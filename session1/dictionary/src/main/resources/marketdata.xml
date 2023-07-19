@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbe:messageSchema xmlns:sbe="http://fixprotocol.io/2016/sbe"
+                   xmlns:xi="http://www.w3.org/2001/XInclude"
+                   package="messages.marketdata"
+                   id="1"
+                   version="0"
+                   semanticVersion="5.2"
+                   description="Market Data Schema Package"
+                   byteOrder="littleEndian">
+    <xi:include href="common-types.xml"/>
+    <!--types>
+        <type name="ModelYear" primitiveType="uint16"/>
+        <type name="VehicleCode" primitiveType="char" length="6" characterEncoding="ASCII"/>
+        <type name="Ron" primitiveType="uint8" minValue="90" maxValue="110"/>
+        <type name="someNumbers" primitiveType="uint32" length="4"/>
+        <type name="Percentage" primitiveType="int8" minValue="0" maxValue="100"/>
+        <composite name="Booster">
+            <enum name="BoostType" encodingType="char">
+                <validValue name="TURBO">T</validValue>
+                <validValue name="SUPERCHARGER">S</validValue>
+                <validValue name="NITROUS">N</validValue>
+                <validValue name="KERS">K</validValue>
+            </enum>
+            <type name="horsePower" primitiveType="uint8"/>
+        </composite>
+        <composite name="Engine">
+            <type name="capacity" primitiveType="uint16"/>
+            <type name="numCylinders" primitiveType="uint8"/>
+            <type name="maxRpm" primitiveType="uint16" presence="constant">9000</type>
+            <type name="manufacturerCode" primitiveType="char" length="3"/>
+            <type name="fuel" primitiveType="char" presence="constant">Petrol</type>
+            <ref name="efficiency" type="Percentage"/>
+            <ref name="boosterEnabled" type="BooleanType"/>
+            <ref name="booster" type="Booster"/>
+        </composite>
+        <enum name="BooleanType" encodingType="uint8" description="Boolean Type.">
+            <validValue name="F" description="False value representation.">0</validValue>
+            <validValue name="T" description="True value representation.">1</validValue>
+        </enum>
+        <enum name="Model" encodingType="char">
+            <validValue name="A">A</validValue>
+            <validValue name="B">B</validValue>
+            <validValue name="C">C</validValue>
+        </enum>
+        <set name="OptionalExtras" encodingType="uint8">
+            <choice name="sunRoof">0</choice>
+            <choice name="sportsPack">1</choice>
+            <choice name="cruiseControl">2</choice>
+        </set>
+    </types-->
+
+
+
+    <types>
+        <type name="int32Enum" primitiveType="int32" />
+
+        <enum name="Venue" encodingType="int32Enum">
+            <validValue name="XLON">1</validValue>
+            <validValue name="XPAR">2</validValue>
+            <validValue name="XAMS">3</validValue>
+        </enum>
+    </types>
+
+    <types>
+        <enum name="InstrumentStatus" encodingType="char">
+            <validValue name="CONTINUOUS">C</validValue>
+            <validValue name="AUCTION">A</validValue>
+            <validValue name="CLOSED">X</validValue>
+        </enum>
+    </types>
+
+    <types>
+        <enum name="InstrumentSubStatus" encodingType="char">
+            <validValue name="LUNCHAUC">L</validValue>
+            <validValue name="EVENINGAUC">E</validValue>
+            <validValue name="CLOSED">X</validValue>
+            <validValue name="CONTAUCT">C</validValue>
+        </enum>
+    </types>
+
+    <sbe:message name="BookUpdate" id="1" description="Full Book Update">
+
+        <field name="instrumentId" id="1" type="uint64"/>
+        <field name="venue" id="2" type="Venue"/>
+        <field name="instrumentStatus" id="9" type="InstrumentStatus"/>
+
+        <group name="bidBook" id="3" dimensionType="groupSizeEncoding">
+            <field name="price" id="4" type="uint64"/>
+            <field name="size" id="5" type="uint64"/>
+        </group>
+
+        <group name="askBook" id="6" dimensionType="groupSizeEncoding">
+            <field name="price" id="7" type="uint64"/>
+            <field name="size" id="8" type="uint64"/>
+        </group>
+
+    </sbe:message>
+
+    <sbe:message name="BidBookUpdate" id="2" description="Bid Side Book Update">
+
+        <field name="instrumentId" id="1" type="uint64"/>
+        <field name="venue" id="2" type="Venue"/>
+
+        <group name="bidBook" id="3" dimensionType="groupSizeEncoding">
+            <field name="price" id="4" type="uint64"/>
+            <field name="size" id="5" type="uint64"/>
+        </group>
+
+    </sbe:message>
+
+    <sbe:message name="AskBookUpdate" id="3" description="Ask Side Book Update">
+
+        <field name="instrumentId" id="1" type="uint64"/>
+        <field name="venue" id="2" type="Venue"/>
+
+        <group name="askBook" id="6" dimensionType="groupSizeEncoding">
+            <field name="price" id="7" type="uint64"/>
+            <field name="size" id="8" type="uint64"/>
+        </group>
+
+    </sbe:message>
+
+
+
+
+</sbe:messageSchema>
