@@ -12,4 +12,8 @@ public class RunTrigger {
         return shouldRun;
     }
 
+    public void hasRun(){
+        this.shouldRun = false;
+    }
+
 }

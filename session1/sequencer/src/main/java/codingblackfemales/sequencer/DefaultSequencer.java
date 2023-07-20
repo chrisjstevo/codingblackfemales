@@ -30,6 +30,7 @@ public class DefaultSequencer implements Sequencer {
         headerDecoder.wrap(byteBuffer, 0);
 
         int schemaId = headerDecoder.schemaId();
+        int version = headerDecoder.version();
 
         if(isModelMessage(schemaId)){
             processModelCommand(byteBuffer, schemaId, headerDecoder);

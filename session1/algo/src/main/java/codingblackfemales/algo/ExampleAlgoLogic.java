@@ -1,7 +1,10 @@
 package codingblackfemales.algo;
 
 import codingblackfemales.action.Action;
+import codingblackfemales.action.CreateChildOrder;
+import codingblackfemales.action.OrderSide;
 import codingblackfemales.sotw.SimpleAlgoState;
+import codingblackfemales.sotw.marketdata.AskLevel;
 
 public class ExampleAlgoLogic implements AlgoLogic{
 
@@ -10,17 +13,12 @@ public class ExampleAlgoLogic implements AlgoLogic{
 
         System.out.println("In Algo Logic....");
 
-        final int bidLevels = state.getBidLevels();
-        final int askLevels = state.getAskLevels();
+        final AskLevel farTouch = state.getAskAt(0);
 
-        for(int i=0; i<bidLevels; i++){
-            System.out.println("i = " + i + " " + state.getBidAt(i));
-        }
+        long quantity = farTouch.quantity / 2;
+        long price = farTouch.price;
+        long instruentId = state.getInstrumentId();
 
-        for(int i=0; i<askLevels; i++){
-            System.out.println("i = " + i + " " + state.getAskAt(i));
-        }
-
-        return null;
+        return new CreateChildOrder(instruentId, OrderSide.BUY, quantity, price);
     }
 }

@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface SimpleAlgoState {
 
+    public String getSymbol();
+
     public int getBidLevels();
     public int getAskLevels();
 
@@ -14,4 +16,6 @@ public interface SimpleAlgoState {
     public AskLevel getAskAt(int index);
 
     public List<Order> getChildOrders();
+
+    public long getInstrumentId();
 }

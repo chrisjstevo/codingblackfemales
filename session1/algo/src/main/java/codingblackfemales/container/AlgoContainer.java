@@ -12,17 +12,21 @@ public class AlgoContainer implements Consumer {
 
     private final MarketDataService marketDataService;
     private final OrderService orderService;
-
     private final RunTrigger runTrigger;
+    private final Actioner actioner;
 
     private AlgoLogic logic;
 
     private final SimpleAlgoState state;
 
-    public AlgoContainer(final MarketDataService marketDataService, final OrderService orderService, final RunTrigger runTrigger) {
+    public AlgoContainer(final MarketDataService marketDataService,
+                         final OrderService orderService,
+                         final RunTrigger runTrigger,
+                         final Actioner actioner) {
         this.marketDataService = marketDataService;
         this.orderService = orderService;
         this.runTrigger = runTrigger;
+        this.actioner = actioner;
         this.state = new SimpleAlgoStateImpl(marketDataService, orderService);
     }
 
@@ -42,12 +46,19 @@ public class AlgoContainer implements Consumer {
     public void onMessage(DirectBuffer buffer) throws Exception {
         if(runTrigger.shouldRun()){
             runAlgoLogic();
+
         }else {
             //do nothing...
         }
     }
 
-    private void runAlgoLogic(){
-        logic.evaluate(state);
+    private void runAlgoLogic() throws Exception {
+        final var action = logic.evaluate(state);
+
+        runTrigger.hasRun();
+
+        if(action !=null){
+            actioner.processAction(action);
+        }
     }
 }

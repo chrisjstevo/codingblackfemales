@@ -18,6 +18,16 @@ public class SimpleAlgoStateImpl implements SimpleAlgoState {
     }
 
     @Override
+    public long getInstrumentId() {
+        return marketDataService.getInstrumentId();
+    }
+
+    @Override
+    public String getSymbol() {
+        return null;
+    }
+
+    @Override
     public int getBidLevels() {
         return marketDataService.getBidLength();
     }

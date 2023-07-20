@@ -66,6 +66,7 @@
                     </systemProperties>
                     <arguments>
                         <argument>${project.build.resources[0].directory}/marketdata.xml</argument>
+                        <argument>${project.build.resources[0].directory}/order.xml</argument>
                     </arguments>
                     <workingDirectory>${project.build.directory}/generated-sources/java</workingDirectory>
                 </configuration>

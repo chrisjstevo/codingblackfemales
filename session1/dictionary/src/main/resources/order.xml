@@ -2,20 +2,28 @@
 <sbe:messageSchema xmlns:sbe="http://fixprotocol.io/2016/sbe"
                    xmlns:xi="http://www.w3.org/2001/XInclude"
                    package="messages.order"
-                   id="1"
+                   id="2"
                    version="0"
                    semanticVersion="5.2"
                    description="Order Schema Package"
                    byteOrder="littleEndian">
     <xi:include href="common-types.xml"/>
 
-    <sbe:message name="CreateChildOrder" id="1" description="Child Order Object">
+    <types>
+        <enum name="Side" encodingType="char">
+            <validValue name="BUY">B</validValue>
+            <validValue name="SELL">S</validValue>
+        </enum>
+    </types>
+
+    <sbe:message name="CreateOrder" id="4" description="Child Order Object">
         <field name="instrumentId" id="1" type="uint64"/>
         <field name="price" id="2" type="uint64"/>
-        <field name="quantity" id="2" type="uint64"/>
+        <field name="quantity" id="3" type="uint64"/>
+        <field name="side" id="4" type="Side"/>
     </sbe:message>
 
-    <sbe:message name="CancelChildOrder" id="1" description="Cancel Order Object">
+    <sbe:message name="CancelOrder" id="5" description="Cancel Order Object">
         <field name="orderId" id="1" type="uint64"/>
     </sbe:message>
 

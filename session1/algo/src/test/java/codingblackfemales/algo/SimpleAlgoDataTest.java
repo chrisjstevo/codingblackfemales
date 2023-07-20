@@ -1,7 +1,9 @@
 package codingblackfemales.algo;
 
+import codingblackfemales.container.Actioner;
 import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.container.RunTrigger;
+import codingblackfemales.sequencer.consumer.LoggingConsumer;
 import codingblackfemales.service.MarketDataService;
 import codingblackfemales.service.OrderService;
 import codingblackfemales.sequencer.DefaultSequencer;
@@ -16,23 +18,26 @@ import java.nio.ByteBuffer;
 
 public class SimpleAlgoDataTest extends SequencerTestCase {
 
-    private final MessageHeaderDecoder headerDecoder = new MessageHeaderDecoder();
     private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
     private final BookUpdateEncoder encoder = new BookUpdateEncoder();
-    private final BookUpdateDecoder decoder = new BookUpdateDecoder();
 
     @Override
     public Sequencer getSequencer() {
         final TestNetwork network = new TestNetwork();
         final Sequencer sequencer = new DefaultSequencer(network);
+
         final RunTrigger runTrigger = new RunTrigger();
-        final AlgoContainer container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger);
+        final Actioner actioner = new Actioner(sequencer);
+
+        final AlgoContainer container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
         //set my algo logic
         container.setLogic(new ExampleAlgoLogic());
 
+        network.addConsumer(new LoggingConsumer());
         network.addConsumer(container.getMarketDataService());
         network.addConsumer(container.getOrderService());
         network.addConsumer(container);
+
         return sequencer;
     }
 
