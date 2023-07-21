@@ -1,25 +1,27 @@
 package codingblackfemales.collection.intrusive;
 
+import java.util.ArrayList;
+
 public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedListNode<TYPEOF>> {
 
-    private IntrusiveLinkedListNode<TYPEOF> next = null;
-    private IntrusiveLinkedListNode<TYPEOF> previous = null;
-    private IntrusiveLinkedListNode<TYPEOF> first = null;
-    private IntrusiveLinkedListNode<TYPEOF> last = null;
+    TYPEOF next = null;
+    TYPEOF previous = null;
+    TYPEOF first = null;
+    TYPEOF last = null;
 
     public IntrusiveLinkedListNode(){
-        this.first = this;
-        this.last = this;
+        this.first = (TYPEOF)this;
+        this.last = (TYPEOF)this;
         this.previous = null;
         this.next = null;
     }
 
-    public IntrusiveLinkedListNode<TYPEOF> add(IntrusiveLinkedListNode<TYPEOF> item){
+    public IntrusiveLinkedListNode<TYPEOF> add(TYPEOF item){
         if(this.first == null){
             this.next = item;
             this.last = item;
-            item.previous = this;
-            item.first = this;
+            item.previous = (TYPEOF)this;
+            item.first = (TYPEOF)this;
             item.last = item;
         }else{
             this.last.next = item;
@@ -32,7 +34,7 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
         }
 
         if(this.first == null){
-            this.first = this;
+            this.first = (TYPEOF)this;
         }
 
         this.first.last = item;
@@ -40,7 +42,7 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
         return this;
     }
 
-    private void setLast(IntrusiveLinkedListNode<TYPEOF> last){
+    private void setLast(TYPEOF last){
         IntrusiveLinkedListNode<TYPEOF> previous = last.previous;
         while(previous != null){
             previous.last = last;
@@ -49,19 +51,28 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
     }
 
 
-    public IntrusiveLinkedListNode<TYPEOF> remove(TYPEOF item){
-        return null;
-    }
-    public IntrusiveLinkedListNode<TYPEOF> first() {
+    public TYPEOF remove(){
+        TYPEOF previous = this.previous;
+        TYPEOF next = this.next;
+        if(previous != null){
+            previous.next = next;
+        }
+
+        if(this.first.equals(this)){
+            this.first = next;
+        }
         return this.first;
     }
-    public IntrusiveLinkedListNode<TYPEOF> last(){
+    public TYPEOF first() {
+        return this.first;
+    }
+    public TYPEOF last(){
         return last;
     }
-    public IntrusiveLinkedListNode<TYPEOF> next() {
+    public TYPEOF next() {
         return next;
     }
-    public IntrusiveLinkedListNode<TYPEOF> previous(){
+    public TYPEOF previous(){
         return previous;
     };
 }

@@ -1,50 +1,61 @@
 package codingblackfemales.orderbook;
 
-import org.junit.Assert;
+import messages.marketdata.*;
+import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
+
+import java.nio.ByteBuffer;
 
 public class OrderBookTest {
 
-    @Test
-    public void testIntrusiveBookLevel(){
+    private final MessageHeaderDecoder headerDecoder = new MessageHeaderDecoder();
+    private final BookUpdateDecoder bookUpdateDecoder = new BookUpdateDecoder();
 
-        final OrderBookLevel level1 = new OrderBookLevel();
-        level1.setQuantity(100_000);
-        level1.setPrice(100);
-        final OrderBookLevel level2 = new OrderBookLevel();
-        level2.setQuantity(150_000);
-        level2.setPrice(98);
-        final OrderBookLevel level3 = new OrderBookLevel();
-        level3.setQuantity(180_000);
-        level3.setPrice(97);
-        final OrderBookLevel level4 = new OrderBookLevel();
-        level4.setQuantity(200_000);
-        level4.setPrice(96);
+    private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+    private final BookUpdateEncoder bookUpdateEncoder = new BookUpdateEncoder();
 
-        level1
-                .add(level2)
-                .add(level3)
-                .add(level4);
+    private UnsafeBuffer createBookUpdateMessage(){
+        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        Assert.assertEquals(level1.last(), level4);
-        Assert.assertEquals(level1.previous(), null);
-        Assert.assertEquals(level1.next(), level2);
+        //write the encoded output to the direct buffer
+        bookUpdateEncoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+        //set the fields to desired values
+        bookUpdateEncoder.venue(Venue.XLON);
+        bookUpdateEncoder.instrumentId(123L);
 
-        Assert.assertEquals(level2.first(), level1);
-        Assert.assertEquals(level2.next(), level3);
-        Assert.assertEquals(level2.previous(), level1);
-        Assert.assertEquals(level2.last(), level4);
+        bookUpdateEncoder.askBookCount(3)
+                .next().price(100L).size(101L)
+                .next().price(110L).size(200L)
+                .next().price(115L).size(5000L);
 
-        Assert.assertEquals(level3.next(), level4);
-        Assert.assertEquals(level3.previous(), level2);
-        Assert.assertEquals(level3.last(), level4);
+        bookUpdateEncoder.bidBookCount(3)
+                .next().price(98L).size(100L)
+                .next().price(95L).size(200L)
+                .next().price(91L).size(300L);
 
-        Assert.assertEquals(level4.next(), null);
-        Assert.assertEquals(level4.previous(), level3);
-        Assert.assertEquals(level4.last(), level4);
+        bookUpdateEncoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
 
-        System.out.println(level1.toString());
-
+        return directBuffer;
     }
 
+    @Test
+    public void testOrderBookFunctionality() throws Exception{
+
+        final var buffer = createBookUpdateMessage();
+
+        headerDecoder.wrap(buffer, 0);
+
+        final int actingBlockLength = headerDecoder.blockLength();
+        final int actingVersion = headerDecoder.version();
+        final int bufferOffset = headerDecoder.encodedLength();
+
+        bookUpdateDecoder.wrap(buffer, bufferOffset, actingBlockLength, actingVersion);
+
+        final OrderBook orderBook = new OrderBook();
+
+        //TODO: CJS
+        //orderBook.onBookUpdate(bookUpdateDecoder);
+
+    }
 }
