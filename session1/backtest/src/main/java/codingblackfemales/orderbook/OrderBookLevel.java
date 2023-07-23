@@ -1,15 +1,16 @@
 package codingblackfemales.orderbook;
 
 import codingblackfemales.collection.intrusive.IntrusiveLinkedListNode;
-import codingblackfemales.orderbook.order.AbstractOrderFlyweight;
-import codingblackfemales.orderbook.order.MarketDataOrderFlyweight;
-import codingblackfemales.orderbook.order.Order;
+import codingblackfemales.orderbook.order.*;
+import codingblackfemales.orderbook.visitor.OrderBookVisitor;
 
 public class OrderBookLevel extends IntrusiveLinkedListNode<OrderBookLevel> {
 
     private long price;
     private long quantity;
-    private Order firstOrder = null;
+
+    private DefaultOrderFlyweight firstOrder;
+
 
     public OrderBookLevel() {
         super();
@@ -31,7 +32,7 @@ public class OrderBookLevel extends IntrusiveLinkedListNode<OrderBookLevel> {
         this.quantity = quantity;
     }
 
-    public void setFirstOrder(final Order order){
+    public void setFirstOrder(final DefaultOrderFlyweight order){
         this.firstOrder = order;
     }
 
@@ -43,6 +44,18 @@ public class OrderBookLevel extends IntrusiveLinkedListNode<OrderBookLevel> {
                 marketDataOrder.remove();
             }
         }
+    }
+
+    public void accept(OrderBookVisitor visitor){
+        visitor.visit(this);
+
+        DefaultOrderFlyweight order = firstOrder;
+
+        while(order != null){
+            DefaultOrderFlyweight next = order.next();
+            order.accept(visitor, next == null);
+        }
+
     }
 
 

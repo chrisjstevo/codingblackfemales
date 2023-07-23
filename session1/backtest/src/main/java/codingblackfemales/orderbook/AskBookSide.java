@@ -1,35 +1,38 @@
 package codingblackfemales.orderbook;
 
 import codingblackfemales.orderbook.order.MarketDataOrderFlyweight;
-import codingblackfemales.orderbook.visitor.OrderBookVisitor;
+import codingblackfemales.orderbook.visitor.MutatingAddOrderVisitor;
 import messages.marketdata.AskBookUpdateDecoder;
 import messages.marketdata.BookUpdateDecoder;
 
 public class AskBookSide extends OrderBookSide {
 
+    private final MutatingAddOrderVisitor addOrderVisitor = new MutatingAddOrderVisitor();
+
     public void onBookUpdate(BookUpdateDecoder bookUpdate) throws Exception {
         removeMarketDataOrders();
-        addMarketDataOrders(bookUpdate);
+        addAskMarketDataOrders(bookUpdate);
     }
 
     public void onAskBook(AskBookUpdateDecoder askBook) throws Exception {
         removeMarketDataOrders();
-        addMarketDataOrders(askBook);
+        AddAskMarketDataOrders(askBook);
     }
 
-    private void removeMarketDataOrders(){
-
-        var level = getFirstLevel();
-
-        level.removeMarketDataOrder();
-
-        while(level.next() != null){
-            level = level.next();
-            level.removeMarketDataOrder();
-        }
+    @Override
+    MutatingAddOrderVisitor getAddOrderVisitor() {
+        return addOrderVisitor;
     }
 
-    private void addMarketDataOrders(AskBookUpdateDecoder askDecoder){
+    boolean isBetweenLevels(OrderBookLevel previous, OrderBookLevel next, long price){
+        return previous != null && next != null && previous.getPrice() < price && next.getPrice() > price;
+    }
+
+    boolean isNewDeepestLevel(OrderBookLevel previous, OrderBookLevel next, long price){
+        return previous != null && next == null && previous.getPrice() < price;
+    }
+
+    void AddAskMarketDataOrders(AskBookUpdateDecoder askDecoder){
         for(AskBookUpdateDecoder.AskBookDecoder decoder : askDecoder.askBook()) {
             final long price = decoder.price();
             final long quantity = decoder.size();
@@ -38,21 +41,16 @@ public class AskBookSide extends OrderBookSide {
         }
     }
 
-    private void addMarketDataOrder(MarketDataOrderFlyweight order){
-
-    }
-
-    private void addMarketDataOrders(BookUpdateDecoder bookUpdateDecoder){
+    private void addAskMarketDataOrders(BookUpdateDecoder bookUpdateDecoder){
         for(BookUpdateDecoder.AskBookDecoder decoder : bookUpdateDecoder.askBook()) {
             final long price = decoder.price();
             final long quantity = decoder.size();
+            System.out.println("Adding order price:" + price + " quantity:" + quantity);
             var marketOrder = new MarketDataOrderFlyweight(price, quantity);
             addMarketDataOrder(marketOrder);
         }
     }
 
-    public void accept(final OrderBookVisitor visitor){
-        final var firstLevel = getFirstLevel();
-        visitor.visit(firstLevel);
-    }
+
+
 }

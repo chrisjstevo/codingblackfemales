@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.nio.ByteBuffer;
 
+import static org.junit.Assert.*;
+
 public class OrderBookTest {
 
     private final MessageHeaderDecoder headerDecoder = new MessageHeaderDecoder();
@@ -54,8 +56,25 @@ public class OrderBookTest {
 
         final OrderBook orderBook = new OrderBook();
 
-        //TODO: CJS
-        //orderBook.onBookUpdate(bookUpdateDecoder);
+        orderBook.onBookUpdate(bookUpdateDecoder);
+
+        assertEquals(100L, orderBook.getAskBookSide().getFirstLevel().getPrice());
+        assertEquals(110L, orderBook.getAskBookSide().getFirstLevel().next().getPrice());
+        assertEquals(115L, orderBook.getAskBookSide().getFirstLevel().next().next().getPrice());
+
+        assertEquals(101L, orderBook.getAskBookSide().getFirstLevel().getQuantity());
+        assertEquals(200L, orderBook.getAskBookSide().getFirstLevel().next().getQuantity());
+        assertEquals(5000L, orderBook.getAskBookSide().getFirstLevel().next().next().getQuantity());
+
+        assertNull(orderBook.getAskBookSide().getFirstLevel().next().next().next());
+
+        assertEquals(98L, orderBook.getBidBookSide().getFirstLevel().getPrice());
+        assertEquals(95L, orderBook.getBidBookSide().getFirstLevel().next().getPrice());
+        assertEquals(91L, orderBook.getBidBookSide().getFirstLevel().next().next().getPrice());
+
+        assertEquals(100L, orderBook.getBidBookSide().getFirstLevel().getQuantity());
+        assertEquals(200L, orderBook.getBidBookSide().getFirstLevel().next().getQuantity());
+        assertEquals(300L, orderBook.getBidBookSide().getFirstLevel().next().next().getQuantity());
 
     }
 }

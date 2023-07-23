@@ -1,6 +1,6 @@
 package codingblackfemales.orderbook.order;
 
-public class MarketDataOrderFlyweight extends AbstractOrderFlyweight<MarketDataOrderFlyweight>{
+public class MarketDataOrderFlyweight extends DefaultOrderFlyweight {
     private long price;
     private long quantity;
 

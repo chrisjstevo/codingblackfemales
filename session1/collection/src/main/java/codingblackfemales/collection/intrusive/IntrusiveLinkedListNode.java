@@ -75,4 +75,9 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
     public TYPEOF previous(){
         return previous;
     };
+
+    public void next(TYPEOF node){
+        this.next = node;
+    }
+
 }
