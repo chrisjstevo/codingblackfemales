@@ -61,4 +61,8 @@ public class AlgoContainer implements Consumer {
             actioner.processAction(action);
         }
     }
+
+    public SimpleAlgoState getState() {
+        return state;
+    }
 }

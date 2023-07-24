@@ -16,10 +16,14 @@ import org.junit.Test;
 
 import java.nio.ByteBuffer;
 
-public class SimpleAlgoDataTest extends SequencerTestCase {
+import static org.junit.Assert.*;
+
+public class ExampleAlgoDataTest extends SequencerTestCase {
 
     private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
     private final BookUpdateEncoder encoder = new BookUpdateEncoder();
+
+    private AlgoContainer container;
 
     @Override
     public Sequencer getSequencer() {
@@ -29,7 +33,7 @@ public class SimpleAlgoDataTest extends SequencerTestCase {
         final RunTrigger runTrigger = new RunTrigger();
         final Actioner actioner = new Actioner(sequencer);
 
-        final AlgoContainer container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
+        container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
         //set my algo logic
         container.setLogic(new ExampleAlgoLogic());
 
@@ -41,10 +45,7 @@ public class SimpleAlgoDataTest extends SequencerTestCase {
         return sequencer;
     }
 
-    @Test
-    public void testDispatchThroughSequencer() throws Exception {
-
-        //Allocate memory and an unsafe buffer to act as a destination for the data
+    private UnsafeBuffer createSampleMarketDataTick(){
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
@@ -67,6 +68,16 @@ public class SimpleAlgoDataTest extends SequencerTestCase {
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
 
-        send(directBuffer);
+        return directBuffer;
+    }
+
+    @Test
+    public void testDispatchThroughSequencer() throws Exception {
+
+        //create a sample market data tick....
+        send(createSampleMarketDataTick());
+
+        //simple assert to check we had 3 orders created
+        assertEquals(container.getState().getChildOrders().size(), 3);
     }
 }

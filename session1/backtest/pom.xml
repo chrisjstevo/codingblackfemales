@@ -1,6 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>codingblackfemales</groupId>
         <artifactId>session1-algo</artifactId>
@@ -18,19 +19,28 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>codingblackfemales</groupId>
             <artifactId>dictionary</artifactId>
             <version>0.01-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>codingblackfemales</groupId>
             <artifactId>sequencer</artifactId>
             <version>0.01-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>codingblackfemales</groupId>
             <artifactId>collection</artifactId>
+            <version>0.01-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>codingblackfemales</groupId>
+            <artifactId>algo</artifactId>
             <version>0.01-SNAPSHOT</version>
         </dependency>
 
@@ -40,5 +50,14 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>codingblackfemales</groupId>
+            <artifactId>sequencer</artifactId>
+            <version>0.01-SNAPSHOT</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 </project>

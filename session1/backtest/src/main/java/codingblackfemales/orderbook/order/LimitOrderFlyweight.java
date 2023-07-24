@@ -16,6 +16,10 @@ public class LimitOrderFlyweight extends DefaultOrderFlyweight {
         this.orderId = orderId;
     }
 
+    public Side getSide() {
+        return side;
+    }
+
     @Override
     public long getPrice() {
         return price;

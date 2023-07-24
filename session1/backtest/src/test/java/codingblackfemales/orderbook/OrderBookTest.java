@@ -1,9 +1,11 @@
 package codingblackfemales.orderbook;
 
+import codingblackfemales.orderbook.channel.MarketDataChannel;
 import codingblackfemales.orderbook.order.MarketDataOrderFlyweight;
 import messages.marketdata.*;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.nio.ByteBuffer;
 
@@ -82,7 +84,9 @@ public class OrderBookTest {
 
         bookUpdateDecoder.wrap(buffer, bufferOffset, actingBlockLength, actingVersion);
 
-        final OrderBook orderBook = new OrderBook();
+        final MarketDataChannel channel = Mockito.mock(MarketDataChannel.class);
+
+        final OrderBook orderBook = new OrderBook(channel);
 
         orderBook.onBookUpdate(bookUpdateDecoder);
 
