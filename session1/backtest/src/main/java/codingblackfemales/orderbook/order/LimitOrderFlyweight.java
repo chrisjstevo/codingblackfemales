@@ -1,11 +1,16 @@
 package codingblackfemales.orderbook.order;
 
+import messages.order.Side;
+
 public class LimitOrderFlyweight extends DefaultOrderFlyweight {
+
+    private Side side;
     private long price;
     private long quantity;
     private long orderId;
 
-    public LimitOrderFlyweight(long price, long quantity, long orderId) {
+    public LimitOrderFlyweight(Side side, long price, long quantity, long orderId) {
+        this.side = side;
         this.price = price;
         this.quantity = quantity;
         this.orderId = orderId;

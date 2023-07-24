@@ -32,10 +32,6 @@ public class OrderBook extends MarketDataEventListener {
         return canMatch;
     }
 
-    public void addOrder(final LimitOrderFlyweight limitOrderFlyweight){
-
-    }
-
     @Override
     public void onBookUpdate(BookUpdateDecoder bookUpdate) throws Exception {
         getAskBookSide().onBookUpdate(bookUpdate);

@@ -3,6 +3,7 @@ package codingblackfemales.orderbook;
 import codingblackfemales.orderbook.order.LimitOrderFlyweight;
 import codingblackfemales.orderbook.order.MarketDataOrderFlyweight;
 import codingblackfemales.orderbook.visitor.MutatingRemoveOneOrderVisitor;
+import messages.order.Side;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -38,22 +39,22 @@ public class OrderBookVisitorTest {
     }
 
     @Test
-    public void testOneLimitOrderRemovalVisitor(){
+    public void testOneLimitOrderRemovalVisitorAskBook(){
 
         final AskBookSide side = new AskBookSide();
 
-        side.addLimitOrder(new LimitOrderFlyweight(1200L, 10_123, 123456));
+        side.addLimitOrder(new LimitOrderFlyweight(Side.SELL, 1200L, 10_123, 123456));
 
         assertEquals(1200L, side.getFirstLevel().getPrice());
         assertEquals(10_123L, side.getFirstLevel().getQuantity());
         assertNull(side.getFirstLevel().getFirstOrder().next());
 
-        side.addLimitOrder(new LimitOrderFlyweight(1300L, 50_000, 123457));
-        side.addLimitOrder(new LimitOrderFlyweight(1400L, 60_000, 123458));
+        side.addLimitOrder(new LimitOrderFlyweight(Side.SELL,1300L, 50_000, 123457));
+        side.addLimitOrder(new LimitOrderFlyweight(Side.SELL,1400L, 60_000, 123458));
 
         assertNull(side.getFirstLevel().getFirstOrder().next());
 
-        side.addLimitOrder(new LimitOrderFlyweight(1200L, 20_000, 123459));
+        side.addLimitOrder(new LimitOrderFlyweight(Side.SELL,1200L, 20_000, 123459));
 
         assertEquals(1200L, side.getFirstLevel().getPrice());
         assertEquals(30_123L, side.getFirstLevel().getQuantity());
@@ -70,7 +71,38 @@ public class OrderBookVisitorTest {
 
         assertNull(((LimitOrderFlyweight)side.getFirstLevel().getFirstOrder().next()));
 
-        System.out.println();
+    }
+
+    @Test
+    public void testOneLimitOrderRemovalVisitorBidBook(){
+
+        final BidBookSide side = new BidBookSide();
+
+        side.addLimitOrder(new LimitOrderFlyweight(Side.BUY,900L, 10_123, 123456));
+
+        assertEquals(900L, side.getFirstLevel().getPrice());
+        assertEquals(10_123L, side.getFirstLevel().getQuantity());
+        assertNull(side.getFirstLevel().getFirstOrder().next());
+
+        side.addLimitOrder(new LimitOrderFlyweight(Side.BUY, 800L, 50_000, 123457));
+        side.addLimitOrder(new LimitOrderFlyweight(Side.BUY, 700L, 60_000, 123458));
+
+        assertNull(side.getFirstLevel().getFirstOrder().next());
+
+        side.addLimitOrder(new LimitOrderFlyweight(Side.BUY, 800L, 20_000, 123459));
+
+        assertEquals(900L, side.getFirstLevel().getPrice());
+        assertEquals(10_123L, side.getFirstLevel().getQuantity());
+
+        assertEquals(70_000L,side.getFirstLevel().next().getQuantity());
+        assertEquals(123459L,((LimitOrderFlyweight)side.getFirstLevel().next().getFirstOrder().next()).getOrderId());
+
+        MutatingRemoveOneOrderVisitor removeVisitor = new MutatingRemoveOneOrderVisitor();
+        removeVisitor.setOrderIdToRemove(123459);
+
+        side.accept(removeVisitor);
+
+        assertEquals(50_000L,side.getFirstLevel().next().getQuantity());
 
     }
 
