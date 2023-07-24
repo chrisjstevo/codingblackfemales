@@ -1,7 +1,5 @@
 package codingblackfemales.collection.intrusive;
 
-import java.util.ArrayList;
-
 public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedListNode<TYPEOF>> {
 
     TYPEOF next = null;
@@ -9,11 +7,14 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
     TYPEOF first = null;
     TYPEOF last = null;
 
+    private int size = 0;
+
     protected IntrusiveLinkedListNode(){
         this.first = (TYPEOF)this;
         this.last = (TYPEOF)this;
         this.previous = null;
         this.next = null;
+        this.size = 1;
     }
 
     public IntrusiveLinkedListNode<TYPEOF> add(TYPEOF item){
@@ -39,6 +40,9 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
 
         this.first.last = item;
 
+        size += 1;
+        setSize(this.last);
+
         return this;
     }
 
@@ -46,6 +50,14 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
         IntrusiveLinkedListNode<TYPEOF> thePrevious = last.previous;
         while(thePrevious != null){
             thePrevious.last = last;
+            thePrevious = thePrevious.previous;
+        }
+    }
+
+    private void setSize(TYPEOF last){
+        IntrusiveLinkedListNode<TYPEOF> thePrevious = last.previous;
+        while(thePrevious != null){
+            thePrevious.size = this.size;
             thePrevious = thePrevious.previous;
         }
     }
@@ -64,6 +76,10 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
         if(this.first.equals(this)){
             this.first = next;
         }
+
+        size -= 1;
+        setSize(this.last);
+
         return this.first;
     }
     public TYPEOF first() {
@@ -83,4 +99,7 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
         this.next = node;
     }
 
+    public int size(){
+        return size;
+    }
 }

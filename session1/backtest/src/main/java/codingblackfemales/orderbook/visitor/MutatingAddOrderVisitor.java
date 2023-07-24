@@ -18,7 +18,10 @@ public class MutatingAddOrderVisitor implements OrderBookVisitor,FilteringOrderB
     }
 
     @Override
-    public void visit(OrderBookLevel level) {
+    public void visit(OrderBookSide side) {}
+
+    @Override
+    public void visit(OrderBookSide side, OrderBookLevel level) {
         level.setQuantity(level.getQuantity() + orderToAdd.getQuantity());
     }
 

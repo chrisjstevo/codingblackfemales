@@ -8,7 +8,7 @@ import codingblackfemales.orderbook.order.MarketDataOrderFlyweight;
 public class MutatingRemoveAllMarketDataOrdersVisitor implements OrderBookVisitor{
 
     @Override
-    public void visit(OrderBookLevel level) {}
+    public void visit(OrderBookSide side, OrderBookLevel level) {}
 
     @Override
     public void visit(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {
@@ -38,4 +38,6 @@ public class MutatingRemoveAllMarketDataOrdersVisitor implements OrderBookVisito
         return null;
     }
 
+    @Override
+    public void visit(OrderBookSide side) {}
 }

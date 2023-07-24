@@ -27,8 +27,9 @@ public abstract class OrderBookSide {
 
     public void accept(final OrderBookVisitor visitor){
 
-        var levelToVisit = getFirstLevel();
+        visitor.visit(this);
 
+        var levelToVisit = getFirstLevel();
 
         //are we the first level...
         if(levelToVisit == null){

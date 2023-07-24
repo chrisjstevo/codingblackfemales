@@ -52,7 +52,7 @@ public class OrderBookLevel extends IntrusiveLinkedListNode<OrderBookLevel> {
     }
 
     public void accept(OrderBookVisitor visitor, OrderBookSide side){
-        visitor.visit(this);
+        visitor.visit(side, this);
 
         DefaultOrderFlyweight order = firstOrder;
 

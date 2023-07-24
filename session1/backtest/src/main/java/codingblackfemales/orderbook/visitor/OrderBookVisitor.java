@@ -5,7 +5,9 @@ import codingblackfemales.orderbook.OrderBookSide;
 import codingblackfemales.orderbook.order.DefaultOrderFlyweight;
 
 public interface OrderBookVisitor {
-    void visit(OrderBookLevel level);
+
+    void visit(OrderBookSide side);
+    void visit(OrderBookSide side, OrderBookLevel level);
     void visit(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast);
     OrderBookLevel missingBookLevel(OrderBookLevel previous, OrderBookLevel next, long price);
 
