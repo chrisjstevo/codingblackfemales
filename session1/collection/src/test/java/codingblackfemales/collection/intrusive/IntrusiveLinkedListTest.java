@@ -7,12 +7,11 @@ import static org.junit.Assert.*;
 public class IntrusiveLinkedListTest {
 
     class ExampleNode extends IntrusiveLinkedListNode<ExampleNode> {
-        int i = 0;
+        private int i = 0;
         ExampleNode(int i){
             super();
             this.i = i;
         }
-
         int getI() {
             return i;
         }
