@@ -1,11 +1,11 @@
 package codingblackfemales.orderbook;
 
-import codingblackfemales.orderbook.order.OrderFlyweight;
-import codingblackfemales.orderbook.visitor.OrderBookVisitor;
+import codingblackfemales.orderbook.order.LimitOrderFlyweight;
 import codingblackfemales.sequencer.event.MarketDataEventListener;
 import messages.marketdata.AskBookUpdateDecoder;
 import messages.marketdata.BidBookUpdateDecoder;
 import messages.marketdata.BookUpdateDecoder;
+import messages.order.Side;
 
 public class OrderBook extends MarketDataEventListener {
 
@@ -20,11 +20,19 @@ public class OrderBook extends MarketDataEventListener {
         return bidBookSide;
     }
 
-    public boolean canMatch(final OrderBookSide side, final long price, final long quantity){
-        return false;
+    public boolean canMatch(final Side side, final long price){
+        boolean canMatch = false;
+
+        if(side.equals(Side.BUY)){
+            canMatch = this.getAskBookSide().getFirstLevel().getPrice() <= price;
+        }else if(side.equals(Side.SELL)){
+            canMatch = this.getBidBookSide().getFirstLevel().getPrice() >= price;
+        }
+
+        return canMatch;
     }
 
-    public void addOrder(final OrderFlyweight orderFlyweight){
+    public void addOrder(final LimitOrderFlyweight limitOrderFlyweight){
 
     }
 

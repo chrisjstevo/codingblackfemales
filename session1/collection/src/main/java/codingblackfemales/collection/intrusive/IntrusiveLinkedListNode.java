@@ -9,7 +9,7 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
     TYPEOF first = null;
     TYPEOF last = null;
 
-    public IntrusiveLinkedListNode(){
+    protected IntrusiveLinkedListNode(){
         this.first = (TYPEOF)this;
         this.last = (TYPEOF)this;
         this.previous = null;
@@ -43,19 +43,22 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
     }
 
     private void setLast(TYPEOF last){
-        IntrusiveLinkedListNode<TYPEOF> previous = last.previous;
-        while(previous != null){
-            previous.last = last;
-            previous = previous.previous;
+        IntrusiveLinkedListNode<TYPEOF> thePrevious = last.previous;
+        while(thePrevious != null){
+            thePrevious.last = last;
+            thePrevious = thePrevious.previous;
         }
     }
-
 
     public TYPEOF remove(){
         TYPEOF previous = this.previous;
         TYPEOF next = this.next;
         if(previous != null){
             previous.next = next;
+        }
+
+        if(this.first == null){
+            return null;
         }
 
         if(this.first.equals(this)){

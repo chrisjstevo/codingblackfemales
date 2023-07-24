@@ -36,24 +36,35 @@ public class OrderBookLevel extends IntrusiveLinkedListNode<OrderBookLevel> {
         this.firstOrder = order;
     }
 
+    public DefaultOrderFlyweight getFirstOrder(){
+        return this.firstOrder;
+    }
+
     public void removeMarketDataOrder(){
         var order = this.firstOrder;
         while(order != null){
             if(order instanceof MarketDataOrderFlyweight){
                 var marketDataOrder = (MarketDataOrderFlyweight) order;
-                marketDataOrder.remove();
+                this.firstOrder = marketDataOrder.remove();
             }
+            order = order.next();
         }
     }
 
-    public void accept(OrderBookVisitor visitor){
+    public void accept(OrderBookVisitor visitor, OrderBookSide side){
         visitor.visit(this);
 
         DefaultOrderFlyweight order = firstOrder;
 
+        if(firstOrder == null){
+            firstOrder = visitor.onNoFirstOrder();
+            return;
+        }
+
         while(order != null){
             DefaultOrderFlyweight next = order.next();
-            order.accept(visitor, next == null);
+            order.accept(visitor, side, this, next == null);
+            order = next;
         }
 
     }
@@ -61,10 +72,6 @@ public class OrderBookLevel extends IntrusiveLinkedListNode<OrderBookLevel> {
 
     @Override
     public String toString() {
-        if(this.next() == null){
-            return "OBLevel(price=" + price + ",quantity=" + quantity + ")" ;
-        }else{
-            return "OBLevel(price=" + price + ",quantity=" + quantity + ") -> " + this.next().toString();
-        }
+        return "OBLevel(price=" + price + ",quantity=" + quantity + ")" ;
     }
 }

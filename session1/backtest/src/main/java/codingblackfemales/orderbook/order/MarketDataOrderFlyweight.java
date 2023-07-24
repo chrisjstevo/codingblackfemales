@@ -16,4 +16,7 @@ public class MarketDataOrderFlyweight extends DefaultOrderFlyweight {
     public long getQuantity() {
         return quantity;
     }
+
+
+
 }

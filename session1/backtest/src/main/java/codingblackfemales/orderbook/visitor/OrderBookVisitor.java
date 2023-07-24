@@ -1,16 +1,16 @@
 package codingblackfemales.orderbook.visitor;
 
 import codingblackfemales.orderbook.OrderBookLevel;
+import codingblackfemales.orderbook.OrderBookSide;
 import codingblackfemales.orderbook.order.DefaultOrderFlyweight;
-import codingblackfemales.orderbook.order.Order;
 
 public interface OrderBookVisitor {
     void visit(OrderBookLevel level);
-    void visit(DefaultOrderFlyweight order, boolean isLast);
+    void visit(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast);
     OrderBookLevel missingBookLevel(OrderBookLevel previous, OrderBookLevel next, long price);
 
-    OrderBookLevel firstBookLevel(long price);
+    OrderBookLevel onNoFirstLevel();
 
-    long desiredPrice();
+    DefaultOrderFlyweight onNoFirstOrder();
 
 }

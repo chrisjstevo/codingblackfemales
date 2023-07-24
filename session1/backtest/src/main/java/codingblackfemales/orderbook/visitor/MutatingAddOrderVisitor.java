@@ -1,18 +1,19 @@
 package codingblackfemales.orderbook.visitor;
 
 import codingblackfemales.orderbook.OrderBookLevel;
+import codingblackfemales.orderbook.OrderBookSide;
 import codingblackfemales.orderbook.order.DefaultOrderFlyweight;
 import codingblackfemales.orderbook.order.Order;
 
 public class MutatingAddOrderVisitor implements OrderBookVisitor,FilteringOrderBookVisitor{
 
-    private Order orderToAdd;
+    private DefaultOrderFlyweight orderToAdd;
 
     public Order getOrderToAdd() {
         return orderToAdd;
     }
 
-    public void setOrderToAdd(Order orderToAdd) {
+    public void setOrderToAdd(DefaultOrderFlyweight orderToAdd) {
         this.orderToAdd = orderToAdd;
     }
 
@@ -22,8 +23,15 @@ public class MutatingAddOrderVisitor implements OrderBookVisitor,FilteringOrderB
     }
 
     @Override
-    public void visit(DefaultOrderFlyweight order, boolean isLast) {
+    public void visit(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {
+        if(order.getPrice() == orderToAdd.getPrice() && isLast){
+            order.add(orderToAdd);
+        }
+    }
 
+    @Override
+    public DefaultOrderFlyweight onNoFirstOrder() {
+        return orderToAdd;
     }
 
     @Override
@@ -34,19 +42,15 @@ public class MutatingAddOrderVisitor implements OrderBookVisitor,FilteringOrderB
     }
 
     @Override
-    public OrderBookLevel firstBookLevel(long price) {
+    public OrderBookLevel onNoFirstLevel() {
         OrderBookLevel level = new OrderBookLevel();
-        level.setPrice(price);
+        level.setPrice(orderToAdd.getPrice());
+        level.setQuantity(0);
         return level;
     }
 
     @Override
-    public long desiredPrice() {
-        return orderToAdd.getPrice();
-    }
-
-    @Override
-    public boolean filter(OrderBookLevel level) {
-        return false;
+    public long getPrice() {
+        return this.orderToAdd.getPrice();
     }
 }

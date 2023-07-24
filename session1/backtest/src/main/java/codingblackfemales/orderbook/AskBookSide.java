@@ -9,14 +9,14 @@ public class AskBookSide extends OrderBookSide {
 
     private final MutatingAddOrderVisitor addOrderVisitor = new MutatingAddOrderVisitor();
 
-    public void onBookUpdate(BookUpdateDecoder bookUpdate) throws Exception {
+    public void onBookUpdate(BookUpdateDecoder bookUpdate){
         removeMarketDataOrders();
         addAskMarketDataOrders(bookUpdate);
     }
 
-    public void onAskBook(AskBookUpdateDecoder askBook) throws Exception {
+    public void onAskBook(AskBookUpdateDecoder askBook){
         removeMarketDataOrders();
-        AddAskMarketDataOrders(askBook);
+        addAskMarketDataOrders(askBook);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class AskBookSide extends OrderBookSide {
         return previous != null && next == null && previous.getPrice() < price;
     }
 
-    void AddAskMarketDataOrders(AskBookUpdateDecoder askDecoder){
+    public void addAskMarketDataOrders(AskBookUpdateDecoder askDecoder){
         for(AskBookUpdateDecoder.AskBookDecoder decoder : askDecoder.askBook()) {
             final long price = decoder.price();
             final long quantity = decoder.size();
@@ -41,7 +41,7 @@ public class AskBookSide extends OrderBookSide {
         }
     }
 
-    private void addAskMarketDataOrders(BookUpdateDecoder bookUpdateDecoder){
+    public void addAskMarketDataOrders(BookUpdateDecoder bookUpdateDecoder){
         for(BookUpdateDecoder.AskBookDecoder decoder : bookUpdateDecoder.askBook()) {
             final long price = decoder.price();
             final long quantity = decoder.size();
