@@ -15,7 +15,7 @@ public interface SimpleAlgoState {
     public BidLevel getBidAt(int index);
     public AskLevel getAskAt(int index);
 
-    public List<Order> getChildOrders();
+    public List<ChildOrder> getChildOrders();
 
     public long getInstrumentId();
 }

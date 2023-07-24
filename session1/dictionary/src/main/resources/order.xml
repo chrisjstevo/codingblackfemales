@@ -21,10 +21,31 @@
         <field name="price" id="2" type="uint64"/>
         <field name="quantity" id="3" type="uint64"/>
         <field name="side" id="4" type="Side"/>
+        <field name="orderId" id="5" type="uint64"/>
+
     </sbe:message>
+
 
     <sbe:message name="CancelOrder" id="5" description="Cancel Order Object">
         <field name="orderId" id="1" type="uint64"/>
+    </sbe:message>
+
+    <sbe:message name="AckedOrder" id="7" description="Acked Order Message">
+        <field name="orderId" id="1" type="uint64"/>
+    </sbe:message>
+
+    <sbe:message name="CancelAckedOrder" id="8" description="Cancel Acked Order Message">
+        <field name="orderId" id="1" type="uint64"/>
+    </sbe:message>
+
+    <sbe:message name="PartialFillOrder" id="9" description="Partial Fill Order Message">
+        <field name="orderId" id="1" type="uint64"/>
+        <field name="quantity" id="2" type="uint64"/>
+    </sbe:message>
+
+    <sbe:message name="FillOrder" id="10" description="Fill Order Order Message">
+        <field name="orderId" id="1" type="uint64"/>
+        <field name="quantity" id="2" type="uint64"/>
     </sbe:message>
 
 

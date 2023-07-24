@@ -3,6 +3,8 @@ package codingblackfemales.sequencer;
 import codingblackfemales.sequencer.net.Network;
 import messages.marketdata.MessageHeaderDecoder;
 import messages.marketdata.MessageHeaderEncoder;
+import messages.order.CreateOrderDecoder;
+import messages.order.CreateOrderEncoder;
 import org.agrona.DirectBuffer;
 import org.agrona.concurrent.UnsafeBuffer;
 
@@ -15,6 +17,14 @@ public class DefaultSequencer implements Sequencer {
 
     private final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
     private final UnsafeBuffer mutableBuffer = new UnsafeBuffer(byteBuffer);
+
+    private final CreateOrderDecoder createOrderDecoder = new CreateOrderDecoder();
+    private final CreateOrderEncoder createOrderEncoder = new CreateOrderEncoder();
+
+    private final messages.order.MessageHeaderEncoder businessHeaderEncoder = new messages.order.MessageHeaderEncoder();
+
+    private final ByteBuffer businessByteBuffer = ByteBuffer.allocateDirect(1024);
+    private final UnsafeBuffer businessMutableBuffer = new UnsafeBuffer(businessByteBuffer);
 
     long sequencerNumber = 0L;
 
@@ -30,17 +40,39 @@ public class DefaultSequencer implements Sequencer {
         headerDecoder.wrap(byteBuffer, 0);
 
         int schemaId = headerDecoder.schemaId();
-        int version = headerDecoder.version();
+        int templateId = headerDecoder.templateId();
 
-        if(isModelMessage(schemaId)){
-            processModelCommand(byteBuffer, schemaId, headerDecoder);
+        if(isModelMessage(schemaId, templateId)){
+            DirectBuffer mutatedBuffer = processModelCommand(byteBuffer, schemaId, headerDecoder);
+            sequenceAndDispatchMessage(mutatedBuffer);
+        }
+        else{
+            sequenceAndDispatchMessage(byteBuffer);
         }
 
-        sequenceAndDispatchMessage(byteBuffer);
     }
 
-    public void processModelCommand(final DirectBuffer byteBuffer, final int schemaId, final MessageHeaderDecoder headerDecoder){
-        //todo: if we had to validate the order for example, we'd go up into this workflow
+    public DirectBuffer processModelCommand(final DirectBuffer byteBuffer, final int schemaId, final MessageHeaderDecoder header){
+
+        final int actingBlockLength = header.blockLength();
+        final int actingVersion = header.version();
+        final int bufferOffset = header.encodedLength();
+
+        createOrderDecoder.wrap(byteBuffer, bufferOffset, actingBlockLength, actingVersion);
+
+
+        createOrderEncoder.wrapAndApplyHeader(businessMutableBuffer, 0, businessHeaderEncoder);
+        createOrderEncoder.price(createOrderDecoder.price());
+        createOrderEncoder.quantity(createOrderDecoder.quantity());
+        createOrderEncoder.side(createOrderDecoder.side());
+        createOrderEncoder.orderId(newOrderId());
+        return businessMutableBuffer;
+    }
+
+    private long orderId = 1;
+
+    public long newOrderId(){
+        return orderId +=1;
     }
 
     public void sequenceAndDispatchMessage(final DirectBuffer byteBuffer) throws Exception{
@@ -60,8 +92,8 @@ public class DefaultSequencer implements Sequencer {
         network.dispatch(sequencedBuffer);
     }
 
-    public boolean isModelMessage(final int schemaId) {
-        return false;
+    public boolean isModelMessage(final int schemaId, final int templateId) {
+        return schemaId == CreateOrderEncoder.SCHEMA_ID && templateId == CreateOrderEncoder.TEMPLATE_ID;
     }
 
 }

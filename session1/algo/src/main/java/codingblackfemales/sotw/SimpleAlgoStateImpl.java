@@ -48,7 +48,7 @@ public class SimpleAlgoStateImpl implements SimpleAlgoState {
     }
 
     @Override
-    public List<Order> getChildOrders() {
-        return null;
+    public List<ChildOrder> getChildOrders() {
+        return orderService.children();
     }
 }
