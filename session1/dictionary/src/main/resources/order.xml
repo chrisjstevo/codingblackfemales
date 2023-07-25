@@ -22,7 +22,14 @@
         <field name="quantity" id="3" type="uint64"/>
         <field name="side" id="4" type="Side"/>
         <field name="orderId" id="5" type="uint64"/>
+    </sbe:message>
 
+    <sbe:message name="PendingOrder" id="11" description="Pending Child Order Object">
+        <field name="instrumentId" id="1" type="uint64"/>
+        <field name="price" id="2" type="uint64"/>
+        <field name="quantity" id="3" type="uint64"/>
+        <field name="side" id="4" type="Side"/>
+        <field name="orderId" id="5" type="uint64"/>
     </sbe:message>
 
 
