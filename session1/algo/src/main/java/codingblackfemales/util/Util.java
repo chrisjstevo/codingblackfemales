@@ -24,18 +24,18 @@ public class Util {
 
         for(int i=0; i<maxLevels; i++){
 
-            if(state.getBidLevels() >= i){
+            if(state.getBidLevels() > i){
                 BidLevel level = state.getBidAt(i);
                 builder.append(padLeft(level.quantity + " @ " + level.price, 12));
             }else{
-                builder.append(padLeft("|------------", 12) + "|");
+                builder.append(padLeft(" - ", 12) + "");
             }
 
-            if(state.getAskLevels() >= i){
+            if(state.getAskLevels() > i){
                 AskLevel level = state.getAskAt(i);
                 builder.append(padLeft(level.quantity + " @ " + level.price, 12));
             }else{
-                builder.append(padLeft("|------------", 12) + "|");
+                builder.append(padLeft(" - ", 12) + "");
             }
 
             builder.append("\n");

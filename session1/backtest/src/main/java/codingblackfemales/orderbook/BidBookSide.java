@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class BidBookSide extends OrderBookSide{
 
-    private static final Logger logger = LoggerFactory.getLogger(AskBookSide.class);
+    private static final Logger logger = LoggerFactory.getLogger(BidBookSide.class);
 
     private final MutatingAddOrderVisitor addOrderVisitor = new MutatingAddOrderVisitor();
 

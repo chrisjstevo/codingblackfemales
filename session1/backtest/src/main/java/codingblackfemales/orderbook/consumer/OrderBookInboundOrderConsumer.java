@@ -20,7 +20,7 @@ public class OrderBookInboundOrderConsumer extends OrderEventListener {
     @Override
     public void onCreateOrder(CreateOrderDecoder create) {
         final var limit = new LimitOrderFlyweight(create.side(), create.price(), create.quantity(), create.orderId());
-        logger.info("Adding limit Order:" + limit + " to book");
+        //logger.info("Adding limit Order:" + limit + " to book");
         book.onLimitOrder(limit);
     }
 

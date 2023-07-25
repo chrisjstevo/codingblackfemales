@@ -36,6 +36,6 @@ public class LimitOrderFlyweight extends DefaultOrderFlyweight {
 
     @Override
     public String toString() {
-        return "Limit(orderId="+orderId+",price="+price+",quantity="+quantity+")";
+        return "Limit(side="+side+",orderId="+orderId+",price="+price+",quantity="+quantity+")";
     }
 }

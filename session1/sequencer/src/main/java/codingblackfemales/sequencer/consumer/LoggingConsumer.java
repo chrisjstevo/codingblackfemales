@@ -9,6 +9,8 @@ import org.agrona.DirectBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static codingblackfemales.sequencer.util.MessageUtil.bookUpdateToString;
+
 public class LoggingConsumer implements Consumer {
 
     private static final Logger logger = LoggerFactory.getLogger(LoggingConsumer.class);
@@ -27,7 +29,7 @@ public class LoggingConsumer implements Consumer {
             final int actingVersion = decoder.version();
             int bufferOffset = decoder.encodedLength();
             bookUpdateDecoder.wrap(buffer, bufferOffset, actingBlockLength, actingVersion);
-            logger.info("[" + decoder.sequencerNumber() + "] " + bookUpdateDecoder);
+            logger.info("[" + decoder.sequencerNumber() + "] \n" + bookUpdateToString(bookUpdateDecoder));
         }else if(decoder.schemaId() == CreateOrderEncoder.SCHEMA_ID){
             final int actingBlockLength = decoder.blockLength();
             final int actingVersion = decoder.version();

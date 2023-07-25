@@ -69,10 +69,10 @@ public class OrderBook extends MarketDataEventListener {
 
     public void addLiquidity(final LimitOrderFlyweight limit) {
         if(limit.getSide().equals(Side.BUY)){
-            logger.info("Adding limit order to bid book" + limit);
+            logger.info("Adding limit order to BID book" + limit);
             this.getBidBookSide().addLimitOrder(limit);
         }else{
-            logger.info("Adding limit order to ask book" + limit);
+            logger.info("Adding limit order to ASK book" + limit);
             this.getAskBookSide().addLimitOrder(limit);
         }
     }

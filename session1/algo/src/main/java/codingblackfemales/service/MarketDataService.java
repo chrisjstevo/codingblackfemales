@@ -44,12 +44,26 @@ public class MarketDataService extends MarketDataEventListener {
 
     public long getInstrumentId(){return instrumentId;}
 
+    private static void empty(BidLevel[] levels){
+        for (int i=0; i<levels.length; i++) {
+            levels[i] = null;
+        }
+    }
+
+    private static void empty(AskLevel[] levels){
+        for (int i=0; i<levels.length; i++) {
+            levels[i] = null;
+        }
+    }
+
     @Override
     public void onBookUpdate(BookUpdateDecoder bookUpdate) {
 
         int bookLevel = 0;
 
         instrumentId = bookUpdate.instrumentId();
+
+        empty(bidBook);
 
         for(BookUpdateDecoder.BidBookDecoder decoder : bookUpdate.bidBook()){
             final long price = decoder.price();
@@ -63,6 +77,8 @@ public class MarketDataService extends MarketDataEventListener {
             bidLength = bookLevel;
 
         }
+
+        empty(askBook);
 
         bookLevel = 0;
 
@@ -80,8 +96,6 @@ public class MarketDataService extends MarketDataEventListener {
             askLength = bookLevel;
         }
 
-
-
         runTrigger.triggerRun();
     }
 
@@ -89,6 +103,8 @@ public class MarketDataService extends MarketDataEventListener {
     public void onAskBook(AskBookUpdateDecoder askBookDec){
 
         instrumentId = askBookDec.instrumentId();
+
+        empty(askBook);
 
         int bookLevel = 0;
 
@@ -111,6 +127,8 @@ public class MarketDataService extends MarketDataEventListener {
     @Override
     public void onBidBook(BidBookUpdateDecoder bidBookDec) {
         int bookLevel = 0;
+
+        empty(bidBook);
 
         instrumentId = bidBookDec.instrumentId();
 
