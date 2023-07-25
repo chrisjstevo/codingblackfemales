@@ -51,11 +51,11 @@ public class ReadOnlyMarketDataChannelPublishVisitor implements OrderBookVisitor
             }
 
             final var size = side.getFirstLevel().size();
-            logger.info("Bid Side Size: " + size);
+            logger.debug("Bid Side Size: " + size);
             var bidBookEncoder = encoder.bidBookCount(size);
             OrderBookLevel level = side.getFirstLevel();
             for(int i=0; i< size; i++){
-                logger.info("Adding Mkt Data Msg BID: Price=" + level.getPrice() + " Qty=" + level.getQuantity());
+                logger.debug("Adding Mkt Data Msg BID: Price=" + level.getPrice() + " Qty=" + level.getQuantity());
                 bidBookEncoder.next().size(level.getQuantity()).price(level.getPrice()) ;
                 level = level.next();
             }
@@ -64,12 +64,12 @@ public class ReadOnlyMarketDataChannelPublishVisitor implements OrderBookVisitor
                 return;
             }
             final var size = side.getFirstLevel().size();
-            logger.info("Ask Side Size: " + size);
+            logger.debug("Ask Side Size: " + size);
             var askBookEncoder = encoder.askBookCount(size);
             OrderBookLevel level = side.getFirstLevel();
 
             for(int i=0; i< size; i++){
-                logger.info("Adding Mkt Data Msg ASK: Price=" + level.getPrice() + " Qty=" + level.getQuantity());
+                logger.debug("Adding Mkt Data Msg ASK: Price=" + level.getPrice() + " Qty=" + level.getQuantity());
                 askBookEncoder.next().size(level.getQuantity()).price(level.getPrice()) ;
                 level = level.next();
             }

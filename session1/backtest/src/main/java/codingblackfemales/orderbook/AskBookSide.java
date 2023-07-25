@@ -41,6 +41,7 @@ public class AskBookSide extends OrderBookSide {
             final long price = decoder.price();
             final long quantity = decoder.size();
             var marketOrder = new MarketDataOrderFlyweight(price, quantity);
+            logger.debug("[ORDERBOOK] ASK: Adding order" + marketOrder);
             addMarketDataOrder(marketOrder);
         }
     }
@@ -49,8 +50,8 @@ public class AskBookSide extends OrderBookSide {
         for(BookUpdateDecoder.AskBookDecoder decoder : bookUpdateDecoder.askBook()) {
             final long price = decoder.price();
             final long quantity = decoder.size();
-            logger.info("[ORDERBOOK] ASK: Adding order price:" + price + " quantity:" + quantity);
             var marketOrder = new MarketDataOrderFlyweight(price, quantity);
+            logger.debug("[ORDERBOOK] ASK: Adding order" + marketOrder);
             addMarketDataOrder(marketOrder);
         }
     }
