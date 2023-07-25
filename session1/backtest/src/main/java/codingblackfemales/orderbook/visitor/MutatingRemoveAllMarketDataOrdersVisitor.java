@@ -19,9 +19,9 @@ public class MutatingRemoveAllMarketDataOrdersVisitor implements OrderBookVisito
         if(order instanceof MarketDataOrderFlyweight){
             DefaultOrderFlyweight newFirst = order.remove();
             level.setFirstOrder(newFirst);
-            logger.info("Removing market data order:" + order);
+            logger.info("[ORDERBOOK] Removing market data order:" + order);
             if(level.getQuantity() - order.getQuantity() == 0){
-                logger.info("Removing level:" + level.getPrice());
+                logger.info("[ORDERBOOK] Removing level:" + level.getPrice());
                 side.setFirstLevel(level.remove());
             }
         }

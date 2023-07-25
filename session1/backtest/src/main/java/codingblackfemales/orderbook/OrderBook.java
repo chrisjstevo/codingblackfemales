@@ -7,6 +7,7 @@ import codingblackfemales.sequencer.event.MarketDataEventListener;
 import messages.marketdata.AskBookUpdateDecoder;
 import messages.marketdata.BidBookUpdateDecoder;
 import messages.marketdata.BookUpdateDecoder;
+import messages.marketdata.Source;
 import messages.order.Side;
 import org.agrona.MutableDirectBuffer;
 import org.slf4j.Logger;
@@ -49,8 +50,12 @@ public class OrderBook extends MarketDataEventListener {
 
     @Override
     public void onBookUpdate(BookUpdateDecoder bookUpdate) {
-        getBidBookSide().onBookUpdate(bookUpdate);
-        getAskBookSide().onBookUpdate(bookUpdate);
+        //don't process updates from ourself.
+        if(!bookUpdate.source().equals(Source.ORDERBOOK)){
+            logger.info("[ORDERBOOK] Processing Mkt Data Update");
+            getBidBookSide().onBookUpdate(bookUpdate);
+            getAskBookSide().onBookUpdate(bookUpdate);
+        }
     }
 
     @Override

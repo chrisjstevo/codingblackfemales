@@ -4,8 +4,12 @@ import codingblackfemales.orderbook.OrderBookLevel;
 import codingblackfemales.orderbook.OrderBookSide;
 import codingblackfemales.orderbook.order.DefaultOrderFlyweight;
 import codingblackfemales.orderbook.order.Order;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MutatingAddOrderVisitor implements OrderBookVisitor,FilteringOrderBookVisitor{
+
+    private static final Logger logger = LoggerFactory.getLogger(MutatingAddOrderVisitor.class);
 
     private DefaultOrderFlyweight orderToAdd;
 
@@ -28,6 +32,7 @@ public class MutatingAddOrderVisitor implements OrderBookVisitor,FilteringOrderB
     @Override
     public void visit(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {
         if(order.getPrice() == orderToAdd.getPrice() && isLast){
+            logger.info("[ORDERBOOK] + " +order);
             order.add(orderToAdd);
         }
     }

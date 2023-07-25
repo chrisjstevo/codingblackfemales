@@ -5,10 +5,7 @@ import codingblackfemales.orderbook.BidBookSide;
 import codingblackfemales.orderbook.OrderBookLevel;
 import codingblackfemales.orderbook.OrderBookSide;
 import codingblackfemales.orderbook.order.DefaultOrderFlyweight;
-import messages.marketdata.BookUpdateEncoder;
-import messages.marketdata.InstrumentStatus;
-import messages.marketdata.MessageHeaderEncoder;
-import messages.marketdata.Venue;
+import messages.marketdata.*;
 import org.agrona.MutableDirectBuffer;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.slf4j.Logger;
@@ -35,6 +32,7 @@ public class ReadOnlyMarketDataChannelPublishVisitor implements OrderBookVisitor
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+        encoder.source(Source.ORDERBOOK);
     }
 
     public MutableDirectBuffer end(){

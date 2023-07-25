@@ -14,10 +14,7 @@ import codingblackfemales.sequencer.marketdata.SequencerTestCase;
 import codingblackfemales.sequencer.net.TestNetwork;
 import codingblackfemales.service.MarketDataService;
 import codingblackfemales.service.OrderService;
-import messages.marketdata.BookUpdateEncoder;
-import messages.marketdata.InstrumentStatus;
-import messages.marketdata.MessageHeaderEncoder;
-import messages.marketdata.Venue;
+import messages.marketdata.*;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
 
@@ -68,6 +65,7 @@ public class ExampleAlgoBackTest  extends SequencerTestCase {
         //set the fields to desired values
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
+        encoder.source(Source.STREAM);
 
         encoder.bidBookCount(3)
                 .next().price(98L).size(100L)

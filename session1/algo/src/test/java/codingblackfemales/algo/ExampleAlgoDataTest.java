@@ -67,6 +67,7 @@ public class ExampleAlgoDataTest extends SequencerTestCase {
                 .next().price(91L).size(300L);
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+        encoder.source(Source.STREAM);
 
         return directBuffer;
     }

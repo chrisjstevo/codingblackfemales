@@ -49,7 +49,7 @@ public class AskBookSide extends OrderBookSide {
         for(BookUpdateDecoder.AskBookDecoder decoder : bookUpdateDecoder.askBook()) {
             final long price = decoder.price();
             final long quantity = decoder.size();
-            logger.info("ASK: Adding order price:" + price + " quantity:" + quantity);
+            logger.info("[ORDERBOOK] ASK: Adding order price:" + price + " quantity:" + quantity);
             var marketOrder = new MarketDataOrderFlyweight(price, quantity);
             addMarketDataOrder(marketOrder);
         }

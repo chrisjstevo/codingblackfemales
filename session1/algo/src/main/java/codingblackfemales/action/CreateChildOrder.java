@@ -5,10 +5,14 @@ import messages.order.MessageHeaderEncoder;
 import messages.order.CreateOrderEncoder;
 import messages.order.Side;
 import org.agrona.concurrent.UnsafeBuffer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 
 public class CreateChildOrder implements Action {
+
+    private static final Logger logger = LoggerFactory.getLogger(CreateChildOrder.class);
     private final long quantity;
     private final long price;
 
@@ -23,6 +27,11 @@ public class CreateChildOrder implements Action {
         this.quantity = quantity;
         this.price = price;
         this.side = side;
+    }
+
+    @Override
+    public String toString() {
+        return "CreateChildOrder(side=" + side + ",quantity=" + quantity + ",price=" + price + ")";
     }
 
     @Override
