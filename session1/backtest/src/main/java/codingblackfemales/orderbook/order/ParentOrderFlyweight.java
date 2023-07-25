@@ -15,5 +15,7 @@ public abstract class ParentOrderFlyweight<TYPE extends IntrusiveLinkedListNode<
         return 0;
     }
 
+    public abstract void setQuantity(long quantity);
+
 
 }

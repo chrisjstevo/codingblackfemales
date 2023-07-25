@@ -18,13 +18,13 @@ public class MutatingRemoveOneOrderVisitor implements OrderBookVisitor{
     }
 
     @Override
-    public void visit(OrderBookSide side, OrderBookLevel level) {}
+    public void visitLevel(OrderBookSide side, OrderBookLevel level) {}
 
     @Override
-    public void visit(OrderBookSide side) {}
+    public void visitSide(OrderBookSide side) {}
 
     @Override
-    public void visit(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {
+    public void visitOrder(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {
         if(order instanceof LimitOrderFlyweight){
             LimitOrderFlyweight limit = (LimitOrderFlyweight) order;
 

@@ -22,15 +22,15 @@ public class MutatingAddOrderVisitor implements OrderBookVisitor,FilteringOrderB
     }
 
     @Override
-    public void visit(OrderBookSide side) {}
+    public void visitSide(OrderBookSide side) {}
 
     @Override
-    public void visit(OrderBookSide side, OrderBookLevel level) {
+    public void visitLevel(OrderBookSide side, OrderBookLevel level) {
         level.setQuantity(level.getQuantity() + orderToAdd.getQuantity());
     }
 
     @Override
-    public void visit(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {
+    public void visitOrder(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {
         if(order.getPrice() == orderToAdd.getPrice() && isLast){
             logger.info("[ORDERBOOK] + " +order);
             order.add(orderToAdd);

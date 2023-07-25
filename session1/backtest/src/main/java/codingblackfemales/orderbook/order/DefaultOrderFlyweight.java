@@ -8,6 +8,8 @@ public class DefaultOrderFlyweight extends ParentOrderFlyweight<DefaultOrderFlyw
 
     @Override
     public void accept(OrderBookVisitor visitor, OrderBookSide side, OrderBookLevel level, boolean isLast) {
-        visitor.visit(this, side, level, isLast);
+        visitor.visitOrder(this, side, level, isLast);
     }
+
+    public void setQuantity(long quantity){}
 }

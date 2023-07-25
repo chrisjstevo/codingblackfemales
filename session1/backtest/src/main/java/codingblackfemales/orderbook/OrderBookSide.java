@@ -6,7 +6,6 @@ import codingblackfemales.orderbook.visitor.FilteringOrderBookVisitor;
 import codingblackfemales.orderbook.visitor.MutatingAddOrderVisitor;
 import codingblackfemales.orderbook.visitor.MutatingRemoveAllMarketDataOrdersVisitor;
 import codingblackfemales.orderbook.visitor.OrderBookVisitor;
-import messages.marketdata.BookUpdateDecoder;
 
 public abstract class OrderBookSide {
     private OrderBookLevel firstLevel;
@@ -27,7 +26,7 @@ public abstract class OrderBookSide {
 
     public void accept(final OrderBookVisitor visitor){
 
-        visitor.visit(this);
+        visitor.visitSide(this);
 
         var levelToVisit = getFirstLevel();
 

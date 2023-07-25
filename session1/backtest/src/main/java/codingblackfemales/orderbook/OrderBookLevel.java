@@ -52,7 +52,7 @@ public class OrderBookLevel extends IntrusiveLinkedListNode<OrderBookLevel> {
     }
 
     public void accept(OrderBookVisitor visitor, OrderBookSide side){
-        visitor.visit(side, this);
+        visitor.visitLevel(side, this);
 
         DefaultOrderFlyweight order = firstOrder;
 
@@ -72,6 +72,6 @@ public class OrderBookLevel extends IntrusiveLinkedListNode<OrderBookLevel> {
 
     @Override
     public String toString() {
-        return "OBLevel(price=" + price + ",quantity=" + quantity + ")" ;
+        return "OrderBookLevel(price=" + price + ",quantity=" + quantity + ")" ;
     }
 }

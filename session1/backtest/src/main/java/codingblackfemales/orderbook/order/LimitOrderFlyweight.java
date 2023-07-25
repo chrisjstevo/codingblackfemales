@@ -30,6 +30,10 @@ public class LimitOrderFlyweight extends DefaultOrderFlyweight {
         return quantity;
     }
 
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
+    }
+
     public long getOrderId() {
         return orderId;
     }

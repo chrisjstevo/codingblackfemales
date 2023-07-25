@@ -41,10 +41,10 @@ public class ReadOnlyMarketDataChannelPublishVisitor implements OrderBookVisitor
 
 
     @Override
-    public void visit(OrderBookSide side, OrderBookLevel level) {}
+    public void visitLevel(OrderBookSide side, OrderBookLevel level) {}
 
     @Override
-    public void visit(OrderBookSide side) {
+    public void visitSide(OrderBookSide side) {
         if(side instanceof BidBookSide){
             if(side.getFirstLevel() == null){
                 return;
@@ -77,7 +77,7 @@ public class ReadOnlyMarketDataChannelPublishVisitor implements OrderBookVisitor
     }
 
     @Override
-    public void visit(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {}
+    public void visitOrder(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {}
 
     @Override
     public OrderBookLevel missingBookLevel(OrderBookLevel previous, OrderBookLevel next, long price) {

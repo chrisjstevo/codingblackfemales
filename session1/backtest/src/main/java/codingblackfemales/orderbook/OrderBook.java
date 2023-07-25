@@ -1,7 +1,9 @@
 package codingblackfemales.orderbook;
 
 import codingblackfemales.orderbook.channel.MarketDataChannel;
+import codingblackfemales.orderbook.channel.OrderChannel;
 import codingblackfemales.orderbook.order.LimitOrderFlyweight;
+import codingblackfemales.orderbook.visitor.MutatingMatchOneOrderVisitor;
 import codingblackfemales.orderbook.visitor.ReadOnlyMarketDataChannelPublishVisitor;
 import codingblackfemales.sequencer.event.MarketDataEventListener;
 import messages.marketdata.AskBookUpdateDecoder;
@@ -18,9 +20,11 @@ public class OrderBook extends MarketDataEventListener {
     private static final Logger logger = LoggerFactory.getLogger(OrderBook.class);
 
     private final MarketDataChannel marketDataChannel;
+    private final OrderChannel orderChannel;
 
-    public OrderBook(MarketDataChannel marketDataChannel) {
+    public OrderBook(final MarketDataChannel marketDataChannel, final OrderChannel orderChannel) {
         this.marketDataChannel = marketDataChannel;
+        this.orderChannel = orderChannel;
     }
 
     private ReadOnlyMarketDataChannelPublishVisitor mktDataVisitor = new ReadOnlyMarketDataChannelPublishVisitor();
@@ -69,15 +73,20 @@ public class OrderBook extends MarketDataEventListener {
     }
 
     public void matchOrder(final LimitOrderFlyweight limit) {
-
+        final MutatingMatchOneOrderVisitor visitor = new MutatingMatchOneOrderVisitor(limit, orderChannel);
+        if(limit.getSide().equals(Side.BUY)){
+            getAskBookSide().accept(visitor);
+        }else if(limit.getSide().equals(Side.SELL)){
+            getBidBookSide().accept(visitor);
+        }
     }
 
     public void addLiquidity(final LimitOrderFlyweight limit) {
         if(limit.getSide().equals(Side.BUY)){
-            logger.info("Adding limit order to BID book" + limit);
+            logger.info("[ORDERBOOK] Adding passive limit order to BID book" + limit);
             this.getBidBookSide().addLimitOrder(limit);
         }else{
-            logger.info("Adding limit order to ASK book" + limit);
+            logger.info("A[ORDERBOOK] dding passive limit order to ASK book" + limit);
             this.getAskBookSide().addLimitOrder(limit);
         }
     }

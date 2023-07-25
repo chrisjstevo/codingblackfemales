@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import static codingblackfemales.action.NoAction.NoAction;
 
-public class ExampleAlgoLogic implements AlgoLogic{
+public class PassiveAlgoLogic implements AlgoLogic{
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -32,10 +32,10 @@ public class ExampleAlgoLogic implements AlgoLogic{
         //until we have three child orders....
         if(state.getChildOrders().size() < 3){
             //then keep creating a new one
-            logger.info("Have:" + state.getChildOrders().size() + " children, want 3, carrying on...");
+            logger.info("[PASSIVEALGO] Have:" + state.getChildOrders().size() + " children, want 3, joining passive side of book with: " + quantity + " @ " + price);
             return new CreateChildOrder(Side.BUY, quantity, price);
         }else{
-            logger.info("Have:" + state.getChildOrders().size() + " children, want 3, all good.");
+            logger.info("[PASSIVEALGO] Have:" + state.getChildOrders().size() + " children, want 3, done.");
             return NoAction;
         }
 

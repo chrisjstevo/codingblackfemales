@@ -12,17 +12,18 @@ public class MutatingRemoveAllMarketDataOrdersVisitor implements OrderBookVisito
     private static final Logger logger = LoggerFactory.getLogger(MutatingRemoveAllMarketDataOrdersVisitor.class);
 
     @Override
-    public void visit(OrderBookSide side, OrderBookLevel level) {}
+    public void visitLevel(OrderBookSide side, OrderBookLevel level) {}
 
     @Override
-    public void visit(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {
+    public void visitOrder(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {
         if(order instanceof MarketDataOrderFlyweight){
             DefaultOrderFlyweight newFirst = order.remove();
             level.setFirstOrder(newFirst);
             logger.info("[ORDERBOOK] Removing market data order:" + order);
             if(level.getQuantity() - order.getQuantity() == 0){
                 logger.info("[ORDERBOOK] Removing level:" + level.getPrice());
-                side.setFirstLevel(level.remove());
+                OrderBookLevel newFirstLevel = level.remove();
+                side.setFirstLevel(newFirstLevel);
             }
         }
     }
@@ -43,5 +44,5 @@ public class MutatingRemoveAllMarketDataOrdersVisitor implements OrderBookVisito
     }
 
     @Override
-    public void visit(OrderBookSide side) {}
+    public void visitSide(OrderBookSide side) {}
 }

@@ -1,11 +1,12 @@
 package codingblackfemales.backtest;
 
-import codingblackfemales.algo.ExampleAlgoLogic;
+import codingblackfemales.algo.SniperAlgoLogic;
 import codingblackfemales.container.Actioner;
 import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.container.RunTrigger;
 import codingblackfemales.orderbook.OrderBook;
 import codingblackfemales.orderbook.channel.MarketDataChannel;
+import codingblackfemales.orderbook.channel.OrderChannel;
 import codingblackfemales.orderbook.consumer.OrderBookInboundOrderConsumer;
 import codingblackfemales.sequencer.DefaultSequencer;
 import codingblackfemales.sequencer.Sequencer;
@@ -22,7 +23,7 @@ import java.nio.ByteBuffer;
 
 import static org.junit.Assert.assertEquals;
 
-public class ExampleAlgoBackTest  extends SequencerTestCase {
+public class SniperAlgoBackTest extends SequencerTestCase {
 
     private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
     private final BookUpdateEncoder encoder = new BookUpdateEncoder();
@@ -38,12 +39,14 @@ public class ExampleAlgoBackTest  extends SequencerTestCase {
         final Actioner actioner = new Actioner(sequencer);
 
         final MarketDataChannel marketDataChannel = new MarketDataChannel(sequencer);
-        final OrderBook book = new OrderBook(marketDataChannel);
+        final OrderChannel orderChannel = new OrderChannel();
+        final OrderBook book = new OrderBook(marketDataChannel, orderChannel);
+
         final OrderBookInboundOrderConsumer orderConsumer = new OrderBookInboundOrderConsumer(book);
 
         container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
         //set my algo logic
-        container.setLogic(new ExampleAlgoLogic());
+        container.setLogic(new SniperAlgoLogic());
 
         network.addConsumer(new LoggingConsumer());
         network.addConsumer(book);
@@ -55,7 +58,7 @@ public class ExampleAlgoBackTest  extends SequencerTestCase {
         return sequencer;
     }
 
-    private UnsafeBuffer createSampleMarketDataTick(){
+    private UnsafeBuffer createSampleMarketDataTick() {
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 

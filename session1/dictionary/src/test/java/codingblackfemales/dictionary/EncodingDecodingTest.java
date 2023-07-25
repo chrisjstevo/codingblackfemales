@@ -41,6 +41,7 @@ public class EncodingDecodingTest {
                 .next().price(310l).size(300);
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+        encoder.source(Source.STREAM);
 
         int encodedLength = MessageHeaderEncoder.ENCODED_LENGTH + encoder.encodedLength();
 
