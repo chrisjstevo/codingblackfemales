@@ -6,26 +6,35 @@ import codingblackfemales.orderbook.OrderBookLevel;
 import codingblackfemales.orderbook.OrderBookSide;
 import codingblackfemales.orderbook.order.DefaultOrderFlyweight;
 import messages.marketdata.BookUpdateEncoder;
+import messages.marketdata.InstrumentStatus;
 import messages.marketdata.MessageHeaderEncoder;
 import messages.marketdata.Venue;
 import org.agrona.MutableDirectBuffer;
 import org.agrona.concurrent.UnsafeBuffer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 
 public class ReadOnlyMarketDataChannelPublishVisitor implements OrderBookVisitor {
 
+    private static final Logger logger = LoggerFactory.getLogger(ReadOnlyMarketDataChannelPublishVisitor.class);
+
     private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
     private final BookUpdateEncoder encoder = new BookUpdateEncoder();
 
-    private final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-    private final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+    private ByteBuffer byteBuffer; //= ByteBuffer.allocateDirect(1024);
+    private UnsafeBuffer directBuffer; //= new UnsafeBuffer(byteBuffer);
 
     public void start(){
+        byteBuffer = ByteBuffer.allocateDirect(1024);
+        directBuffer = new UnsafeBuffer(byteBuffer);
+
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
         //set the fields to desired valus
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
+        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
     }
 
     public MutableDirectBuffer end(){
@@ -39,16 +48,32 @@ public class ReadOnlyMarketDataChannelPublishVisitor implements OrderBookVisitor
     @Override
     public void visit(OrderBookSide side) {
         if(side instanceof BidBookSide){
-            var bidBookEncoder = encoder.bidBookCount(side.getFirstLevel().size());
+            if(side.getFirstLevel() == null){
+                return;
+            }
+
+            final var size = side.getFirstLevel().size();
+            logger.info("Bid Side Size: " + size);
+            var bidBookEncoder = encoder.bidBookCount(size);
             OrderBookLevel level = side.getFirstLevel();
-            while(level != null){
+            for(int i=0; i< size; i++){
+                logger.info("Adding Mkt Data Msg BID: Price=" + level.getPrice() + " Qty=" + level.getQuantity());
                 bidBookEncoder.next().size(level.getQuantity()).price(level.getPrice()) ;
+                level = level.next();
             }
         }else if(side instanceof AskBookSide){
-            var askBookEncoder = encoder.askBookCount(side.getFirstLevel().size());
+            if(side.getFirstLevel() == null){
+                return;
+            }
+            final var size = side.getFirstLevel().size();
+            logger.info("Ask Side Size: " + size);
+            var askBookEncoder = encoder.askBookCount(size);
             OrderBookLevel level = side.getFirstLevel();
-            while(level != null){
+
+            for(int i=0; i< size; i++){
+                logger.info("Adding Mkt Data Msg ASK: Price=" + level.getPrice() + " Qty=" + level.getQuantity());
                 askBookEncoder.next().size(level.getQuantity()).price(level.getPrice()) ;
+                level = level.next();
             }
         }
     }

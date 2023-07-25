@@ -4,8 +4,12 @@ import codingblackfemales.orderbook.order.MarketDataOrderFlyweight;
 import codingblackfemales.orderbook.visitor.MutatingAddOrderVisitor;
 import messages.marketdata.AskBookUpdateDecoder;
 import messages.marketdata.BookUpdateDecoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AskBookSide extends OrderBookSide {
+
+    private static final Logger logger = LoggerFactory.getLogger(AskBookSide.class);
 
     private final MutatingAddOrderVisitor addOrderVisitor = new MutatingAddOrderVisitor();
 
@@ -45,7 +49,7 @@ public class AskBookSide extends OrderBookSide {
         for(BookUpdateDecoder.AskBookDecoder decoder : bookUpdateDecoder.askBook()) {
             final long price = decoder.price();
             final long quantity = decoder.size();
-            System.out.println("Adding order price:" + price + " quantity:" + quantity);
+            logger.info("ASK: Adding order price:" + price + " quantity:" + quantity);
             var marketOrder = new MarketDataOrderFlyweight(price, quantity);
             addMarketDataOrder(marketOrder);
         }

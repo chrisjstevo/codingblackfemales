@@ -4,8 +4,12 @@ import codingblackfemales.orderbook.OrderBook;
 import codingblackfemales.orderbook.order.LimitOrderFlyweight;
 import codingblackfemales.sequencer.event.OrderEventListener;
 import messages.order.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OrderBookInboundOrderConsumer extends OrderEventListener {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderBookInboundOrderConsumer.class);
 
     private final OrderBook book;
 
@@ -16,7 +20,7 @@ public class OrderBookInboundOrderConsumer extends OrderEventListener {
     @Override
     public void onCreateOrder(CreateOrderDecoder create) {
         final var limit = new LimitOrderFlyweight(create.side(), create.price(), create.quantity(), create.orderId());
-        System.out.println("Adding limit Order:" + limit + " to book");
+        logger.info("Adding limit Order:" + limit + " to book");
         book.onLimitOrder(limit);
     }
 

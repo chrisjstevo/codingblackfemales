@@ -7,8 +7,12 @@ import codingblackfemales.sequencer.event.MarketDataEventListener;
 import messages.marketdata.AskBookUpdateDecoder;
 import messages.marketdata.BidBookUpdateDecoder;
 import messages.marketdata.BookUpdateDecoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MarketDataService extends MarketDataEventListener {
+
+    private static final Logger logger = LoggerFactory.getLogger(MarketDataService.class);
 
     private int bidLength = 0;
     private int askLength = 0;
@@ -41,11 +45,26 @@ public class MarketDataService extends MarketDataEventListener {
     public long getInstrumentId(){return instrumentId;}
 
     @Override
-    public void onBookUpdate(BookUpdateDecoder bookUpdate) throws Exception {
+    public void onBookUpdate(BookUpdateDecoder bookUpdate) {
 
         int bookLevel = 0;
 
         instrumentId = bookUpdate.instrumentId();
+
+        for(BookUpdateDecoder.BidBookDecoder decoder : bookUpdate.bidBook()){
+            final long price = decoder.price();
+            final long quantity = decoder.size();
+            bidBook[bookLevel] = new BidLevel();
+            bidBook[bookLevel].setPrice(price);
+            bidBook[bookLevel].setQuantity(quantity);
+            logger.info("BID: price:" + price + " quantity:" + quantity);
+
+            bookLevel+= 1;
+            bidLength = bookLevel;
+
+        }
+
+        bookLevel = 0;
 
         for(BookUpdateDecoder.AskBookDecoder decoder : bookUpdate.askBook()){
             final long price = decoder.price();
@@ -55,34 +74,19 @@ public class MarketDataService extends MarketDataEventListener {
             askBook[bookLevel].setPrice(price);
             askBook[bookLevel].setQuantity(quantity);
 
-
-
-            System.out.println("ASK: price:" + price + " quantity:" + quantity);
+            logger.info("ASK: price:" + price + " quantity:" + quantity);
 
             bookLevel+= 1;
             askLength = bookLevel;
         }
 
-        bookLevel = 0;
 
-        for(BookUpdateDecoder.BidBookDecoder decoder : bookUpdate.bidBook()){
-            final long price = decoder.price();
-            final long quantity = decoder.size();
-            bidBook[bookLevel] = new BidLevel();
-            bidBook[bookLevel].setPrice(price);
-            bidBook[bookLevel].setQuantity(quantity);
-            System.out.println("BID: price:" + price + " quantity:" + quantity);
-
-            bookLevel+= 1;
-            bidLength = bookLevel;
-
-        }
 
         runTrigger.triggerRun();
     }
 
     @Override
-    public void onAskBook(AskBookUpdateDecoder askBookDec) throws Exception {
+    public void onAskBook(AskBookUpdateDecoder askBookDec){
 
         instrumentId = askBookDec.instrumentId();
 
@@ -94,7 +98,7 @@ public class MarketDataService extends MarketDataEventListener {
             askBook[bookLevel] = new AskLevel();
             askBook[bookLevel].setPrice(price);
             askBook[bookLevel].setQuantity(quantity);
-            System.out.println("BID: price:" + price + " quantity:" + quantity);
+            logger.info("BID: price:" + price + " quantity:" + quantity);
 
             bookLevel+= 1;
             askLength = bookLevel;
@@ -105,7 +109,7 @@ public class MarketDataService extends MarketDataEventListener {
     }
 
     @Override
-    public void onBidBook(BidBookUpdateDecoder bidBookDec) throws Exception {
+    public void onBidBook(BidBookUpdateDecoder bidBookDec) {
         int bookLevel = 0;
 
         instrumentId = bidBookDec.instrumentId();
@@ -116,7 +120,7 @@ public class MarketDataService extends MarketDataEventListener {
             bidBook[bookLevel] = new BidLevel();
             bidBook[bookLevel].setPrice(price);
             bidBook[bookLevel].setQuantity(quantity);
-            System.out.println("BID: price:" + price + " quantity:" + quantity);
+            logger.info("BID: price:" + price + " quantity:" + quantity);
 
             bookLevel+= 1;
             bidLength = bookLevel;

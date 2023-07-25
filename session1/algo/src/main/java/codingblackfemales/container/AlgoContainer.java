@@ -43,7 +43,7 @@ public class AlgoContainer implements Consumer {
     }
 
     @Override
-    public void onMessage(DirectBuffer buffer) throws Exception {
+    public void onMessage(DirectBuffer buffer){
         if(runTrigger.shouldRun()){
             runAlgoLogic();
 
@@ -52,7 +52,7 @@ public class AlgoContainer implements Consumer {
         }
     }
 
-    private void runAlgoLogic() throws Exception {
+    private void runAlgoLogic(){
         final var action = logic.evaluate(state);
 
         runTrigger.hasRun();

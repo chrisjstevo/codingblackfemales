@@ -15,8 +15,8 @@ public class DefaultSequencer implements Sequencer {
     private final MessageHeaderDecoder headerDecoder = new MessageHeaderDecoder();
     private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
 
-    private final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-    private final UnsafeBuffer mutableBuffer = new UnsafeBuffer(byteBuffer);
+    private ByteBuffer byteBuffer;//= ByteBuffer.allocateDirect(1024);
+    private UnsafeBuffer mutableBuffer;// = new UnsafeBuffer(byteBuffer);
 
     private final CreateOrderDecoder createOrderDecoder = new CreateOrderDecoder();
     private final CreateOrderEncoder createOrderEncoder = new CreateOrderEncoder();
@@ -35,19 +35,19 @@ public class DefaultSequencer implements Sequencer {
     }
 
     @Override
-    public void onCommand(DirectBuffer byteBuffer) throws Exception {
+    public void onCommand(DirectBuffer bb) {
 
-        headerDecoder.wrap(byteBuffer, 0);
+        headerDecoder.wrap(bb, 0);
 
         int schemaId = headerDecoder.schemaId();
         int templateId = headerDecoder.templateId();
 
         if(isModelMessage(schemaId, templateId)){
-            DirectBuffer mutatedBuffer = processModelCommand(byteBuffer, schemaId, headerDecoder);
+            DirectBuffer mutatedBuffer = processModelCommand(bb, schemaId, headerDecoder);
             sequenceAndDispatchMessage(mutatedBuffer);
         }
         else{
-            sequenceAndDispatchMessage(byteBuffer);
+            sequenceAndDispatchMessage(bb);
         }
 
     }
@@ -75,9 +75,12 @@ public class DefaultSequencer implements Sequencer {
         return orderId +=1;
     }
 
-    public void sequenceAndDispatchMessage(final DirectBuffer byteBuffer) throws Exception{
+    public void sequenceAndDispatchMessage(final DirectBuffer bb){
 
-        mutableBuffer.wrap(byteBuffer);
+        byteBuffer = ByteBuffer.allocateDirect(1024);
+        mutableBuffer = new UnsafeBuffer(byteBuffer);
+
+        mutableBuffer.wrap(bb);
 
         headerEncoder.wrap(mutableBuffer, 0);
 
@@ -88,7 +91,7 @@ public class DefaultSequencer implements Sequencer {
         dispatchToNetwork(mutableBuffer);
     }
 
-    public void dispatchToNetwork(DirectBuffer sequencedBuffer) throws Exception{
+    public void dispatchToNetwork(DirectBuffer sequencedBuffer){
         network.dispatch(sequencedBuffer);
     }
 

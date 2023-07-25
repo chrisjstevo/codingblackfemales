@@ -18,7 +18,7 @@ public abstract class OrderEventListener implements Consumer {
     private final FillOrderDecoder fillOrderDecoder = new FillOrderDecoder();
 
     @Override
-    public void onMessage(DirectBuffer buffer) throws Exception {
+    public void onMessage(DirectBuffer buffer){
 
         header.wrap(buffer, 0);
 

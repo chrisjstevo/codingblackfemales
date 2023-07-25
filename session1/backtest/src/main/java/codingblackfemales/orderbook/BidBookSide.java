@@ -6,17 +6,21 @@ import codingblackfemales.orderbook.visitor.OrderBookVisitor;
 import messages.marketdata.AskBookUpdateDecoder;
 import messages.marketdata.BidBookUpdateDecoder;
 import messages.marketdata.BookUpdateDecoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BidBookSide extends OrderBookSide{
 
+    private static final Logger logger = LoggerFactory.getLogger(AskBookSide.class);
+
     private final MutatingAddOrderVisitor addOrderVisitor = new MutatingAddOrderVisitor();
 
-    public void onBidBook(BidBookUpdateDecoder bidBook) throws Exception {
+    public void onBidBook(BidBookUpdateDecoder bidBook) {
         removeMarketDataOrders();
         AddBidMarketDataOrders(bidBook);
     }
 
-    public void onBookUpdate(BookUpdateDecoder bookUpdate) throws Exception {
+    public void onBookUpdate(BookUpdateDecoder bookUpdate) {
         removeMarketDataOrders();
         addBidkMarketDataOrders(bookUpdate);
     }
@@ -47,7 +51,7 @@ public class BidBookSide extends OrderBookSide{
         for(BookUpdateDecoder.AskBookDecoder decoder : bookUpdateDecoder.askBook()) {
             final long price = decoder.price();
             final long quantity = decoder.size();
-            System.out.println("Adding order price:" + price + " quantity:" + quantity);
+            logger.info("BID: Adding order price:" + price + " quantity:" + quantity);
             var marketOrder = new MarketDataOrderFlyweight(price, quantity);
             addMarketDataOrder(marketOrder);
         }

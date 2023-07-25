@@ -3,5 +3,5 @@ package codingblackfemales.sequencer;
 import org.agrona.DirectBuffer;
 
 public interface Sequencer {
-    public void onCommand(final DirectBuffer byteBuffer) throws Exception;
+    public void onCommand(final DirectBuffer byteBuffer);
 }

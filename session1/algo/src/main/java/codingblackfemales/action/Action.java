@@ -4,6 +4,6 @@ import codingblackfemales.sequencer.Sequencer;
 
 public interface Action {
 
-    void apply(final Sequencer sequencer) throws Exception;
+    void apply(final Sequencer sequencer);
 
 }

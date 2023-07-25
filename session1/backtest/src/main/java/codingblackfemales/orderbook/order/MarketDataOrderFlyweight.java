@@ -17,6 +17,8 @@ public class MarketDataOrderFlyweight extends DefaultOrderFlyweight {
         return quantity;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "MktData(price="+price+",quantity="+quantity+")";
+    }
 }

@@ -4,8 +4,12 @@ import codingblackfemales.orderbook.OrderBookLevel;
 import codingblackfemales.orderbook.OrderBookSide;
 import codingblackfemales.orderbook.order.DefaultOrderFlyweight;
 import codingblackfemales.orderbook.order.MarketDataOrderFlyweight;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MutatingRemoveAllMarketDataOrdersVisitor implements OrderBookVisitor{
+
+    private static final Logger logger = LoggerFactory.getLogger(MutatingRemoveAllMarketDataOrdersVisitor.class);
 
     @Override
     public void visit(OrderBookSide side, OrderBookLevel level) {}
@@ -15,9 +19,9 @@ public class MutatingRemoveAllMarketDataOrdersVisitor implements OrderBookVisito
         if(order instanceof MarketDataOrderFlyweight){
             DefaultOrderFlyweight newFirst = order.remove();
             level.setFirstOrder(newFirst);
-            System.out.println("Removing market data order:" + order);
+            logger.info("Removing market data order:" + order);
             if(level.getQuantity() - order.getQuantity() == 0){
-                System.out.println("Removing level:" + level.getPrice());
+                logger.info("Removing level:" + level.getPrice());
                 side.setFirstLevel(level.remove());
             }
         }

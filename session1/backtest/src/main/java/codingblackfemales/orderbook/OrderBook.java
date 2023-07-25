@@ -9,8 +9,12 @@ import messages.marketdata.BidBookUpdateDecoder;
 import messages.marketdata.BookUpdateDecoder;
 import messages.order.Side;
 import org.agrona.MutableDirectBuffer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OrderBook extends MarketDataEventListener {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderBook.class);
 
     private final MarketDataChannel marketDataChannel;
 
@@ -44,18 +48,18 @@ public class OrderBook extends MarketDataEventListener {
     }
 
     @Override
-    public void onBookUpdate(BookUpdateDecoder bookUpdate) throws Exception {
-        getAskBookSide().onBookUpdate(bookUpdate);
+    public void onBookUpdate(BookUpdateDecoder bookUpdate) {
         getBidBookSide().onBookUpdate(bookUpdate);
+        getAskBookSide().onBookUpdate(bookUpdate);
     }
 
     @Override
-    public void onAskBook(AskBookUpdateDecoder askBook) throws Exception {
+    public void onAskBook(AskBookUpdateDecoder askBook) {
         getAskBookSide().onAskBook(askBook);
     }
 
     @Override
-    public void onBidBook(BidBookUpdateDecoder bidBook) throws Exception {
+    public void onBidBook(BidBookUpdateDecoder bidBook) {
         getBidBookSide().onBidBook(bidBook);
     }
 
@@ -65,8 +69,10 @@ public class OrderBook extends MarketDataEventListener {
 
     public void addLiquidity(final LimitOrderFlyweight limit) {
         if(limit.getSide().equals(Side.BUY)){
+            logger.info("Adding limit order to bid book" + limit);
             this.getBidBookSide().addLimitOrder(limit);
         }else{
+            logger.info("Adding limit order to ask book" + limit);
             this.getAskBookSide().addLimitOrder(limit);
         }
     }
@@ -78,12 +84,12 @@ public class OrderBook extends MarketDataEventListener {
             addLiquidity(limit);
         }
 
-        //publishBook();
+        publishBook();
     }
 
     public void publishBook(){
         final var messageBuffer = getBookUpdateMessage();
-        //sendIt....
+        marketDataChannel.publish(messageBuffer);
     }
 
     public MutableDirectBuffer getBookUpdateMessage(){

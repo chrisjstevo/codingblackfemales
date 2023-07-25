@@ -41,7 +41,7 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
         this.first.last = item;
 
         size += 1;
-        setSize(this.last);
+        //setSize(this.last);
 
         return this;
     }
@@ -96,10 +96,18 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
     };
 
     public void next(TYPEOF node){
+
         this.next = node;
     }
 
     public int size(){
-        return size;
+        TYPEOF working = this.first;
+        int count = 0;
+        while(working!=null){
+            count += 1;
+            working = working.next;
+        }
+
+        return count;
     }
 }

@@ -26,7 +26,7 @@ public class CreateChildOrder implements Action {
     }
 
     @Override
-    public void apply(Sequencer sequencer) throws Exception {
+    public void apply(Sequencer sequencer) {
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
         headerEncoder.schemaId(CreateOrderEncoder.SCHEMA_ID);
         headerEncoder.version(CreateOrderEncoder.SCHEMA_VERSION);

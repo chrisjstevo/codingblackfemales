@@ -15,7 +15,7 @@ public abstract class MarketDataEventListener implements Consumer {
     private final BidBookUpdateDecoder bid = new BidBookUpdateDecoder();
 
     @Override
-    public void onMessage(final DirectBuffer buffer) throws Exception {
+    public void onMessage(final DirectBuffer buffer) {
         header.wrap(buffer, 0);
 
         final int actingBlockLength = header.blockLength();
@@ -34,8 +34,8 @@ public abstract class MarketDataEventListener implements Consumer {
         }
     }
 
-    public abstract void onBookUpdate(BookUpdateDecoder bookUpdate) throws Exception;
-    public abstract void onAskBook(AskBookUpdateDecoder askBook) throws Exception;
-    public abstract void onBidBook(BidBookUpdateDecoder bidBook) throws Exception;
+    public abstract void onBookUpdate(BookUpdateDecoder bookUpdate);
+    public abstract void onAskBook(AskBookUpdateDecoder askBook);
+    public abstract void onBidBook(BidBookUpdateDecoder bidBook);
 
 }

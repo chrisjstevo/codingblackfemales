@@ -7,6 +7,6 @@ public class NoAction implements Action {
     public static final NoAction NoAction = new NoAction();
 
     @Override
-    public void apply(Sequencer sequencer) throws Exception {
+    public void apply(Sequencer sequencer) {
     }
 }

@@ -5,7 +5,7 @@ import org.agrona.DirectBuffer;
 
 public class AlgoSequencerConsumer implements Consumer {
     @Override
-    public void onMessage(DirectBuffer buffer) throws Exception {
+    public void onMessage(DirectBuffer buffer){
 
     }
 }

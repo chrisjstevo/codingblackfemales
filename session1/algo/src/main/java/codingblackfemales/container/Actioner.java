@@ -11,7 +11,7 @@ public class Actioner {
         this.sequencer = sequencer;
     }
 
-    public void processAction(final Action action) throws Exception{
+    public void processAction(final Action action){
         action.apply(sequencer);
     }
 }

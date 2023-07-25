@@ -49,6 +49,7 @@ public class ExampleAlgoBackTest  extends SequencerTestCase {
         container.setLogic(new ExampleAlgoLogic());
 
         network.addConsumer(new LoggingConsumer());
+        network.addConsumer(book);
         network.addConsumer(container.getMarketDataService());
         network.addConsumer(container.getOrderService());
         network.addConsumer(orderConsumer);
@@ -68,15 +69,41 @@ public class ExampleAlgoBackTest  extends SequencerTestCase {
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
 
+        encoder.bidBookCount(3)
+                .next().price(98L).size(100L)
+                .next().price(95L).size(200L)
+                .next().price(91L).size(300L);
+
         encoder.askBookCount(3)
                 .next().price(100L).size(101L)
                 .next().price(110L).size(200L)
                 .next().price(115L).size(5000L);
 
+        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+
+        return directBuffer;
+    }
+
+    private UnsafeBuffer createSampleMarketDataTick2(){
+        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+
+        //write the encoded output to the direct buffer
+        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+
+        //set the fields to desired values
+        encoder.venue(Venue.XLON);
+        encoder.instrumentId(123L);
+
         encoder.bidBookCount(3)
-                .next().price(98L).size(100L)
-                .next().price(95L).size(200L)
-                .next().price(91L).size(300L);
+                .next().price(96L).size(150L)
+                .next().price(93L).size(250L)
+                .next().price(90L).size(350L);
+
+        encoder.askBookCount(3)
+                .next().price(101L).size(151L)
+                .next().price(102L).size(251L)
+                .next().price(103L).size(5051L);
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
 
@@ -85,11 +112,12 @@ public class ExampleAlgoBackTest  extends SequencerTestCase {
 
     @Test
     public void testExampleBackTest() throws Exception {
-
         //create a sample market data tick....
         send(createSampleMarketDataTick());
 
         //simple assert to check we had 3 orders created
         assertEquals(container.getState().getChildOrders().size(), 3);
+
+        //send(createSampleMarketDataTick2());
     }
 }

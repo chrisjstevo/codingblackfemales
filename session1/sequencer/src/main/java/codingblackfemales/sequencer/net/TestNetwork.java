@@ -10,7 +10,7 @@ public class TestNetwork implements Network{
     private final List<Consumer> consumers = new LinkedList<>();
 
     @Override
-    public void dispatch(DirectBuffer buffer) throws Exception {
+    public void dispatch(DirectBuffer buffer){
         for (Consumer consumer: consumers) {
             consumer.onMessage(buffer);
         }
