@@ -4,6 +4,7 @@ import codingblackfemales.action.Action;
 import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.sotw.SimpleAlgoState;
 import codingblackfemales.sotw.marketdata.BidLevel;
+import codingblackfemales.util.Util;
 import messages.order.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,10 @@ public class ExampleAlgoLogic implements AlgoLogic{
     public Action evaluate(SimpleAlgoState state) {
 
         logger.info("In Algo Logic....");
+
+        final String book = Util.orderBookToString(state);
+
+        logger.info("Algo Sees Book as:\n" + book);
 
         final BidLevel nearTouch = state.getBidAt(0);
 
