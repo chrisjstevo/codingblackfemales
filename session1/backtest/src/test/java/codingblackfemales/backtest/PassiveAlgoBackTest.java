@@ -39,7 +39,7 @@ public class PassiveAlgoBackTest extends SequencerTestCase {
         final Actioner actioner = new Actioner(sequencer);
 
         final MarketDataChannel marketDataChannel = new MarketDataChannel(sequencer);
-        final OrderChannel orderChannel = new OrderChannel();
+        final OrderChannel orderChannel = new OrderChannel(sequencer);
         final OrderBook book = new OrderBook(marketDataChannel, orderChannel);
 
         final OrderBookInboundOrderConsumer orderConsumer = new OrderBookInboundOrderConsumer(book);
@@ -99,14 +99,14 @@ public class PassiveAlgoBackTest extends SequencerTestCase {
         encoder.source(Source.STREAM);
 
         encoder.bidBookCount(3)
-                .next().price(98L).size(100L)
-                .next().price(95L).size(200L)
+                .next().price(95L).size(100L)
+                .next().price(93L).size(200L)
                 .next().price(91L).size(300L);
 
         encoder.askBookCount(4)
-                .next().price(100L).size(101L)
-                .next().price(110L).size(200L)
-                .next().price(115L).size(5000L)
+                .next().price(98L).size(501L)
+                .next().price(101L).size(200L)
+                .next().price(110L).size(5000L)
                 .next().price(119L).size(5600L);
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
@@ -121,6 +121,14 @@ public class PassiveAlgoBackTest extends SequencerTestCase {
         //simple assert to check we had 3 orders created
         assertEquals(container.getState().getChildOrders().size(), 3);
 
+        //when: market data moves towards us
         send(createSampleMarketDataTick2());
+
+        //then: get the state
+        var state = container.getState();
+        long filledQuantity = state.getChildOrders().stream().map( o -> o.getFilledQuantity() ).reduce(Long::sum).get();
+
+        //and: check that our algo state was updated to reflect our fills when the market data
+        assertEquals(225, filledQuantity);
     }
 }

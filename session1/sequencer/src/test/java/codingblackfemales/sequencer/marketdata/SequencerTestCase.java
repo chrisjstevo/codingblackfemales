@@ -7,8 +7,14 @@ public abstract class SequencerTestCase {
 
     public abstract Sequencer getSequencer();
 
+    private final Sequencer sequencer = getSequencer();
+
+    public Sequencer getSequencerInternal(){
+        return sequencer;
+    }
+
     public void send(DirectBuffer buffer) throws Exception{
-        getSequencer().onCommand(buffer);
+        getSequencerInternal().onCommand(buffer);
     }
 
 }

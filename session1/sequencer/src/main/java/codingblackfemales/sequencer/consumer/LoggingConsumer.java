@@ -5,6 +5,8 @@ import messages.marketdata.BookUpdateDecoder;
 import messages.marketdata.MessageHeaderDecoder;
 import messages.order.CreateOrderDecoder;
 import messages.order.CreateOrderEncoder;
+import messages.order.FillOrderDecoder;
+import messages.order.FillOrderEncoder;
 import org.agrona.DirectBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,26 +20,33 @@ public class LoggingConsumer implements Consumer {
     private final MessageHeaderDecoder decoder = new MessageHeaderDecoder();
     private final BookUpdateDecoder bookUpdateDecoder = new BookUpdateDecoder();
     private final CreateOrderDecoder createOrderDecoder = new CreateOrderDecoder();
+    private final FillOrderDecoder fillDecoder = new FillOrderDecoder();
 
     @Override
     public void onMessage(final DirectBuffer buffer) {
 
         decoder.wrap(buffer, 0);
 
-        if(decoder.schemaId() == BookUpdateDecoder.SCHEMA_ID){
+        if (decoder.schemaId() == BookUpdateDecoder.SCHEMA_ID && decoder.templateId() == BookUpdateDecoder.TEMPLATE_ID) {
             final int actingBlockLength = decoder.blockLength();
             final int actingVersion = decoder.version();
             int bufferOffset = decoder.encodedLength();
             bookUpdateDecoder.wrap(buffer, bufferOffset, actingBlockLength, actingVersion);
             logger.info("[" + decoder.sequencerNumber() + "] \n" + bookUpdateToString(bookUpdateDecoder));
-        }else if(decoder.schemaId() == CreateOrderEncoder.SCHEMA_ID){
+        } else if (decoder.schemaId() == CreateOrderEncoder.SCHEMA_ID && decoder.templateId() == CreateOrderDecoder.TEMPLATE_ID) {
             final int actingBlockLength = decoder.blockLength();
             final int actingVersion = decoder.version();
 
             int bufferOffset = decoder.encodedLength();
             createOrderDecoder.wrap(buffer, bufferOffset, actingBlockLength, actingVersion);
             logger.info("[" + decoder.sequencerNumber() + "] " + createOrderDecoder);
-        }
+        } else if (decoder.schemaId() == FillOrderDecoder.SCHEMA_ID && decoder.templateId() == FillOrderDecoder.TEMPLATE_ID) {
+            final int actingBlockLength = decoder.blockLength();
+            final int actingVersion = decoder.version();
 
+            int bufferOffset = decoder.encodedLength();
+            fillDecoder.wrap(buffer, bufferOffset, actingBlockLength, actingVersion);
+            logger.info("[" + decoder.sequencerNumber() + "] " + fillDecoder);
+        }
     }
 }

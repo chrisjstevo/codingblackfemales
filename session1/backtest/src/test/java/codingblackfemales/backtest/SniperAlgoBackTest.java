@@ -39,7 +39,7 @@ public class SniperAlgoBackTest extends SequencerTestCase {
         final Actioner actioner = new Actioner(sequencer);
 
         final MarketDataChannel marketDataChannel = new MarketDataChannel(sequencer);
-        final OrderChannel orderChannel = new OrderChannel();
+        final OrderChannel orderChannel = new OrderChannel(sequencer);
         final OrderBook book = new OrderBook(marketDataChannel, orderChannel);
 
         final OrderBookInboundOrderConsumer orderConsumer = new OrderBookInboundOrderConsumer(book);
