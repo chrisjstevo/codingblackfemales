@@ -3,6 +3,7 @@ package codingblackfemales.orderbook.order;
 import codingblackfemales.orderbook.OrderBookLevel;
 import codingblackfemales.orderbook.OrderBookSide;
 import codingblackfemales.orderbook.visitor.OrderBookVisitor;
+import messages.order.Side;
 
 public class DefaultOrderFlyweight extends ParentOrderFlyweight<DefaultOrderFlyweight>{
 
@@ -12,4 +13,17 @@ public class DefaultOrderFlyweight extends ParentOrderFlyweight<DefaultOrderFlyw
     }
 
     public void setQuantity(long quantity){}
+
+
+    public Side getSide() {
+        return null;
+    }
+
+    public long getPrice() {
+        return 0;
+    }
+
+    public long getQuantity() {
+        return 0;
+    }
 }

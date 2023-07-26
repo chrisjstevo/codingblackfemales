@@ -6,6 +6,7 @@ import codingblackfemales.orderbook.visitor.OrderBookVisitor;
 import messages.marketdata.AskBookUpdateDecoder;
 import messages.marketdata.BidBookUpdateDecoder;
 import messages.marketdata.BookUpdateDecoder;
+import messages.order.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,15 +16,15 @@ public class BidBookSide extends OrderBookSide{
 
     private final MutatingAddOrderVisitor addOrderVisitor = new MutatingAddOrderVisitor();
 
-    public void onBidBook(BidBookUpdateDecoder bidBook) {
-        removeMarketDataOrders();
-        AddBidMarketDataOrders(bidBook);
-    }
-
-    public void onBookUpdate(BookUpdateDecoder bookUpdate) {
-        removeMarketDataOrders();
-        addBidkMarketDataOrders(bookUpdate);
-    }
+//    public void onBidBook(BidBookUpdateDecoder bidBook) {
+//        removeMarketDataOrders();
+//        AddBidMarketDataOrders(bidBook);
+//    }
+//
+//    public void onBookUpdate(BookUpdateDecoder bookUpdate) {
+//        removeMarketDataOrders();
+//        addBidkMarketDataOrders(bookUpdate);
+//    }
 
     @Override
     MutatingAddOrderVisitor getAddOrderVisitor() {
@@ -37,26 +38,26 @@ public class BidBookSide extends OrderBookSide{
     boolean isNewDeepestLevel(OrderBookLevel previous, OrderBookLevel next, long price){
         return previous != null && next == null && previous.getPrice() > price;
     }
-
-    void AddBidMarketDataOrders(BidBookUpdateDecoder bidDecoder){
-        for(BidBookUpdateDecoder.BidBookDecoder decoder : bidDecoder.bidBook()) {
-            final long price = decoder.price();
-            final long quantity = decoder.size();
-            var marketOrder = new MarketDataOrderFlyweight(price, quantity);
-            logger.debug("[ORDERBOOK] BID: Adding order " + marketOrder);
-            addMarketDataOrder(marketOrder);
-        }
-    }
-
-    private void addBidkMarketDataOrders(BookUpdateDecoder bookUpdateDecoder){
-        for(BookUpdateDecoder.AskBookDecoder decoder : bookUpdateDecoder.askBook()) {
-            final long price = decoder.price();
-            final long quantity = decoder.size();
-            var marketOrder = new MarketDataOrderFlyweight(price, quantity);
-            logger.debug("[ORDERBOOK] BID: Adding order " + marketOrder);
-            addMarketDataOrder(marketOrder);
-        }
-    }
+//
+//    void AddBidMarketDataOrders(BidBookUpdateDecoder bidDecoder){
+//        for(BidBookUpdateDecoder.BidBookDecoder decoder : bidDecoder.bidBook()) {
+//            final long price = decoder.price();
+//            final long quantity = decoder.size();
+//            var marketOrder = new MarketDataOrderFlyweight(Side.BUY, price, quantity);
+//            logger.debug("[ORDERBOOK] BID: Adding order " + marketOrder);
+//            addMarketDataOrder(marketOrder);
+//        }
+//    }
+//
+//    private void addBidkMarketDataOrders(BookUpdateDecoder bookUpdateDecoder){
+//        for(BookUpdateDecoder.AskBookDecoder decoder : bookUpdateDecoder.askBook()) {
+//            final long price = decoder.price();
+//            final long quantity = decoder.size();
+//            var marketOrder = new MarketDataOrderFlyweight(Side.BUY, price, quantity);
+//            logger.debug("[ORDERBOOK] BID: Adding order " + marketOrder);
+//            addMarketDataOrder(marketOrder);
+//        }
+//    }
 
 
 }

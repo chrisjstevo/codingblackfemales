@@ -15,9 +15,9 @@ public class OrderBookVisitorTest {
     public void testMarketDataAddRemovalVisitor(){
 
         final AskBookSide side = new AskBookSide();
-        side.addMarketDataOrder(new MarketDataOrderFlyweight(1000, 10_500));
-        side.addMarketDataOrder(new MarketDataOrderFlyweight(1100, 21_000));
-        side.addMarketDataOrder(new MarketDataOrderFlyweight(1200, 35_000));
+        side.addMarketDataOrder(new MarketDataOrderFlyweight(Side.SELL, 1000, 10_500));
+        side.addMarketDataOrder(new MarketDataOrderFlyweight(Side.SELL, 1100, 21_000));
+        side.addMarketDataOrder(new MarketDataOrderFlyweight(Side.SELL, 1200, 35_000));
 
         assertEquals(1000L, side.getFirstLevel().getPrice());
         assertEquals(1100L, side.getFirstLevel().next().getPrice());
@@ -31,7 +31,7 @@ public class OrderBookVisitorTest {
 
         assertNull(side.getFirstLevel());
 
-        side.addMarketDataOrder(new MarketDataOrderFlyweight(1000, 11_500));
+        side.addMarketDataOrder(new MarketDataOrderFlyweight(Side.SELL, 1000, 11_500));
 
         assertEquals(1000L, side.getFirstLevel().getPrice());
         assertEquals(11_500L, side.getFirstLevel().getQuantity());

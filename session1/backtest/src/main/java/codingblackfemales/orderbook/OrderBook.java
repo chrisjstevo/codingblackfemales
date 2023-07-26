@@ -3,6 +3,8 @@ package codingblackfemales.orderbook;
 import codingblackfemales.orderbook.channel.MarketDataChannel;
 import codingblackfemales.orderbook.channel.OrderChannel;
 import codingblackfemales.orderbook.order.LimitOrderFlyweight;
+import codingblackfemales.orderbook.order.MarketDataOrderFlyweight;
+import codingblackfemales.orderbook.visitor.MutatingMatchOneMarketDataOrderVisitor;
 import codingblackfemales.orderbook.visitor.MutatingMatchOneOrderVisitor;
 import codingblackfemales.orderbook.visitor.ReadOnlyMarketDataChannelPublishVisitor;
 import codingblackfemales.sequencer.event.MarketDataEventListener;
@@ -57,19 +59,80 @@ public class OrderBook extends MarketDataEventListener {
         //don't process updates from ourself.
         if(!bookUpdate.source().equals(Source.ORDERBOOK)){
             logger.info("[ORDERBOOK] Processing Mkt Data Update");
-            getBidBookSide().onBookUpdate(bookUpdate);
-            getAskBookSide().onBookUpdate(bookUpdate);
+            getBidBookSide().removeMarketDataOrders();
+            addOrMatchBidMarketDataOrders(bookUpdate);
+
+            getAskBookSide().removeMarketDataOrders();
+            addOrMatchAskMarketDataOrders(bookUpdate);
+        }
+    }
+
+    private void addOrMatchAskMarketDataOrders(BookUpdateDecoder bookUpdateDecoder){
+        for(BookUpdateDecoder.AskBookDecoder decoder : bookUpdateDecoder.askBook()) {
+            final long price = decoder.price();
+            final long quantity = decoder.size();
+            var marketOrder = new MarketDataOrderFlyweight(Side.SELL, price, quantity);
+            logger.debug("[ORDERBOOK] ASK: Adding order" + marketOrder);
+            if(canMatch(Side.SELL, price)){
+                matchMarketDataOrder(marketOrder);
+            }else{
+                getAskBookSide().addMarketDataOrder(marketOrder);
+            }
+        }
+    }
+
+    private void addOrMatchAskMarketDataOrders(AskBookUpdateDecoder askBookUpdateDecoder){
+        for(AskBookUpdateDecoder.AskBookDecoder decoder : askBookUpdateDecoder.askBook()) {
+            final long price = decoder.price();
+            final long quantity = decoder.size();
+            var marketOrder = new MarketDataOrderFlyweight(Side.SELL, price, quantity);
+            logger.debug("[ORDERBOOK] ASK: Adding order" + marketOrder);
+            if(canMatch(Side.SELL, price)){
+                matchMarketDataOrder(marketOrder);
+            }else{
+                getAskBookSide().addMarketDataOrder(marketOrder);
+            }
+        }
+    }
+
+    private void addOrMatchBidMarketDataOrders(BidBookUpdateDecoder askBookUpdateDecoder){
+        for(BidBookUpdateDecoder.BidBookDecoder decoder : askBookUpdateDecoder.bidBook()) {
+            final long price = decoder.price();
+            final long quantity = decoder.size();
+            var marketOrder = new MarketDataOrderFlyweight(Side.SELL, price, quantity);
+            logger.debug("[ORDERBOOK] ASK: Adding order" + marketOrder);
+            if(canMatch(Side.BUY, price)){
+                matchMarketDataOrder(marketOrder);
+            }else{
+                getBidBookSide().addMarketDataOrder(marketOrder);
+            }
+        }
+    }
+
+    private void addOrMatchBidMarketDataOrders(BookUpdateDecoder bookUpdateDecoder){
+        for(BookUpdateDecoder.AskBookDecoder decoder : bookUpdateDecoder.askBook()) {
+            final long price = decoder.price();
+            final long quantity = decoder.size();
+            var marketOrder = new MarketDataOrderFlyweight(Side.SELL, price, quantity);
+            logger.debug("[ORDERBOOK] ASK: Adding order" + marketOrder);
+            if(canMatch(Side.BUY, price)){
+                matchMarketDataOrder(marketOrder);
+            }else{
+                getBidBookSide().addMarketDataOrder(marketOrder);
+            }
         }
     }
 
     @Override
     public void onAskBook(AskBookUpdateDecoder askBook) {
-        getAskBookSide().onAskBook(askBook);
+        getAskBookSide().removeMarketDataOrders();
+        addOrMatchAskMarketDataOrders(askBook);
     }
 
     @Override
     public void onBidBook(BidBookUpdateDecoder bidBook) {
-        getBidBookSide().onBidBook(bidBook);
+        getBidBookSide().removeMarketDataOrders();
+        addOrMatchBidMarketDataOrders(bidBook);
     }
 
     public void matchOrder(final LimitOrderFlyweight limit) {
@@ -77,6 +140,15 @@ public class OrderBook extends MarketDataEventListener {
         if(limit.getSide().equals(Side.BUY)){
             getAskBookSide().accept(visitor);
         }else if(limit.getSide().equals(Side.SELL)){
+            getBidBookSide().accept(visitor);
+        }
+    }
+
+    public void matchMarketDataOrder(final MarketDataOrderFlyweight market) {
+        final MutatingMatchOneMarketDataOrderVisitor visitor = new MutatingMatchOneMarketDataOrderVisitor(market, orderChannel);
+        if(market.getSide().equals(Side.BUY)){
+            getAskBookSide().accept(visitor);
+        }else if(market.getSide().equals(Side.SELL)){
             getBidBookSide().accept(visitor);
         }
     }
