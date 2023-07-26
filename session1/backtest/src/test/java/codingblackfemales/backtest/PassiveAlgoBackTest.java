@@ -15,6 +15,7 @@ import codingblackfemales.sequencer.marketdata.SequencerTestCase;
 import codingblackfemales.sequencer.net.TestNetwork;
 import codingblackfemales.service.MarketDataService;
 import codingblackfemales.service.OrderService;
+import codingblackfemales.sotw.ChildOrder;
 import messages.marketdata.*;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
@@ -126,7 +127,7 @@ public class PassiveAlgoBackTest extends SequencerTestCase {
 
         //then: get the state
         var state = container.getState();
-        long filledQuantity = state.getChildOrders().stream().map( o -> o.getFilledQuantity() ).reduce(Long::sum).get();
+        long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
 
         //and: check that our algo state was updated to reflect our fills when the market data
         assertEquals(225, filledQuantity);
