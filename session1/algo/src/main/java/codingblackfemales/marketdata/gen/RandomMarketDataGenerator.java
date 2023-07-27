@@ -1,8 +1,9 @@
 package codingblackfemales.marketdata.gen;
 
 import codingblackfemales.marketdata.api.BookEntry;
-import codingblackfemales.marketdata.api.BookUpdate;
 import codingblackfemales.marketdata.api.MarketDataMessage;
+import codingblackfemales.marketdata.impl.AskBookUpdateImpl;
+import codingblackfemales.marketdata.impl.BidBookUpdateImpl;
 import codingblackfemales.marketdata.impl.BookUpdateImpl;
 import messages.marketdata.InstrumentStatus;
 import messages.marketdata.Venue;
@@ -16,28 +17,36 @@ import java.util.stream.Collectors;
 import static java.lang.Math.toIntExact;
 
 public class RandomMarketDataGenerator implements MarketDataGenerator {
-    private Logger logger = LoggerFactory.getLogger(getClass());
-    private long priceLevel;
-    private long priceMaxDelta;
-
-    private long instrumentId = 1;
-    private Venue venue = Venue.XLON;
-    private InstrumentStatus instrumentStatus = InstrumentStatus.CONTINUOUS;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final long priceLevel;
+    private final long priceMaxDelta;
+    private final long instrumentId;
+    private final Venue venue;
+    private final InstrumentStatus instrumentStatus = InstrumentStatus.CONTINUOUS;
     private final Comparator<Order> buysCompare = Order::compareTo;
-    private Queue<Order> buys = new PriorityQueue<>(buysCompare);
+    private final Queue<Order> buys = new PriorityQueue<>(buysCompare);
     private final Comparator<Order> sellsCompare = (t1, t2) -> -1 * t1.compareTo(t2);
-    private Queue<Order> sells = new PriorityQueue<>(sellsCompare);
+    private final Queue<Order> sells = new PriorityQueue<>(sellsCompare);
     private long bid = Long.MIN_VALUE;
     private long ask = Long.MAX_VALUE;
 
-    @Override
-    public MarketDataMessage next() {
-        return nextBookUpdate();
-    }
-
-    public void initBook(long priceLevel, long priceMaxDelta) {
+    public RandomMarketDataGenerator(final long instrumentId,
+                                     final Venue venue,
+                                     final long priceLevel,
+                                     final long priceMaxDelta) {
         this.priceLevel = priceLevel;
         this.priceMaxDelta = priceMaxDelta;
+        this.instrumentId = instrumentId;
+        this.venue = venue;
+        initBook();
+    }
+
+    @Override
+    public MarketDataMessage next() {
+        return updateBook();
+    }
+
+    public void initBook() {
         bid = rand(priceLevel - priceMaxDelta, priceLevel - 1);
         ask = rand(priceLevel + 1, priceLevel + priceMaxDelta);
 
@@ -73,7 +82,23 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
         Sell
     }
 
-    public void updateBook() {
+    public MarketDataMessage updateBook() {
+        int updateCount = toIntExact(rand(1, 3));
+        boolean buyUpdated = false;
+        boolean sellUpdated = false;
+        for (int i = 0; i < updateCount; i++) {
+            Side updated = doUpdateBook();
+            if (updated == Side.Buy) {
+                buyUpdated = true;
+            } else if (updated == Side.Sell) {
+                sellUpdated = true;
+            }
+        }
+
+        return toMarketDataMessage(buyUpdated, sellUpdated);
+    }
+
+    private Side doUpdateBook() {
         Side side = Side.values()[(int) rand0Max(Side.values().length)];
         Queue<Order> orders = side == Side.Buy ? buys : sells;
         Action action = Action.values()[(int) rand0Max(Action.values().length)];
@@ -92,6 +117,7 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
                 newTrade(side, orders);
                 break;
         }
+        return side;
     }
 
     private void cancel(Side side, Queue<Order> orders) {
@@ -125,9 +151,9 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
     private void newTrade(Side side, Queue<Order> orders) {
         final Order order;
         if (side == Side.Buy) {
-            addBuy(order =new Order(nextBid(), nextQty()));
+            addBuy(order = new Order(nextBid(), nextQty()));
         } else {
-            addSell(order =new Order(nextAsk(), nextQty()));
+            addSell(order = new Order(nextAsk(), nextQty()));
         }
         logger.debug("new_trade side=[{}] trade=[{}]", side, order);
     }
@@ -181,14 +207,6 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
         return ThreadLocalRandom.current().nextLong(min, max);
     }
 
-    private BookUpdate nextBookUpdate() {
-        List<BookEntry> bidBook = new ArrayList<>();
-        bidBook.add(new BookEntry().setPrice(100).setSize(20));
-        List<BookEntry> askBook = new ArrayList<>();
-        askBook.add(new BookEntry().setPrice(110).setSize(30));
-        return new BookUpdateImpl(instrumentId, venue, instrumentStatus, bidBook, askBook);
-    }
-
     class Order implements Comparable<Order> {
         long price;
         long qty;
@@ -208,7 +226,7 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
 
         @Override
         public int compareTo(Order o) {
-            return Long.compare(price, o.price);
+            return -1 * Long.compare(price, o.price);
         }
 
         @Override
@@ -228,5 +246,40 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
                 "\n buys=\n\t" + buys.stream().sorted(buysCompare).map(Object::toString).collect(Collectors.joining("\n\t")) +
                 "\n sells=\n\t" + sells.stream().sorted(sellsCompare).map(Object::toString).collect(Collectors.joining("\n\t")) +
                 '}';
+    }
+
+    private MarketDataMessage toMarketDataMessage(final boolean buyUpdated,
+                                                  final boolean sellUpdated) {
+        if (buyUpdated && sellUpdated) {
+            return toBookUpdate();
+        } else if (buyUpdated) {
+            return toBidBookUpdate();
+        } else if (sellUpdated) {
+            return toAskBookUpdate();
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    private MarketDataMessage toAskBookUpdate() {
+        return new AskBookUpdateImpl(instrumentId, venue, toBookEntries(this.sells));
+    }
+
+    private MarketDataMessage toBidBookUpdate() {
+        return new BidBookUpdateImpl(instrumentId, venue, toBookEntries(this.buys));
+    }
+
+    private MarketDataMessage toBookUpdate() {
+        return new BookUpdateImpl(instrumentId, venue, instrumentStatus, toBookEntries(this.buys), toBookEntries(this.sells));
+    }
+
+    private List<BookEntry> toBookEntries(Queue<Order> orders) {
+        List<BookEntry> bidBook = new ArrayList<>();
+        Queue<Order> buys = new PriorityQueue(orders);
+        Order buy;
+        while ((buy = buys.poll()) != null) {
+            bidBook.add(new BookEntry().setPrice(buy.price).setSize(buy.qty));
+        }
+        return bidBook;
     }
 }

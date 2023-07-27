@@ -46,4 +46,15 @@ public class BookUpdateImpl implements BookUpdate {
     public Venue venue() {
         return venue;
     }
+
+    @Override
+    public String toString() {
+        return "BookUpdateImpl{" +
+                "instrumentId=" + instrumentId +
+                ", venue=" + venue +
+                ", instrumentStatus=" + instrumentStatus +
+                ", bidBook=" + bidBook +
+                ", askBook=" + askBook +
+                '}';
+    }
 }

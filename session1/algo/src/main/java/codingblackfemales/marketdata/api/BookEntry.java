@@ -24,4 +24,12 @@ public class BookEntry {
         this.size = size;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "BookEntry{" +
+                "price=" + price +
+                ", size=" + size +
+                '}';
+    }
 }
