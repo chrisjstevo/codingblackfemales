@@ -46,6 +46,10 @@ public class MutatingMatchOneOrderVisitor implements OrderBookVisitor{
                 remainingQuantity -= fillQuantity;
                 filledQuantity += fillQuantity;
                 level.setFirstOrder(order.remove());
+                level.setQuantity(level.getQuantity() - fillQuantity);
+                if(level.getQuantity()==0){
+                    side.setFirstLevel(level.remove());
+                }
                 publishFill(fillQuantity, orderToMatch);
             //if we can only take a nibble...
             }else if(remainingQuantity < order.getQuantity()){
@@ -54,8 +58,13 @@ public class MutatingMatchOneOrderVisitor implements OrderBookVisitor{
                 remainingQuantity -= fillQuantity;
                 filledQuantity += fillQuantity;
                 order.setQuantity(remainingQty);
+                level.setQuantity(level.getQuantity() - fillQuantity);
+                if(level.getQuantity()==0){
+                    side.setFirstLevel(level.remove());
+                }
                 publishFill(fillQuantity, orderToMatch);
             }
+
         }else{
             logger.info("[ORDERBOOK] Can't match order:" + order + "(" + orderToMatch + ")");
         }

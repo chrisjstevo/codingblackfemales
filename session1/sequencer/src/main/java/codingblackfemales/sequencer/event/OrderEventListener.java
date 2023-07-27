@@ -48,7 +48,7 @@ public abstract class OrderEventListener implements Consumer {
                 onPartialFill(partialFillOrderDecoder);
             } else if (header.templateId() == FillOrderDecoder.TEMPLATE_ID) {
                 fillOrderDecoder.wrap(buffer, bufferOffset, actingBlockLength, actingVersion);
-                onFIll(fillOrderDecoder);
+                onFill(fillOrderDecoder);
             }
         }
     }
@@ -65,5 +65,5 @@ public abstract class OrderEventListener implements Consumer {
 
     public abstract void onPartialFill(final PartialFillOrderDecoder partialFill);
 
-    public abstract void onFIll(final FillOrderDecoder fill);
+    public abstract void onFill(final FillOrderDecoder fill);
 }

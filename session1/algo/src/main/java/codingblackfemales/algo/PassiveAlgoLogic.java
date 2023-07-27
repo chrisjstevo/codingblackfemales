@@ -18,11 +18,11 @@ public class PassiveAlgoLogic implements AlgoLogic{
     @Override
     public Action evaluate(SimpleAlgoState state) {
 
-        logger.info("In Algo Logic....");
+        logger.info("[PASSIVEALGO] In Algo Logic....");
 
         final String book = Util.orderBookToString(state);
 
-        logger.info("Algo Sees Book as:\n" + book);
+        logger.info("[PASSIVEALGO] Algo Sees Book as:\n" + book);
 
         final BidLevel nearTouch = state.getBidAt(0);
 

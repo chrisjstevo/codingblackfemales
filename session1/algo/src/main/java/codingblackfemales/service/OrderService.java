@@ -81,7 +81,7 @@ public class OrderService extends OrderEventListener {
     }
 
     @Override
-    public void onFIll(FillOrderDecoder fill) {
+    public void onFill(FillOrderDecoder fill) {
         updateFillQty(find(fill.orderId()), fill.quantity());
         triggerRun();
     }

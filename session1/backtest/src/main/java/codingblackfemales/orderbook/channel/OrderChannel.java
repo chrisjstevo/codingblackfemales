@@ -34,7 +34,7 @@ public class OrderChannel {
         fillEncoder.orderId(limit.getOrderId());
         fillEncoder.quantity(fillQuantity);
 
-        logger.info("publishing fill to stream: " + fillEncoder);
+        logger.info("[ORDERBOOK] publishing fill to stream: " + fillEncoder);
 
         this.sequencer.onCommand(directBuffer);
     }
