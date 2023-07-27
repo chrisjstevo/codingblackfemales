@@ -74,7 +74,7 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
         Cancel,
         UpdateQty,
         UpdatePrice,
-        NewTrade
+        NewOrder
     }
 
     enum Side {
@@ -95,29 +95,47 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
             }
         }
 
+        if (!sellUpdated && !buyUpdated) {
+            // we have been very unlucky, just insert new order
+            Side side = Side.values()[(int) rand0Max(Side.values().length)];
+            Queue<Order> orders = side == Side.Buy ? buys : sells;
+            newOrder(side, orders);
+            if (side == Side.Buy) {
+                buyUpdated = true;
+            } else {
+                sellUpdated = true;
+            }
+        }
+
         return toMarketDataMessage(buyUpdated, sellUpdated);
     }
 
     private Side doUpdateBook() {
-        Side side = Side.values()[(int) rand0Max(Side.values().length)];
-        Queue<Order> orders = side == Side.Buy ? buys : sells;
-        Action action = Action.values()[(int) rand0Max(Action.values().length)];
+        for (int i = 0; i < 20; i++) {
+            Side side = Side.values()[(int) rand0Max(Side.values().length)];
+            Queue<Order> orders = side == Side.Buy ? buys : sells;
+            Action action = Action.values()[(int) rand0Max(Action.values().length)];
 
-        switch (action) {
-            case Cancel:
-                cancel(side, orders);
-                break;
-            case UpdateQty:
-                updateQty(side, orders);
-                break;
-            case UpdatePrice:
-                updatePrice(side, orders);
-                break;
-            case NewTrade:
-                newTrade(side, orders);
-                break;
+            switch (action) {
+                case Cancel:
+                    if (orders.size() == 0) continue; // can't perform update for: (side & action) try again
+                    cancel(side, orders);
+                    break;
+                case UpdateQty:
+                    if (orders.size() == 0) continue; // can't perform update for: (side & action) try again
+                    updateQty(side, orders);
+                    break;
+                case UpdatePrice:
+                    if (orders.size() == 0) continue; // can't perform update for: (side & action) try again
+                    updatePrice(side, orders);
+                    break;
+                case NewOrder:
+                    newOrder(side, orders);
+                    break;
+            }
+            return side;
         }
-        return side;
+        return null;
     }
 
     private void cancel(Side side, Queue<Order> orders) {
@@ -148,7 +166,7 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
         }
     }
 
-    private void newTrade(Side side, Queue<Order> orders) {
+    private void newOrder(Side side, Queue<Order> orders) {
         final Order order;
         if (side == Side.Buy) {
             addBuy(order = new Order(nextBid(), nextQty()));
