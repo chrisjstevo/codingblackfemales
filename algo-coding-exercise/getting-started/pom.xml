@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>codingblackfemales</groupId>
-        <artifactId>session1-algo</artifactId>
+        <artifactId>algo-coding-exercise</artifactId>
         <version>0.01-SNAPSHOT</version>
     </parent>
 
-    <artifactId>algo</artifactId>
+    <artifactId>getting-started</artifactId>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
@@ -20,24 +20,16 @@
     <dependencies>
         <dependency>
             <groupId>codingblackfemales</groupId>
-            <artifactId>dictionary</artifactId>
+            <artifactId>algo</artifactId>
             <version>0.01-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>codingblackfemales</groupId>
-            <artifactId>sequencer</artifactId>
+            <artifactId>backtest</artifactId>
             <version>0.01-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.10.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
-        </dependency>
+
         <dependency>
             <groupId>codingblackfemales</groupId>
             <artifactId>sequencer</artifactId>
@@ -45,12 +37,15 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
+
 
 </project>

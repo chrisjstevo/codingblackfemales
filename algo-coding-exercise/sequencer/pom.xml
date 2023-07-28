@@ -4,33 +4,72 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>codingblackfemales</groupId>
-        <artifactId>session1-algo</artifactId>
+        <artifactId>algo-coding-exercise</artifactId>
         <version>0.01-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>oms</artifactId>
+    <artifactId>sequencer</artifactId>
 
-    <name>oms</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <name>sequencer</name>
 
     <dependencies>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <artifactId>dictionary</artifactId>
+            <groupId>codingblackfemales</groupId>
+            <version>0.01-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>java</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <includeProjectDependencies>false</includeProjectDependencies>
+                        <includePluginDependencies>true</includePluginDependencies>
+                        <mainClass>uk.co.real_logic.sbe.SbeTool</mainClass>
+                        <systemProperties>
+                            <systemProperty>
+                                <key>sbe.output.dir</key>
+                                <value>${project.build.directory}/generated-sources/java</value>
+                            </systemProperty>
+                        </systemProperties>
+                        <arguments>
+                            <argument>${project.build.resources[0].directory}/schema.xml</argument>
+                        </arguments>
+                        <workingDirectory>${project.build.directory}/generated-sources/java</workingDirectory>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>uk.co.real-logic</groupId>
+                            <artifactId>sbe-tool</artifactId>
+                            <version>${sbe.tool.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
                 <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
