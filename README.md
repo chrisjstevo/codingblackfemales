@@ -15,7 +15,7 @@ Note: make sure you think about how the market data could change over time, add 
 Pre-requisites: 
 
 1. The project requires java version 16 or higher
-2. You should have latest Apache Maven installed or an IDE which has embedded in it (like IntelliJ)
+2. You should have latest Apache Maven installed or an IDE which has it embedded within it (like IntelliJ)
 
 Opening the project: 
 
