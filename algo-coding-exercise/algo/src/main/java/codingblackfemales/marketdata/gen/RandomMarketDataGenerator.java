@@ -17,27 +17,36 @@ import java.util.stream.Collectors;
 import static java.lang.Math.toIntExact;
 
 public class RandomMarketDataGenerator implements MarketDataGenerator {
+    private static final long BID_START = Long.MIN_VALUE;
+    private static final long ASK_START = Long.MAX_VALUE;
+    private static final int spreadMultiplierMin = 5;
+    private static final int spreadMultiplierMax = 12;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final long priceLevel;
+    private final long startPriceLevel;
+    private long spreadMultiplier;
     private final long priceMaxDelta;
     private final long instrumentId;
     private final Venue venue;
+    private long marketDataMessagesMaxLevel;
     private final InstrumentStatus instrumentStatus = InstrumentStatus.CONTINUOUS;
     private final Comparator<Order> buysCompare = Order::compareTo;
     private final Queue<Order> buys = new PriorityQueue<>(buysCompare);
     private final Comparator<Order> sellsCompare = (t1, t2) -> -1 * t1.compareTo(t2);
     private final Queue<Order> sells = new PriorityQueue<>(sellsCompare);
-    private long bid = Long.MIN_VALUE;
-    private long ask = Long.MAX_VALUE;
+    private long mid;
+    private long bid = BID_START;
+    private long ask = ASK_START;
 
     public RandomMarketDataGenerator(final long instrumentId,
                                      final Venue venue,
                                      final long priceLevel,
-                                     final long priceMaxDelta) {
-        this.priceLevel = priceLevel;
+                                     final long priceMaxDelta,
+                                     final long marketDataMessagesMaxLevel) {
+        this.startPriceLevel = this.mid = priceLevel;
         this.priceMaxDelta = priceMaxDelta;
         this.instrumentId = instrumentId;
         this.venue = venue;
+        this.marketDataMessagesMaxLevel = marketDataMessagesMaxLevel;
         initBook();
     }
 
@@ -47,8 +56,8 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
     }
 
     public void initBook() {
-        bid = rand(priceLevel - priceMaxDelta, priceLevel - 1);
-        ask = rand(priceLevel + 1, priceLevel + priceMaxDelta);
+        bid = rand(mid - priceMaxDelta, mid - 1);
+        ask = rand(mid + 1, mid + priceMaxDelta);
 
         for (int i = 0; i < rand0Max(10); i++) {
             Order order = buyTrade();
@@ -143,6 +152,7 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
             int idx = toIntExact(rand0Max(orders.size()));
             orders.remove(orders.toArray()[idx]);
             logger.debug("cancel side=[{}] idx=[{}] qty=[{}]", side, idx);
+            updateAskBid();
         }
     }
 
@@ -157,16 +167,19 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
 
     private void updatePrice(Side side, Queue<Order> orders) {
         if (orders.size() > 0) {
+            nextSpreadMultiplier();
             int idx = toIntExact(rand0Max(orders.size()));
             Order order = (Order) orders.toArray()[idx];
             orders.remove(order);
             order.price = side == Side.Buy ? nextBid() : nextAsk();
             orders.add(order);
+            updateAskBid();
             logger.debug("price_update side=[{}] idx=[{}] price=[{}]", side, idx, order.price);
         }
     }
 
     private void newOrder(Side side, Queue<Order> orders) {
+        nextSpreadMultiplier();
         final Order order;
         if (side == Side.Buy) {
             addBuy(order = new Order(nextBid(), nextQty()));
@@ -176,12 +189,44 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
         logger.debug("new_trade side=[{}] trade=[{}]", side, order);
     }
 
+    private void nextSpreadMultiplier() {
+        this.spreadMultiplier = rand(spreadMultiplierMin, spreadMultiplierMax);
+    }
+
     private void updateBid(Order order) {
         this.bid = Math.max(order.price, bid);
+        updatePriceTarget();
     }
 
     private void updateAsk(Order order) {
-        this.ask = Math.max(order.price, ask);
+        this.ask = Math.min(order.price, ask);
+        updatePriceTarget();
+    }
+
+    private void updateAskBid() {
+        if (buys.size() == 0 && sells.size() == 0) {
+            this.mid = startPriceLevel;
+            this.ask = ASK_START;
+            this.bid = BID_START;
+        } else if (buys.size() != 0 && sells.size() == 0) {
+            this.mid = buys.peek().price;
+            this.ask = ASK_START;
+            this.bid = buys.peek().price;
+        } else if (buys.size() == 0 && sells.size() != 0) {
+            this.mid = sells.peek().price;
+            this.ask = sells.peek().price;
+            this.bid = BID_START;
+        } else {
+            this.mid = (buys.peek().price + sells.peek().price) / 2;
+            this.ask = sells.peek().price;
+            this.bid = buys.peek().price;
+        }
+    }
+
+    private void updatePriceTarget() {
+        if (ask != ASK_START && bid != BID_START) {
+            mid = (ask + bid) / 2;
+        }
     }
 
     Order buyTrade() {
@@ -190,9 +235,17 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
     }
 
     private long nextBid() {
-        long minBid = Math.max(bid - 2 * spread(), priceLevel - priceMaxDelta);
-        long maxBid = Math.min(ask - 1, priceLevel);
+        long minBid = minBid();
+        long maxBid = maxBid();
         return rand(minBid, maxBid);
+    }
+
+    private long maxBid() {
+        return ask != ASK_START ? Math.min(ask - 1, mid) : mid;
+    }
+
+    private long minBid() {
+        return bid != BID_START ? Math.max(bid - Math.min(spreadMultiplier * spread(), 10), mid - priceMaxDelta) : mid - priceMaxDelta;
     }
 
     Order sellTrade() {
@@ -201,9 +254,17 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
     }
 
     private long nextAsk() {
-        long minAsk = Math.max(bid + 1, priceLevel);
-        long maxAsk = Math.min(ask + 2 * spread(), priceLevel + priceMaxDelta);
+        long minAsk = minAsk();
+        long maxAsk = maxAsk();
         return rand(minAsk, maxAsk);
+    }
+
+    private long maxAsk() {
+        return ask != ASK_START ? Math.min(ask + spreadMultiplier * spread(), mid + priceMaxDelta) : (mid + priceMaxDelta);
+    }
+
+    private long minAsk() {
+        return Math.max(bid + 1, mid);
     }
 
     private long nextQty() {
@@ -211,7 +272,7 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
     }
 
     private long spread() {
-        return Math.abs(bid - ask);
+        return Math.min(Math.abs(bid - ask), 100);
     }
 
     private long rand0Max(long bound) {
@@ -259,8 +320,9 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
     @Override
     public String toString() {
         return "RandomMarketDataGenerator{" +
-                "\n bid=" + bid +
-                "\n ask=" + ask +
+                String.format("\n mid=%d spraed=%d spreadMultiplier=%d", mid, spread(), spreadMultiplier) +
+                String.format("\n bid=%d min/max=(%d/%d)", bid, minBid(), maxBid()) +
+                String.format("\n ask=%d min/max=(%d/%d)", ask, minAsk(), maxAsk()) +
                 "\n buys=\n\t" + buys.stream().sorted(buysCompare).map(Object::toString).collect(Collectors.joining("\n\t")) +
                 "\n sells=\n\t" + sells.stream().sorted(sellsCompare).map(Object::toString).collect(Collectors.joining("\n\t")) +
                 '}';
@@ -295,8 +357,13 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
         List<BookEntry> bidBook = new ArrayList<>();
         Queue<Order> buys = new PriorityQueue(orders);
         Order buy;
+        int count = 0;
         while ((buy = buys.poll()) != null) {
             bidBook.add(new BookEntry().setPrice(buy.price).setSize(buy.qty));
+            count++;
+            if (count == marketDataMessagesMaxLevel) {
+                break;
+            }
         }
         return bidBook;
     }

@@ -11,9 +11,9 @@ public class RandomMarketDataGeneratorTest {
 
     @Test
     public void should_generate_marketdata() {
-        final RandomMarketDataGenerator generator = new RandomMarketDataGenerator(1, Venue.XLON, 1_000, 100);
+        final RandomMarketDataGenerator generator = new RandomMarketDataGenerator(1, Venue.XLON, 1_000, 100, 15);
         logger.info("{}",generator);
-        for(int i = 0; i < 100; i++){
+        for(int i = 0; i < 1_000; i++){
             MarketDataMessage marketDataMessage = generator.updateBook();
             logger.info("{}",generator);
             logger.info("{}",marketDataMessage);
