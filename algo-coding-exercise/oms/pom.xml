@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>codingblackfemales</groupId>
-        <artifactId>session1-algo</artifactId>
+        <artifactId>algo-coding-exercise</artifactId>
         <version>0.01-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
