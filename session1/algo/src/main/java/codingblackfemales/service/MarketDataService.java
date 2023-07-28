@@ -1,9 +1,9 @@
 package codingblackfemales.service;
 
 import codingblackfemales.container.RunTrigger;
+import codingblackfemales.sequencer.event.MarketDataEventListener;
 import codingblackfemales.sotw.marketdata.AskLevel;
 import codingblackfemales.sotw.marketdata.BidLevel;
-import codingblackfemales.sequencer.event.MarketDataEventListener;
 import messages.marketdata.AskBookUpdateDecoder;
 import messages.marketdata.BidBookUpdateDecoder;
 import messages.marketdata.BookUpdateDecoder;
@@ -18,8 +18,8 @@ public class MarketDataService extends MarketDataEventListener {
     private int askLength = 0;
 
     private long instrumentId;
-    private final BidLevel[] bidBook = new BidLevel[10];
-    private final AskLevel[] askBook = new AskLevel[10];
+    private final BidLevel[] bidBook = new BidLevel[15];
+    private final AskLevel[] askBook = new AskLevel[15];
     private final RunTrigger runTrigger;
 
     public MarketDataService(RunTrigger runTrigger) {

@@ -3,10 +3,10 @@ package codingblackfemales.sequencer.consumer;
 import codingblackfemales.sequencer.net.Consumer;
 import messages.marketdata.BookUpdateDecoder;
 import messages.marketdata.MessageHeaderDecoder;
+import messages.order.CancelOrderDecoder;
 import messages.order.CreateOrderDecoder;
 import messages.order.CreateOrderEncoder;
 import messages.order.FillOrderDecoder;
-import messages.order.FillOrderEncoder;
 import org.agrona.DirectBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +21,8 @@ public class LoggingConsumer implements Consumer {
     private final BookUpdateDecoder bookUpdateDecoder = new BookUpdateDecoder();
     private final CreateOrderDecoder createOrderDecoder = new CreateOrderDecoder();
     private final FillOrderDecoder fillDecoder = new FillOrderDecoder();
+
+    private final CancelOrderDecoder cancelDecoder = new CancelOrderDecoder();
 
     @Override
     public void onMessage(final DirectBuffer buffer) {
@@ -43,10 +45,15 @@ public class LoggingConsumer implements Consumer {
         } else if (decoder.schemaId() == FillOrderDecoder.SCHEMA_ID && decoder.templateId() == FillOrderDecoder.TEMPLATE_ID) {
             final int actingBlockLength = decoder.blockLength();
             final int actingVersion = decoder.version();
-
             int bufferOffset = decoder.encodedLength();
             fillDecoder.wrap(buffer, bufferOffset, actingBlockLength, actingVersion);
             logger.info("[" + decoder.sequencerNumber() + "] " + fillDecoder);
+        }else if (decoder.schemaId() == CancelOrderDecoder.SCHEMA_ID && decoder.templateId() == CancelOrderDecoder.TEMPLATE_ID) {
+            final int actingBlockLength = decoder.blockLength();
+            final int actingVersion = decoder.version();
+            int bufferOffset = decoder.encodedLength();
+            cancelDecoder.wrap(buffer, bufferOffset, actingBlockLength, actingVersion);
+            logger.info("[" + decoder.sequencerNumber() + "] " + cancelDecoder);
         }
     }
 }

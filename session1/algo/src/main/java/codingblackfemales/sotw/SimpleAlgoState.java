@@ -17,5 +17,7 @@ public interface SimpleAlgoState {
 
     public List<ChildOrder> getChildOrders();
 
+    public List<ChildOrder> getActiveChildOrders();
+
     public long getInstrumentId();
 }

@@ -47,6 +47,10 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
     }
 
     private void setLast(TYPEOF last){
+        if(last == null){
+            return;
+        }
+
         IntrusiveLinkedListNode<TYPEOF> thePrevious = last.previous;
         while(thePrevious != null){
             thePrevious.last = last;
@@ -62,6 +66,10 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
     }
 
     private void setSize(TYPEOF last){
+        if(last == null){
+            return;
+        }
+
         IntrusiveLinkedListNode<TYPEOF> thePrevious = last.previous;
         while(thePrevious != null){
             thePrevious.size = this.size;
@@ -76,6 +84,13 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
             previous.next = next;
         }
 
+        if(this.last.equals(this)){
+            this.last = previous;
+            if(this.previous != null){
+                this.previous.last = previous;
+            }
+        }
+
         if(this.first == null){
             return null;
         }
@@ -86,9 +101,11 @@ public abstract class IntrusiveLinkedListNode<TYPEOF extends IntrusiveLinkedList
 
         size -= 1;
 
+
+
         setSize(this.last);
         setFirst(this.first);
-
+        setLast(this.last);
         return this.first;
     }
     public TYPEOF first() {

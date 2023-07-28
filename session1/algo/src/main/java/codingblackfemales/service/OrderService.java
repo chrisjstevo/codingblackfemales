@@ -25,15 +25,15 @@ public class OrderService extends OrderEventListener {
     }
 
     private ChildOrder createChildOrder(final CreateOrderDecoder create){
-        return new ChildOrder(create.side(), create.orderId(), create.quantity(), create.price(), 0, OrderState.PENDING);
+        return new ChildOrder(create.side(), create.orderId(), create.quantity(), create.price(), OrderState.PENDING);
     }
 
     private void updateState(ChildOrder child, int state){
         child.setState(state);
     }
 
-    private void updateFillQty(ChildOrder child, long filledQuantity){
-        child.setFilledQuantity(filledQuantity);
+    private void addChildFill(ChildOrder child, long filledQuantity, long filledPrice){
+        child.addFill(filledQuantity, filledPrice);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class OrderService extends OrderEventListener {
 
     @Override
     public void onCancelOrder(final CancelOrderDecoder cancel) {
-        updateState(find(cancel.orderId()), OrderState.PENDING);
+        updateState(find(cancel.orderId()), OrderState.CANCELLED);
         triggerRun();
     }
 
@@ -76,13 +76,13 @@ public class OrderService extends OrderEventListener {
 
     @Override
     public void onPartialFill(PartialFillOrderDecoder partialFill) {
-        updateFillQty(find(partialFill.orderId()), partialFill.quantity());
+        addChildFill(find(partialFill.orderId()), partialFill.quantity(), partialFill.price());
         triggerRun();
     }
 
     @Override
     public void onFill(FillOrderDecoder fill) {
-        updateFillQty(find(fill.orderId()), fill.quantity());
+        addChildFill(find(fill.orderId()), fill.quantity(), fill.price());
         triggerRun();
     }
 }

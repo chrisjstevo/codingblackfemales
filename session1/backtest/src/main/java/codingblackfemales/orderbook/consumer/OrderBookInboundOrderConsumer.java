@@ -26,7 +26,7 @@ public class OrderBookInboundOrderConsumer extends OrderEventListener {
 
     @Override
     public void onCancelOrder(CancelOrderDecoder cancel) {
-
+        book.onCancelOrder(cancel.orderId());
     }
 
     @Override

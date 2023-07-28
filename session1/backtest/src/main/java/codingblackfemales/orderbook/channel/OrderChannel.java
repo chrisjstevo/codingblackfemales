@@ -2,8 +2,8 @@ package codingblackfemales.orderbook.channel;
 
 import codingblackfemales.orderbook.order.LimitOrderFlyweight;
 import codingblackfemales.sequencer.Sequencer;
-import messages.order.MessageHeaderEncoder;
 import messages.order.FillOrderEncoder;
+import messages.order.MessageHeaderEncoder;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class OrderChannel {
         this.sequencer = sequencer;
     }
 
-    public void publishFill(long fillQuantity, LimitOrderFlyweight limit){
+    public void publishFill(final long fillQuantity, final long price, final LimitOrderFlyweight limit){
 
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
@@ -33,6 +33,7 @@ public class OrderChannel {
 
         fillEncoder.orderId(limit.getOrderId());
         fillEncoder.quantity(fillQuantity);
+        fillEncoder.price(price);
 
         logger.info("[ORDERBOOK] publishing fill to stream: " + fillEncoder);
 

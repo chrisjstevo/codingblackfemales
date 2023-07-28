@@ -1,7 +1,8 @@
 package codingblackfemales.orderbook;
 
 import codingblackfemales.collection.intrusive.IntrusiveLinkedListNode;
-import codingblackfemales.orderbook.order.*;
+import codingblackfemales.orderbook.order.DefaultOrderFlyweight;
+import codingblackfemales.orderbook.order.MarketDataOrderFlyweight;
 import codingblackfemales.orderbook.visitor.OrderBookVisitor;
 
 public class OrderBookLevel extends IntrusiveLinkedListNode<OrderBookLevel> {

@@ -2,21 +2,25 @@ package codingblackfemales.sotw;
 
 import messages.order.Side;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ChildOrder {
     private Side side;
     private long orderId;
     private long quantity;
     private long price;
 
-    private long filledQuantity;
     private int state;
 
-    public ChildOrder(Side side, long orderId, long quantity, long price, long filledQuantity, int state) {
+    private List<ChildFill> fills = new LinkedList<>();
+
+    public ChildOrder(Side side, long orderId, long quantity, long price, int state) {
         this.side = side;
         this.orderId = orderId;
         this.quantity = quantity;
         this.price = price;
-        this.filledQuantity = filledQuantity;
         this.state = state;
     }
 
@@ -37,7 +41,7 @@ public class ChildOrder {
     }
 
     public long getFilledQuantity() {
-        return filledQuantity;
+        return fills.stream().map( cf -> cf.getQuantity()).collect(Collectors.summingLong(Long::longValue));
     }
 
     public int getState() {
@@ -48,7 +52,7 @@ public class ChildOrder {
         this.state = state;
     }
 
-    public void setFilledQuantity(long filledQuantity) {
-        this.filledQuantity = filledQuantity;
+    public void addFill(long filledQuantity, long filledPrice) {
+        this.fills.add(new ChildFill(filledQuantity, filledPrice));
     }
 }

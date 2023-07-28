@@ -13,7 +13,7 @@ import static codingblackfemales.action.NoAction.NoAction;
 
 public class SniperAlgoLogic implements AlgoLogic {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(SniperAlgoLogic.class);
 
     @Override
     public Action evaluate(SimpleAlgoState state) {

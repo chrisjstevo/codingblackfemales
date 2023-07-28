@@ -6,6 +6,7 @@ import codingblackfemales.sotw.marketdata.AskLevel;
 import codingblackfemales.sotw.marketdata.BidLevel;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SimpleAlgoStateImpl implements SimpleAlgoState {
 
@@ -50,5 +51,10 @@ public class SimpleAlgoStateImpl implements SimpleAlgoState {
     @Override
     public List<ChildOrder> getChildOrders() {
         return orderService.children();
+    }
+
+    @Override
+    public List<ChildOrder> getActiveChildOrders() {
+        return orderService.children().stream().filter(order -> order.getState() != OrderState.CANCELLED).collect(Collectors.toList());
     }
 }

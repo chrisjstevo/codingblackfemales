@@ -48,11 +48,13 @@
     <sbe:message name="PartialFillOrder" id="9" description="Partial Fill Order Message">
         <field name="orderId" id="1" type="uint64"/>
         <field name="quantity" id="2" type="uint64"/>
+        <field name="price" id="3" type="uint64"/>
     </sbe:message>
 
     <sbe:message name="FillOrder" id="10" description="Fill Order Order Message">
         <field name="orderId" id="1" type="uint64"/>
         <field name="quantity" id="2" type="uint64"/>
+        <field name="price" id="3" type="uint64"/>
     </sbe:message>
 
 

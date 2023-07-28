@@ -1,5 +1,6 @@
 package codingblackfemales.container;
 
+import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
 import codingblackfemales.sequencer.net.Consumer;
 import codingblackfemales.service.MarketDataService;
@@ -57,7 +58,7 @@ public class AlgoContainer implements Consumer {
 
         runTrigger.hasRun();
 
-        if(action !=null){
+        if(action !=null && (!action.equals(NoAction.NoAction))){
             actioner.processAction(action);
         }
     }

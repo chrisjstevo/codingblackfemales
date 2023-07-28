@@ -5,7 +5,6 @@ import codingblackfemales.orderbook.OrderBookSide;
 import codingblackfemales.orderbook.channel.OrderChannel;
 import codingblackfemales.orderbook.order.DefaultOrderFlyweight;
 import codingblackfemales.orderbook.order.LimitOrderFlyweight;
-import codingblackfemales.orderbook.order.Order;
 import messages.order.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +49,7 @@ public class MutatingMatchOneOrderVisitor implements OrderBookVisitor{
                 if(level.getQuantity()==0){
                     side.setFirstLevel(level.remove());
                 }
-                publishFill(fillQuantity, orderToMatch);
+                publishFill(fillQuantity, order.getPrice(), orderToMatch);
             //if we can only take a nibble...
             }else if(remainingQuantity < order.getQuantity()){
                 long fillQuantity = remainingQuantity;
@@ -62,21 +61,22 @@ public class MutatingMatchOneOrderVisitor implements OrderBookVisitor{
                 if(level.getQuantity()==0){
                     side.setFirstLevel(level.remove());
                 }
-                publishFill(fillQuantity, orderToMatch);
+                publishFill(fillQuantity, order.getPrice(), orderToMatch);
             }
 
         }else{
             logger.info("[ORDERBOOK] Can't match order:" + order + "(" + orderToMatch + ")");
         }
+
     }
 
     private boolean canMatchOrder(final DefaultOrderFlyweight order){
         return priceIsEqualOrMoreAggressive(order, this.orderToMatch);
     }
 
-    private void publishFill(final long quantity, LimitOrderFlyweight orderFlyweight){
-        logger.info("[ORDERBOOK] Filled " + quantity + " for order:" + orderFlyweight);
-        orderChannel.publishFill(quantity, orderFlyweight);
+    private void publishFill(final long quantity, final long price, LimitOrderFlyweight orderFlyweight){
+        logger.info("[ORDERBOOK] Filled " + quantity + "@" + price + " for order:" + orderFlyweight);
+        orderChannel.publishFill(quantity, price, orderFlyweight);
     }
 
     private boolean priceIsEqualOrMoreAggressive(final DefaultOrderFlyweight bookOrder, final LimitOrderFlyweight orderToMatch){

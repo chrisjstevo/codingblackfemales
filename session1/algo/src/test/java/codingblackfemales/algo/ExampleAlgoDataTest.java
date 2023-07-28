@@ -3,20 +3,20 @@ package codingblackfemales.algo;
 import codingblackfemales.container.Actioner;
 import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.container.RunTrigger;
-import codingblackfemales.sequencer.consumer.LoggingConsumer;
-import codingblackfemales.service.MarketDataService;
-import codingblackfemales.service.OrderService;
 import codingblackfemales.sequencer.DefaultSequencer;
 import codingblackfemales.sequencer.Sequencer;
+import codingblackfemales.sequencer.consumer.LoggingConsumer;
 import codingblackfemales.sequencer.marketdata.SequencerTestCase;
 import codingblackfemales.sequencer.net.TestNetwork;
+import codingblackfemales.service.MarketDataService;
+import codingblackfemales.service.OrderService;
 import messages.marketdata.*;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ExampleAlgoDataTest extends SequencerTestCase {
 

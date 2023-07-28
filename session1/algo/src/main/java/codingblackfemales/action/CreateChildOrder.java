@@ -1,8 +1,8 @@
 package codingblackfemales.action;
 
 import codingblackfemales.sequencer.Sequencer;
-import messages.order.MessageHeaderEncoder;
 import messages.order.CreateOrderEncoder;
+import messages.order.MessageHeaderEncoder;
 import messages.order.Side;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.slf4j.Logger;
@@ -18,10 +18,7 @@ public class CreateChildOrder implements Action {
 
     private final Side side;
 
-    private final CreateOrderEncoder encoder = new CreateOrderEncoder();
-    private final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-    private final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
-    private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+
 
     public CreateChildOrder(final Side side, final long quantity, final long price) {
         this.quantity = quantity;
@@ -36,6 +33,11 @@ public class CreateChildOrder implements Action {
 
     @Override
     public void apply(Sequencer sequencer) {
+        final CreateOrderEncoder encoder = new CreateOrderEncoder();
+        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+        final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
         headerEncoder.schemaId(CreateOrderEncoder.SCHEMA_ID);
         headerEncoder.version(CreateOrderEncoder.SCHEMA_VERSION);

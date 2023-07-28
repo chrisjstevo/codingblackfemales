@@ -3,7 +3,6 @@ package codingblackfemales.orderbook;
 import codingblackfemales.orderbook.channel.MarketDataChannel;
 import codingblackfemales.orderbook.channel.OrderChannel;
 import codingblackfemales.orderbook.order.LimitOrderFlyweight;
-import codingblackfemales.orderbook.order.MarketDataOrderFlyweight;
 import messages.marketdata.*;
 import messages.order.Side;
 import org.agrona.concurrent.UnsafeBuffer;
@@ -12,11 +11,8 @@ import org.mockito.Mockito;
 
 import java.nio.ByteBuffer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -95,7 +91,7 @@ public class MatchingOrderBookVisitorTest {
 
         book.onLimitOrder(new LimitOrderFlyweight(Side.BUY, 101L, 100L, 1));
 
-        verify(orderChannel, times(1)).publishFill(eq(100l), any());
+        verify(orderChannel, times(1)).publishFill(eq(100l), eq(101L), any());
     }
 
     @Test
@@ -114,8 +110,8 @@ public class MatchingOrderBookVisitorTest {
 
         book.onLimitOrder(new LimitOrderFlyweight(Side.BUY, 115L, 150L, 1));
 
-        verify(orderChannel, times(1)).publishFill(eq(101L), any());
-        verify(orderChannel, times(1)).publishFill(eq(49L), any());
+        verify(orderChannel, times(1)).publishFill(eq(101L), eq(101L), any());
+        verify(orderChannel, times(1)).publishFill(eq(49L), eq(115L), any());
     }
 
     @Test
@@ -134,12 +130,12 @@ public class MatchingOrderBookVisitorTest {
 
         book.onLimitOrder(new LimitOrderFlyweight(Side.SELL, 96L, 280L, 1));
 
-        verify(orderChannel, times(1)).publishFill(eq(100L), any());
-        verify(orderChannel, times(1)).publishFill(eq(180L), any());
+        verify(orderChannel, times(1)).publishFill(eq(100L), eq(100L), any());
+        verify(orderChannel, times(1)).publishFill(eq(180L), eq(96L), any());
     }
 
 
-    private static BookUpdateDecoder wrapBufferInDecoder(final UnsafeBuffer buffer){
+    public static BookUpdateDecoder wrapBufferInDecoder(final UnsafeBuffer buffer){
         final MessageHeaderDecoder headerDecoder = new MessageHeaderDecoder();
         final BookUpdateDecoder bookUpdateDecoder = new BookUpdateDecoder();
 
@@ -176,7 +172,7 @@ public class MatchingOrderBookVisitorTest {
         book.onBookUpdate(bookUpdateDecoder2);
 
         //then: verify that we get a fill published
-        verify(orderChannel, times(1)).publishFill(eq(101L), any());
+        verify(orderChannel, times(1)).publishFill(eq(101L), eq(99L), any());
     }
 
 }

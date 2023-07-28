@@ -4,6 +4,7 @@ import codingblackfemales.orderbook.channel.MarketDataChannel;
 import codingblackfemales.orderbook.channel.OrderChannel;
 import codingblackfemales.orderbook.order.LimitOrderFlyweight;
 import codingblackfemales.orderbook.order.MarketDataOrderFlyweight;
+import codingblackfemales.orderbook.visitor.CancelOrderVisitor;
 import codingblackfemales.orderbook.visitor.MutatingMatchOneMarketDataOrderVisitor;
 import codingblackfemales.orderbook.visitor.MutatingMatchOneOrderVisitor;
 import codingblackfemales.orderbook.visitor.ReadOnlyMarketDataChannelPublishVisitor;
@@ -172,6 +173,15 @@ public class OrderBook extends MarketDataEventListener {
 
         publishBook();
     }
+
+    public void onCancelOrder(final long orderIdToCancel){
+        logger.info("[ORDERBOOK] Cancelling order (id=:" + orderIdToCancel + ")");
+        var cancelVisitor = new CancelOrderVisitor(orderIdToCancel);
+        getAskBookSide().accept(cancelVisitor);
+        getBidBookSide().accept(cancelVisitor);
+        publishBook();
+    }
+
 
     public void publishBook(){
         final var messageBuffer = getBookUpdateMessage();
