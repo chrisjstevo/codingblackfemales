@@ -1,2 +1,4 @@
-# codingblackfemales
-Sample Code for Coding Black Females Course
+# Coding Black Females - Create your own Trading Algo
+
+
+
