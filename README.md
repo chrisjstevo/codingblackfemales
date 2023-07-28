@@ -6,6 +6,10 @@ Welcome to your first Electronic Trading Coding Challenge!
 
 The objective of this challenge is to write a simple trading algo that creates and cancels child orders. 
 
+**Stretch objective:** write an algo that can make money buy buying shares when the order book is cheaper, and selling them when the order book is moe expensive. 
+
+Note: make sure you think about how the market data could change over time, add scenarios into your test to show how you've tested those scenarios. 
+
 ### How to Get Started
 
 Pre-requisites: 
@@ -18,7 +22,7 @@ Opening the project:
 1. Git clone this project
 2. Open the project as a maven project in your IDE
 3. Open the "getting-started" model.
-4. Navigate to the MyAlgoTest
+4. Navigate to the [MyAlgoTest.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MyAlgo.java) and [MyAlgo.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MyAlgo.java)
 5. You're ready to go!
 
 ### Writing Your Algo
@@ -40,4 +44,27 @@ https://github.com/chrisjstevo/codingblackfemales/blob/263cecf4da4a3afa4b94a021f
 
 You can see in the above code snippet the PassiveAlgoLogic getting access to the market data on the bid side of the book. It then uses that price to place a passive order into the bid side of the order book. 
 
+https://github.com/chrisjstevo/codingblackfemales/blob/263cecf4da4a3afa4b94a021f82265f3fcafac08/algo-coding-exercise/algo/src/main/java/codingblackfemales/algo/PassiveAlgoLogic.java#L33-L36
+
+### An Overview of the Backtesting Infra
+
+The back testing infrastructure allows you, from within a unit test, to write an algo that adds or removes orders into an order book. When your orders go onto the orer book, if they can't match immediately (i.e. the price is too passive) the order book will send a market data update showing the new order book with your quantity in it. Your algo can then see that market data update and respond to it. 
+
+When you are writing scenarios to see how the algo would behave you can inject new market data by creating copies of the tick() method and changing the price or quantity values it submits. 
+
+There is one example in the test provided already: 
+
+https://github.com/chrisjstevo/codingblackfemales/blob/ec5bbff1a3d4ed07eddaae5a8fcca928ad5c56f4/algo-coding-exercise/getting-started/src/test/java/codingblackfemales/gettingstarted/MyAlgoTest.java#L27-L33
+
+The below diagram shows the message flows across the infrastructure. If you look at the [AbstractAlgoBackTest.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/test/java/codingblackfemales/gettingstarted/AbstractAlgoBackTest.java) you can see how this is wired together for you behind the scenes. 
+
 ![cbf-graphics-overview](https://github.com/chrisjstevo/codingblackfemales/assets/17289809/f9a27f2a-5c9b-4b9e-bbea-762a6a144868)
+
+In the diagram you can see your algo (MyAlgo) in the blue box. That is where you add your logic to create or cancel orders. 
+
+When you're orders are created they travel through a Sequencer component which duplicates the message out to each consumer. The sequencer distributes all messages out (including your createTick() message) to all consumers. 
+
+The orders then hit the order book component, the order book then checks if this order can match with any other in the book (including fake orders that come from our market data tick). 
+
+
+
