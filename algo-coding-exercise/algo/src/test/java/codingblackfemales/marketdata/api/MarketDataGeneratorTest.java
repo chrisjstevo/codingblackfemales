@@ -15,7 +15,7 @@ public class MarketDataGeneratorTest {
         final Venue venue = Venue.XLON;
         final long priceLevel = 1000;
         final long priceMaxDelta = 100;
-        marketDataGenerator = new SimpleFileMarketDataGenerator("src/test/resources/marketdata.json", new RandomMarketDataGenerator(instrumentId, venue, priceLevel, priceMaxDelta));
+        marketDataGenerator = new SimpleFileMarketDataGenerator("src/test/resources/marketdata.json", new RandomMarketDataGenerator(instrumentId, venue, priceLevel, priceMaxDelta, 15));
     }
 
     @Test

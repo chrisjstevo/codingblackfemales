@@ -19,7 +19,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
     @Override
     public AlgoLogic createAlgoLogic() {
         //this adds your algo logic to the container classes
-        return new MyAlgo();
+        return new MyAlgoLogic();
     }
 
 
