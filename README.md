@@ -20,8 +20,8 @@ Pre-requisites:
 Opening the project: 
 
 1. Git clone this project
-2. Open the project as a maven project in your IDE
-3. Open the "getting-started" model.
+2. Open the project as a maven project in your IDE (normally by opening the top level pom.xml file)
+3. Click to expand the "getting-started" module
 4. Navigate to the [MyAlgoTest.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MyAlgo.java) and [MyAlgo.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MyAlgo.java)
 5. You're ready to go!
 
@@ -60,11 +60,23 @@ The below diagram shows the message flows across the infrastructure. If you look
 
 ![cbf-graphics-overview](https://github.com/chrisjstevo/codingblackfemales/assets/17289809/f9a27f2a-5c9b-4b9e-bbea-762a6a144868)
 
-In the diagram you can see your algo (MyAlgo) in the blue box. That is where you add your logic to create or cancel orders. 
+In the diagram you can see your algo (MyAlgo) in the darker blue box. That is where you add your logic to create or cancel orders. 
 
-When you're orders are created they travel through a Sequencer component which duplicates the message out to each consumer. The sequencer distributes all messages out (including your createTick() message) to all consumers. 
+When you're orders are created they travel through a Sequencer component which duplicates the message out to each consumer. The sequencer distributes all messages  (including your createTick() message) to all consumers.
 
-The orders then hit the order book component, the order book then checks if this order can match with any other in the book (including fake orders that come from our market data tick). 
+The orders then hit the order book component, the order book checks if this order can match with any other in the book (including fake orders that come from our market data tick). If it cannot immediately match, it adds the order to the order book and sends out an updated market data message showing the new quantities in the order book. The algo container will then get this updated message and see the new view of the orderbook in its state. 
+
+If the order book can match the order immediately, it will send out a fill message and then publish a new market data message of the order book with the matched quantity removed. 
+
+### What are the most important parts of this?
+
+Writing tests that can assert how your algo behaves, sometimes you will get stuff or have bugs that means your code doesn't work properly, but having tests showing what you were trying to do is (almost) as good as having the whole thing work. 
+
+### Good Luck!
+
+Remember your mentors are here to help
+
+
 
 
 
