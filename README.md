@@ -6,7 +6,7 @@ Welcome to your first Electronic Trading Coding Challenge!
 
 The objective of this challenge is to write a simple trading algo that creates and cancels child orders. 
 
-**Stretch objective:** write an algo that can make money buy buying shares when the order book is cheaper, and selling them when the order book is moe expensive. 
+**Stretch objective:** write an algo that can make money buy buying shares when the order book is cheaper, and selling them when the order book is more expensive. 
 
 Note: make sure you think about how the market data could change over time, add scenarios into your test to show how you've tested those scenarios. 
 
