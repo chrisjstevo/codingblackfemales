@@ -38,6 +38,7 @@
         <module>collection</module>
         <module>algo</module>
         <module>backtest</module>
+        <module>getting-started</module>
     </modules>
 
     <dependencies>

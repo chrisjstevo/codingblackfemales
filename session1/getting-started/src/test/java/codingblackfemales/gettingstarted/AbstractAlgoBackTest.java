@@ -1,6 +1,6 @@
-package codingblackfemales.backtest;
+package codingblackfemales.gettingstarted;
 
-import codingblackfemales.algo.AddCancelAlgoLogic;
+import codingblackfemales.algo.AlgoLogic;
 import codingblackfemales.container.Actioner;
 import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.container.RunTrigger;
@@ -17,16 +17,13 @@ import codingblackfemales.service.MarketDataService;
 import codingblackfemales.service.OrderService;
 import messages.marketdata.*;
 import org.agrona.concurrent.UnsafeBuffer;
-import org.junit.Test;
 
 import java.nio.ByteBuffer;
 
-public class AddCancelAlgoBackTest extends SequencerTestCase {
+public abstract class AbstractAlgoBackTest extends SequencerTestCase {
 
-    private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
-    private final BookUpdateEncoder encoder = new BookUpdateEncoder();
 
-    private AlgoContainer container;
+    protected AlgoContainer container;
 
     @Override
     public Sequencer getSequencer() {
@@ -44,7 +41,7 @@ public class AddCancelAlgoBackTest extends SequencerTestCase {
 
         container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
         //set my algo logic
-        container.setLogic(new AddCancelAlgoLogic());
+        container.setLogic(createAlgoLogic());
 
         network.addConsumer(new LoggingConsumer());
         network.addConsumer(book);
@@ -56,7 +53,13 @@ public class AddCancelAlgoBackTest extends SequencerTestCase {
         return sequencer;
     }
 
-    private UnsafeBuffer createSampleMarketDataTick(){
+    public abstract AlgoLogic createAlgoLogic();
+
+    protected UnsafeBuffer createTick(){
+        final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+        final BookUpdateEncoder encoder = new BookUpdateEncoder();
+
+
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
@@ -84,7 +87,11 @@ public class AddCancelAlgoBackTest extends SequencerTestCase {
         return directBuffer;
     }
 
-    private UnsafeBuffer createSampleMarketDataTick2(){
+    protected UnsafeBuffer createTick2(){
+
+        final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+        final BookUpdateEncoder encoder = new BookUpdateEncoder();
+
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
@@ -112,21 +119,5 @@ public class AddCancelAlgoBackTest extends SequencerTestCase {
         return directBuffer;
     }
 
-    @Test
-    public void testExampleBackTest() throws Exception {
-        //create a sample market data tick....
-        send(createSampleMarketDataTick());
-        //simple assert to check we had 3 orders created
-        //assertEquals(container.getState().getChildOrders().size(), 3);
 
-        //when: market data moves towards us
-        send(createSampleMarketDataTick2());
-
-        //then: get the state
-        //var state = container.getState();
-        //long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
-
-        //and: check that our algo state was updated to reflect our fills when the market data
-        //assertEquals(225, filledQuantity);
-    }
 }
