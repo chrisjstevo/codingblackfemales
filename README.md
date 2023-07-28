@@ -60,7 +60,7 @@ The below diagram shows the message flows across the infrastructure. If you look
 
 ![cbf-graphics-overview](https://github.com/chrisjstevo/codingblackfemales/assets/17289809/f9a27f2a-5c9b-4b9e-bbea-762a6a144868)
 
-In the diagram you can see your algo (MyAlgo) in the darker blue box. That is where you add your logic to create or cancel orders. 
+In the diagram you can see your algo (MyAlgoLogic) in the darker blue box. That is where you add your logic to create or cancel orders. 
 
 When you're orders are created they travel through a Sequencer component which duplicates the message out to each consumer. The sequencer distributes all messages  (including your createTick() message) to all consumers.
 
