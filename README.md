@@ -31,6 +31,9 @@ To get started, look at the the exampes below:
 * Algo Logic: [PassiveAlgoLogic.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/algo/src/main/java/codingblackfemales/algo/PassiveAlgoLogic.java) Unit Test: [PassiveAlgoTest.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/algo/src/test/java/codingblackfemales/algo/PassiveAlgoTest.java) Back Test: [PassiveAlgoBackTest.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/backtest/src/test/java/codingblackfemales/backtest/PassiveAlgoBackTest.java)
 * Algo Logic: [SniperAlgoLogic.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/algo/src/main/java/codingblackfemales/algo/SniperAlgoLogic.java) Back Test: [SniperAlgoBackTest.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/backtest/src/test/java/codingblackfemales/backtest/SniperAlgoBackTest.java)
 
+You can see from these examples the algo has access to a state object (SimpleAlgoState state), that is passed in from the container. The state object gives you access to two sets of information: 
 
+1. A current view on the market data
+2. The current view of the child orders you've created, and whether they are filled or cancelled etc..
 
 ![cbf-graphics-overview](https://github.com/chrisjstevo/codingblackfemales/assets/17289809/f9a27f2a-5c9b-4b9e-bbea-762a6a144868)
