@@ -19,7 +19,7 @@ Pre-requisites:
 
 Opening the project: 
 
-1. Git clone this project
+1. Git fork this project
 2. Open the project as a maven project in your IDE (normally by opening the top level pom.xml file)
 3. Click to expand the "getting-started" module
 4. Navigate to the [MyAlgoTest.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MyAlgoLogic.java) and [MyAlgoLogic.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MyAlgoLogic.java)
