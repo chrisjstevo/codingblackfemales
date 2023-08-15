@@ -25,6 +25,8 @@ Opening the project:
 4. Navigate to the [MyAlgoTest.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MyAlgoLogic.java) and [MyAlgoLogic.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MyAlgoLogic.java)
 5. You're ready to go!
 
+** Please note, you will need to run the "mvn compile" task, either at command line or from the IDE integration to make sure the binary encoders and decoders are created. 
+
 ### Writing Your Algo
 
 At this point its worth *taking a deep breath*. There is a lot of code in this repository, but 99% of it is framework to help you. 
@@ -75,6 +77,19 @@ Writing tests that can assert how your algo behaves, sometimes you will get stuf
 ### Good Luck!
 
 Remember your mentors are here to help
+
+### Frequently Asked Questions
+
+1. I am getting compile errors for the encoders in the project, how do I resolve this?
+
+The encoders and decoders are generated from the .xsd documents in the project. To get them generated, you must run a "mvn compile" step either from inside the IDE or from the command line. 
+
+Please see, if you're unsure how to run maven in your setup: 
+* (https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
+* (https://www.jetbrains.com/help/idea/maven-support.html)
+* (https://code.visualstudio.com/docs/java/java-build#_execute-maven-commands-and-goals)
+
+
 
 
 
