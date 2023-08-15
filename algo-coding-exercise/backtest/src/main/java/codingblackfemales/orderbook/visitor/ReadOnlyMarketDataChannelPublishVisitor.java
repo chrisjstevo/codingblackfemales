@@ -20,33 +20,33 @@ public class ReadOnlyMarketDataChannelPublishVisitor implements OrderBookVisitor
     private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
     private final BookUpdateEncoder encoder = new BookUpdateEncoder();
 
-    private ByteBuffer byteBuffer; //= ByteBuffer.allocateDirect(1024);
-    private UnsafeBuffer directBuffer; //= new UnsafeBuffer(byteBuffer);
+    private ByteBuffer byteBuffer; // = ByteBuffer.allocateDirect(1024);
+    private UnsafeBuffer directBuffer; // = new UnsafeBuffer(byteBuffer);
 
-    public void start(){
+    public void start() {
         byteBuffer = ByteBuffer.allocateDirect(1024);
         directBuffer = new UnsafeBuffer(byteBuffer);
 
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
-        //set the fields to desired valus
+        // set the fields to desired valus
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
         encoder.source(Source.ORDERBOOK);
     }
 
-    public MutableDirectBuffer end(){
+    public MutableDirectBuffer end() {
         return directBuffer;
     }
 
-
     @Override
-    public void visitLevel(OrderBookSide side, OrderBookLevel level) {}
+    public void visitLevel(OrderBookSide side, OrderBookLevel level) {
+    }
 
     @Override
     public void visitSide(OrderBookSide side) {
-        if(side instanceof BidBookSide){
-            if(side.getFirstLevel() == null){
+        if (side instanceof BidBookSide) {
+            if (side.getFirstLevel() == null) {
                 return;
             }
 
@@ -54,13 +54,13 @@ public class ReadOnlyMarketDataChannelPublishVisitor implements OrderBookVisitor
             logger.debug("Bid Side Size: " + size);
             var bidBookEncoder = encoder.bidBookCount(size);
             OrderBookLevel level = side.getFirstLevel();
-            for(int i=0; i< size; i++){
+            for (int i = 0; i < size; i++) {
                 logger.debug("Adding Mkt Data Msg BID: Price=" + level.getPrice() + " Qty=" + level.getQuantity());
-                bidBookEncoder.next().size(level.getQuantity()).price(level.getPrice()) ;
+                bidBookEncoder.next().size(level.getQuantity()).price(level.getPrice());
                 level = level.next();
             }
-        }else if(side instanceof AskBookSide){
-            if(side.getFirstLevel() == null){
+        } else if (side instanceof AskBookSide) {
+            if (side.getFirstLevel() == null) {
                 return;
             }
             final var size = side.getFirstLevel().size();
@@ -68,16 +68,17 @@ public class ReadOnlyMarketDataChannelPublishVisitor implements OrderBookVisitor
             var askBookEncoder = encoder.askBookCount(size);
             OrderBookLevel level = side.getFirstLevel();
 
-            for(int i=0; i< size; i++){
+            for (int i = 0; i < size; i++) {
                 logger.debug("Adding Mkt Data Msg ASK: Price=" + level.getPrice() + " Qty=" + level.getQuantity());
-                askBookEncoder.next().size(level.getQuantity()).price(level.getPrice()) ;
+                askBookEncoder.next().size(level.getQuantity()).price(level.getPrice());
                 level = level.next();
             }
         }
     }
 
     @Override
-    public void visitOrder(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {}
+    public void visitOrder(DefaultOrderFlyweight order, OrderBookSide side, OrderBookLevel level, boolean isLast) {
+    }
 
     @Override
     public OrderBookLevel missingBookLevel(OrderBookLevel previous, OrderBookLevel next, long price) {

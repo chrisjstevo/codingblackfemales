@@ -27,7 +27,7 @@ public class AddCancelAlgoBackTest extends SequencerTestCase {
     private final BookUpdateEncoder encoder = new BookUpdateEncoder();
 
     private AlgoContainer container;
-
+// puts together all the bits 
     @Override
     public Sequencer getSequencer() {
         final TestNetwork network = new TestNetwork();
@@ -55,7 +55,8 @@ public class AddCancelAlgoBackTest extends SequencerTestCase {
 
         return sequencer;
     }
-
+// price that are going into the order book
+// can trade against this prices
     private UnsafeBuffer createSampleMarketDataTick(){
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);

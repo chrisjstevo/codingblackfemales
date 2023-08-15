@@ -41,7 +41,7 @@ public class ChildOrder {
     }
 
     public long getFilledQuantity() {
-        return fills.stream().map( cf -> cf.getQuantity()).collect(Collectors.summingLong(Long::longValue));
+        return fills.stream().map(cf -> cf.getQuantity()).collect(Collectors.summingLong(Long::longValue));
     }
 
     public int getState() {
