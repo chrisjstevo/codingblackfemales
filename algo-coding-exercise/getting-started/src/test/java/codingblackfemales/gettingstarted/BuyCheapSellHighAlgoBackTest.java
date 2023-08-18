@@ -24,7 +24,7 @@ import org.junit.Test;
  * cancelled in the childOrders of the state object.
  *
  */
-public class MyAlgoBackTest extends AbstractAlgoBackTest {
+public class BuyCheapSellHighAlgoBackTest extends AbstractAlgoBackTest {
 
     @Override
     public AlgoLogic createAlgoLogic() {
@@ -34,21 +34,21 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
     @Test
     public void testExampleBackTest() throws Exception {
         // create a sample market data tick....
-         send(createTick());
+        send(createTick());
 
         // ADD asserts when you have implemented your algo logic
         assertEquals(container.getState().getChildOrders().size(), 0);
 
         // when: market data moves towards us
-        //  send(createTick2());
+        // send(createTick2());
 
         // then: get the state
-        //  var state = container.getState();
+        // var state = container.getState();
 
         // //Check things like filled quantity, cancelled order count etc....
         // long filledQuantity =
-        //  state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum)
-        //  .get();
+        // state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum)
+        // .get();
         // and: check that our algo state was updated to reflect our fills when the
         // market data
         // assertEquals(225, filledQuantity);

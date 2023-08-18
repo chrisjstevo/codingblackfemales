@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MyAlgoLogic implements AlgoLogic {
-
+    private static final double BID_INCREASE_PERCENTAGE = 1;
     private static final Logger logger = LoggerFactory.getLogger(MyAlgoLogic.class);
 
     @Override
@@ -30,47 +30,34 @@ public class MyAlgoLogic implements AlgoLogic {
          * Add your logic here....
          *
          */
-        // The objective of this challenge is to write a simple trading algo that
-        // creates and cancels child orders.
-        final BidLevel bid = state.getBidAt(0);
-        final AskLevel ask = state.getAskAt(0);
+        // The logic gets the highest bid and places a bid that is 1% higher than the
+        // highest bid
+        // but if the price is greater than 200, it cancels the order
+        final BidLevel bestBid = state.getBidAt(0);
 
-        long bidPrice = bid.price;
+        long bidPrice = bestBid.price;
         long bidQuantity = 100;
-        long askPrice = ask.price;
-        long askQuantity = ask.quantity;
 
         final var activeOrders = state.getActiveChildOrders();
-// don't hard code the price
-// get the bid price
-// place a bid that's slightly less than what the best bid is e.g 1%
-// look at how passalfgo does it and add cancel algo does it as well
-//if time has passed a
-// buy cheap and sell more expensive
-// sell wjen it high and buy back when it cheaper
-// addcancelalgo order checks if the bid as been in the market for more than a certain time, if so it cancels 
 
-        if (askPrice < 0.60  ) {
-            logger.info("[MyAlgoLogic] Adding order for" + askQuantity + "@" + askPrice);
-            return new CreateChildOrder(Side.BUY, bidQuantity, bidPrice);
+        // if (activeOrders.size() > 0) {
+        final var option = activeOrders.stream().findFirst();
 
-        }
+        if (option.isPresent()) {
+            var childOrder = option.get();
 
-        if (activeOrders.size() > 0) {
-            final var option = activeOrders.stream().findFirst();
+            if (bestBid != null) {
 
-            if (option.isPresent()) {
-                var childOrder = option.get();
-                if (bidPrice > 100) {
-                    logger.info("[MyAlgoLogic] Adding order for" + bidQuantity + "@" + bidPrice);
-                    return new CreateChildOrder(Side.BUY, askQuantity, askPrice);
-
-                } else {
+                long price = (long) (bestBid.price * (1 + BID_INCREASE_PERCENTAGE));
+                if (price > 200) {
                     logger.info("[MyAlgoLogic] Cancelling order: " + childOrder);
                     return new CancelChildOrder(childOrder);
                 }
+                logger.info("[MyAlgoLogic] Adding order for" + bidQuantity + "@" + bidPrice);
+                return new CreateChildOrder(Side.BUY, bidQuantity, price);
             }
         }
+        // }
         return NoAction.NoAction;
 
     }
