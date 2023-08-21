@@ -1,6 +1,10 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
+import codingblackfemales.sotw.ChildOrder;
+
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 /**
@@ -28,7 +32,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         send(createTick());
 
         //ADD asserts when you have implemented your algo logic
-        //assertEquals(container.getState().getChildOrders().size(), 3);
+        assertEquals(container.getState().getChildOrders().size(), 2);
 
         //when: market data moves towards us
         send(createTick2());
@@ -37,9 +41,12 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         var state = container.getState();
 
         //Check things like filled quantity, cancelled order count etc....
-        //long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
-        //and: check that our algo state was updated to reflect our fills when the market data
-        //assertEquals(225, filledQuantity);
-    }
+        long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
+        // long filledPrice = state.getChildOrders().stream().map(ChildOrder::getPrice).reduce(Long::sum).get();
 
+        //and: check that our algo state was updated to reflect our fills when the market data
+        //check that the child orders have been cancelled
+        assertEquals(0, filledQuantity);
+        // assertEquals(20, filledPrice);
+    }
 }
