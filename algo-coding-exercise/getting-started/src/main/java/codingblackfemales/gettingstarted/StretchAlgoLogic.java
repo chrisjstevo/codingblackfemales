@@ -24,24 +24,23 @@ public class StretchAlgoLogic implements AlgoLogic {
 
         logger.info("[STRETCHALGO] The state of the order book is:\n" + orderBookAsString);
 
-        //create a sell
         final AskLevel askLevel = state.getAskAt(0);
 
         long askPrice = askLevel.price;
         long askQuantity = askLevel.quantity;
 
+        //create new bid order
         //ChildOrder newAskOrder = new ChildOrder(Side.BUY, 1, 50L, 105, 1);
         CreateChildOrder childOrder = new CreateChildOrder(Side.SELL, 50, 105);
 
-        if(newAskOrder.getPrice() > askPrice){
+
+        if(newAskOrder.getPrice() >= askPrice){
             //match order
-            //clear order how?
+
         }
         else{
-            //do nothing
+
         }
-
-
 
         return NoAction.NoAction;
     }
