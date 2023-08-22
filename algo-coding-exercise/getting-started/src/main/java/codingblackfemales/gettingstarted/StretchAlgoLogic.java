@@ -30,12 +30,10 @@ public class StretchAlgoLogic implements AlgoLogic {
         long askQuantity = askLevel.quantity;
 
         //create new bid order
-        //ChildOrder newAskOrder = new ChildOrder(Side.BUY, 1, 50L, 105, 1);
+        //ChildOrder newBidOrder = new ChildOrder(Side.BUY, 1, 50L, 105, 1);
         CreateChildOrder childOrder = new CreateChildOrder(Side.SELL, 50, 105);
 
-
-        if(newAskOrder.getPrice() >= askPrice){
-            //match order
+        if(newBidOrder.getPrice() >= askPrice){
 
         }
         else{
