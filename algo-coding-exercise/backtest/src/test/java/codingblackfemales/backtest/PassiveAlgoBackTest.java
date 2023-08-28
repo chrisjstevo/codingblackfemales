@@ -118,11 +118,15 @@ public class PassiveAlgoBackTest extends SequencerTestCase {
     @Test
     public void testExampleBackTest() throws Exception {
         //create a sample market data tick....
-        send(createSampleMarketDataTick());
+        // 12:55
+        send(createSampleMarketDataTick()); // gets you an order book
         //simple assert to check we had 3 orders created
         assertEquals(container.getState().getChildOrders().size(), 3);
-
+// an order book always changes
+// orbook from 12pm to 12:01pm is not the same
+// there are frequentc changes
         //when: market data moves towards us
+        // 1300
         send(createSampleMarketDataTick2());
 
         //then: get the state

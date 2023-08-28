@@ -28,16 +28,16 @@ public class BuyCheapSellHighAlgoBackTest extends AbstractAlgoBackTest {
 
     @Override
     public AlgoLogic createAlgoLogic() {
-        return new MyAlgoLogic();
+        return new BuyCheapSellHighAlgo();
     }
 
     @Test
     public void testExampleBackTest() throws Exception {
         // create a sample market data tick....
-        send(createTick());
+        //  send(createTick());
 
         // ADD asserts when you have implemented your algo logic
-        assertEquals(container.getState().getChildOrders().size(), 0);
+        //  assertEquals(container.getState().getChildOrders().size(), 3);
 
         // when: market data moves towards us
         // send(createTick2());

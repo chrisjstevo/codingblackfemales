@@ -95,7 +95,7 @@ public class AddCancelAlgoBackTest extends SequencerTestCase {
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
         encoder.source(Source.STREAM);
-
+// mock data to test if the algo works
         encoder.bidBookCount(3)
                 .next().price(95L).size(100L)
                 .next().price(93L).size(200L)

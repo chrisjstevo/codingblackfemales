@@ -6,7 +6,6 @@ import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
 import codingblackfemales.sotw.SimpleAlgoState;
-import codingblackfemales.sotw.marketdata.AskLevel;
 import codingblackfemales.sotw.marketdata.BidLevel;
 import codingblackfemales.util.Util;
 import messages.order.Side;
@@ -15,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MyAlgoLogic implements AlgoLogic {
-    private static final double BID_INCREASE_PERCENTAGE = 1;
+
     private static final Logger logger = LoggerFactory.getLogger(MyAlgoLogic.class);
 
     @Override
@@ -30,35 +29,41 @@ public class MyAlgoLogic implements AlgoLogic {
          * Add your logic here....
          *
          */
-        // The logic gets the highest bid and places a bid that is 1% higher than the
-        // highest bid
-        // but if the price is greater than 200, it cancels the order
-        final BidLevel bestBid = state.getBidAt(0);
 
-        long bidPrice = bestBid.price;
-        long bidQuantity = 100;
+        final BidLevel bestBid = state.getBidAt(0);
 
         final var activeOrders = state.getActiveChildOrders();
 
-        // if (activeOrders.size() > 0) {
-        final var option = activeOrders.stream().findFirst();
+        long bestBidPrice = bestBid.price;
 
-        if (option.isPresent()) {
-            var childOrder = option.get();
+        // checks if there are active orders
+        if (activeOrders.size() > 0) {
 
-            if (bestBid != null) {
+            final var option = activeOrders.stream().findFirst();
 
-                long price = (long) (bestBid.price * (1 + BID_INCREASE_PERCENTAGE));
-                if (price > 200) {
-                    logger.info("[MyAlgoLogic] Cancelling order: " + childOrder);
-                    return new CancelChildOrder(childOrder);
+            if (option.isPresent()) {
+                var activeChildOrder = option.get();
+
+                // if there are active orders check that the price is equals to the best bid
+
+                if (activeChildOrder.getPrice() == bestBidPrice) {
+                    // if the price is equal to the best bid leave it
+                    return NoAction.NoAction;
+                    // else you can cancel the order
+                } else {
+                    logger.info("[MyAlgoLogic] Cancelling order: " + activeChildOrder);
+                    return new CancelChildOrder(activeChildOrder);
+
                 }
-                logger.info("[MyAlgoLogic] Adding order for" + bidQuantity + "@" + bidPrice);
-                return new CreateChildOrder(Side.BUY, bidQuantity, price);
             }
-        }
-        // }
-        return NoAction.NoAction;
+            // if you don't have active orders place an order
+        } else {
 
+            long quantity = 502;
+            logger.info("[MyAlgoLogic] Adding order for: " + quantity + " @ " + bestBidPrice);
+            return new CreateChildOrder(Side.BUY, quantity, bestBidPrice);
+        }
+
+        return NoAction.NoAction;
     }
 }
