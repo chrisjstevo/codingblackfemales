@@ -5,7 +5,9 @@ import codingblackfemales.action.CancelChildOrder;
 import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
+
 import codingblackfemales.sotw.SimpleAlgoState;
+
 import codingblackfemales.sotw.marketdata.BidLevel;
 import codingblackfemales.util.Util;
 import messages.order.Side;
@@ -13,22 +15,17 @@ import messages.order.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MyAlgoLogic implements AlgoLogic {
-
-    private static final Logger logger = LoggerFactory.getLogger(MyAlgoLogic.class);
+public class BuyLowAlgo implements AlgoLogic {
+    private static final Logger logger = LoggerFactory.getLogger(BuyLowAlgo.class);
 
     @Override
     public Action evaluate(SimpleAlgoState state) {
 
+        logger.info("[BUYLOWALGO] In Algo Logic....");
+
         final String orderBookAsString = Util.orderBookToString(state);
 
-        logger.info("[MYALGO] The state of the order book is:\n" + orderBookAsString);
-
-        /********
-         *
-         * Add your logic here....
-         *
-         */
+        logger.info("[BUYLOWALGO] The state of the order book is:\n" + orderBookAsString);
 
         final BidLevel bestBid = state.getBidAt(0);
 
@@ -41,37 +38,43 @@ public class MyAlgoLogic implements AlgoLogic {
         final var option = activeOrders.stream().findFirst();
         long quantity = 200;
 
+        long prevBestBidPrice = 0;
+        long bidPriceUpCount = 0;
+
         // create one order when there are no active orders in the market
         if (activeChildOrderCount < 1) {
-            logger.info("[MyAlgoLogic] Adding first order for: " + quantity + " @ " +
-                    bestBidPrice);
+            logger.info("[MyAlgoLogic] Adding first order for: " + quantity + " @ " + bestBidPrice);
             return new CreateChildOrder(Side.BUY, quantity, bestBidPrice);
-            // we want to create 6 orders in total. 5 orders at a cheaper price
+
         } else if (activeChildOrderCount < 6) {
             if (option.isPresent()) {
 
                 var activeChildOrder = option.get();
-                // if the next best price in the market is less than our first created order
-                if (bestBidPrice < activeChildOrder.getPrice()) {
-                    // buy more quantity at a cheaper price than the first order created
+                // check if best price has gone up twice
+                if (bestBidPrice > prevBestBidPrice) {
+                    bidPriceUpCount++;
+
+                    if (bidPriceUpCount >= 2) {
+                        logger.info("[BuyLowAlgo] Cancelling order: " + activeChildOrder);
+                        return new CancelChildOrder(activeChildOrder);
+                    }
+                } else {
+                    bidPriceUpCount = 0;
                     quantity = 250;
 
-                    logger.info("[MyAlgoLogic] Adding order for: " + quantity + " @ " +
+                    logger.info("[BuyLowAlgo] Adding order for: " + quantity + " @ " +
                             bestBidPrice);
                     return new CreateChildOrder(Side.BUY, quantity, bestBidPrice);
-                    // but if the next best order is still the same price or higher than our first
-                    // order then cancel our initial order
-                } else {
-                    logger.info("[MyAlgoLogic] Cancelling order: " + activeChildOrder);
-                    return new CancelChildOrder(activeChildOrder);
                 }
+                prevBestBidPrice = bestBidPrice;
             }
-            // once we have 6 orders in the market stop trading
+
         } else {
-            logger.info("[MyAlgoLogic] Have:" + state.getChildOrders().size() + " children, want 6, done.");
+            logger.info("[BuyLowAlgo] Have:" + state.getChildOrders().size() + " children, want 6, done.");
             return NoAction.NoAction;
         }
 
         return NoAction.NoAction;
+
     }
 }

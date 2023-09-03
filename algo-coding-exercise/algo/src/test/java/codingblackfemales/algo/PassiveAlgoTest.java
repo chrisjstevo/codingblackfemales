@@ -33,8 +33,9 @@ public class PassiveAlgoTest extends SequencerTestCase {
         final RunTrigger runTrigger = new RunTrigger();
         final Actioner actioner = new Actioner(sequencer);
 
-        container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
-        //set my algo logic
+        container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger,
+                actioner);
+        // set my algo logic
         container.setLogic(new PassiveAlgoLogic());
 
         network.addConsumer(new LoggingConsumer());
@@ -45,14 +46,14 @@ public class PassiveAlgoTest extends SequencerTestCase {
         return sequencer;
     }
 
-    private UnsafeBuffer createSampleMarketDataTick(){
+    private UnsafeBuffer createSampleMarketDataTick() {
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        //write the encoded output to the direct buffer
+        // write the encoded output to the direct buffer
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-        //set the fields to desired values
+        // set the fields to desired values
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
 
@@ -75,10 +76,10 @@ public class PassiveAlgoTest extends SequencerTestCase {
     @Test
     public void testDispatchThroughSequencer() throws Exception {
 
-        //create a sample market data tick....
-        // send(createSampleMarketDataTick());
+        // create a sample market data tick....
+        send(createSampleMarketDataTick());
 
-        //simple assert to check we had 3 orders created
-        // assertEquals(container.getState().getChildOrders().size(), 3);
+        // simple assert to check we had 3 orders created
+        assertEquals(container.getState().getChildOrders().size(), 3);
     }
 }

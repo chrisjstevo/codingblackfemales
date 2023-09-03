@@ -26,29 +26,22 @@ public class AddCancelAlgoLogic implements AlgoLogic {
 
         var totalOrderCount = state.getChildOrders().size();
 
-        //make sure we have an exit condition...
+        // make sure we have an exit condition...
         if (totalOrderCount > 20) {
             return NoAction.NoAction;
         }
 
-        // gets all the child order that has not being cancelled
-        // orders that have 
-        // gets fullfiled and pending orders
         final var activeOrders = state.getActiveChildOrders();
 
         if (activeOrders.size() > 0) {
 
-            // returns the order in the order they were placed
             final var option = activeOrders.stream().findFirst();
 
-    //    check if it is null or empty
             if (option.isPresent()) {
-
                 var childOrder = option.get();
                 logger.info("[ADDCANCELALGO] Cancelling order:" + childOrder);
                 return new CancelChildOrder(childOrder);
-            }
-            else{
+            } else {
                 return NoAction.NoAction;
             }
         } else {
