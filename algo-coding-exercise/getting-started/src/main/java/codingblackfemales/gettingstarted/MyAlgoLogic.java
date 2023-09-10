@@ -22,7 +22,7 @@ public class MyAlgoLogic implements AlgoLogic {
     private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
     private final BookUpdateEncoder bookUpdateEncoder = new BookUpdateEncoder();
 
-    private UnsafeBuffer createTick2(){
+    protected UnsafeBuffer createTick2(){
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
