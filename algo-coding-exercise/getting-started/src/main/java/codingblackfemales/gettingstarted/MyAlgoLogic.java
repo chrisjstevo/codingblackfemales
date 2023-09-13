@@ -72,4 +72,5 @@ public class MyAlgoLogic implements AlgoLogic {
 
         return NoAction.NoAction;
     }
+
 }
