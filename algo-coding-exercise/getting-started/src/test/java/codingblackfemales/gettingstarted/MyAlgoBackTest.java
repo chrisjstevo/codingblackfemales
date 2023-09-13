@@ -1,11 +1,15 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
+import codingblackfemales.service.OrderService;
 import codingblackfemales.sotw.ChildOrder;
 
 import static org.junit.Assert.assertEquals;
 
+import codingblackfemales.sotw.OrderState;
 import org.junit.Test;
+
+import java.util.stream.Collectors;
 
 /**
  * This test plugs together all of the infrastructure, including the order book
@@ -24,54 +28,55 @@ import org.junit.Test;
  * cancelled in the childOrders of the state object.
  */
 public class MyAlgoBackTest extends AbstractAlgoBackTest {
+        public OrderService orderService;
 
-    @Override
-    public AlgoLogic createAlgoLogic() {
-        return new MyAlgoLogic();
-    }
+        @Override
+        public AlgoLogic createAlgoLogic() {
+                return new MyAlgoLogic();
+        }
 
-    // we are assuming the market would always go down
-    @Test
-    public void testExampleBackTest() throws Exception {
-        // create a sample market data tick....
-        send(createTick());
-        var myChildOrders = container.getState().getChildOrders();
-        // I expect to have created one child order
-        assertEquals(myChildOrders.size(), 1);
-        // but i don't expect it to have been filled
-        long filledQuantity = myChildOrders.stream().map(ChildOrder::getFilledQuantity)
-                .reduce(Long::sum)
-                .get();
-        assertEquals(0, filledQuantity);
+        // This test checks if my algorithm successfully creates and cancels 6 child
+        // orders.
 
-        send(createTick2());
-        // I still expect to have one order, but to have the order cancelled
-        // because the new best price is lower than the existing order price
-        assertEquals(myChildOrders.size(), 1);
-        // based on this I don't expect it to have been filled
-        long filledQuantity2 = myChildOrders.stream().map(ChildOrder::getFilledQuantity)
-                .reduce(Long::sum)
-                .get();
+        @Test
+        public void testExampleBackTest() throws Exception {
 
-        assertEquals(0, filledQuantity2);
+                // create a sample market data tick....
+                send(createTick());
 
-        send(createTick3());
-        // I expect it to create 5 more orders +My the existing 1 order
-        assertEquals(container.getState().getChildOrders().size(), 6);
+                var myChildOrders = container.getState().getChildOrders();
 
-        long filledQuantity3 = myChildOrders.stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum)
-                .get();
-        // I expect it to fill the 5 orders because the market moved towards us
-        assertEquals(1000, filledQuantity3);
+                // simple assert to check I have 6 orders created
+                assertEquals(myChildOrders.size(), 6);
 
-        // send(createTick4());
-        // // checking for cancelled order
-        // long filledQuantity4 =
-        // state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum)
-        // .get();
-        // assertEquals(401, filledQuantity4);
-        // assertEquals(container.getState().getChildOrders().size(), 4);
-        // ;
-    }
+                // when: market data moves towards us
+                send(createTick2());
+
+                // get filled quantity
+                long filledQuantity = myChildOrders.stream().map(ChildOrder::getFilledQuantity)
+                                .reduce(Long::sum)
+                                .get();
+                // check that there are no fullfilled order
+                assertEquals(0, filledQuantity);
+
+                // get cancelled order
+                long cancelledOrders = myChildOrders.stream()
+                                .filter(order -> order.getState() == OrderState.CANCELLED).collect(Collectors.toList())
+                                .size();
+
+                // check that all 6 orders were cancelled
+                assertEquals(6, cancelledOrders);
+
+                send(createTick3());
+
+                assertEquals(container.getState().getChildOrders().size(), 6);
+                long filledQuantity2 = myChildOrders.stream().map(ChildOrder::getFilledQuantity)
+                                .reduce(Long::sum)
+                                .get();
+
+                assertEquals(0, filledQuantity2);
+                assertEquals(6, cancelledOrders);
+
+        }
 
 }

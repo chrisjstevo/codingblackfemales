@@ -13,6 +13,14 @@ import messages.order.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This algorithm logic involves the creation and cancellation of 6 orders.
+ * It seeks the second-best price in the market and initiates a buy order at
+ * that price.
+ * If the active buy order matches the best market price, it is automatically
+ * canceled.
+ */
+
 public class MyAlgoLogic implements AlgoLogic {
 
     private static final Logger logger = LoggerFactory.getLogger(MyAlgoLogic.class);
@@ -36,42 +44,37 @@ public class MyAlgoLogic implements AlgoLogic {
 
         long bestBidPrice = bestBid.price;
 
-        var activeChildOrderCount = state.getChildOrders().size();
-
         final var option = activeOrders.stream().findFirst();
         long quantity = 200;
 
-        // create one order when there are no active orders in the market
-        if (activeChildOrderCount < 1) {
-            logger.info("[MyAlgoLogic] Adding first order for: " + quantity + " @ " +
-                    bestBidPrice);
-            return new CreateChildOrder(Side.BUY, quantity, bestBidPrice);
-            // we want to create 6 orders in total. 5 orders at a cheaper price
-        } else if (activeChildOrderCount < 6) {
-            if (option.isPresent()) {
+        long buyPrice = state.getBidAt(1).price;
 
-                var activeChildOrder = option.get();
-                // if the next best price in the market is less than our first created order
-                if (bestBidPrice < activeChildOrder.getPrice()) {
-                    // buy more quantity at a cheaper price than the first order created
-                    quantity = 250;
+        // Create 6 orders and automatically cancel them when the active price matches
+        // the best market price.
+        // No further action is taken once 6 orders are in the market.
+        if (state.getChildOrders().size() < 6) {
 
-                    logger.info("[MyAlgoLogic] Adding order for: " + quantity + " @ " +
-                            bestBidPrice);
-                    return new CreateChildOrder(Side.BUY, quantity, bestBidPrice);
-                    // but if the next best order is still the same price or higher than our first
-                    // order then cancel our initial order
-                } else {
-                    logger.info("[MyAlgoLogic] Cancelling order: " + activeChildOrder);
-                    return new CancelChildOrder(activeChildOrder);
-                }
+            logger.info("[MyAlgoLogic] Adding order for: " + quantity + " @ " +
+                    buyPrice);
+            return new CreateChildOrder(Side.BUY, quantity, buyPrice);
+
+        } else if (option.isPresent()) {
+
+            var activeChildOrder = option.get();
+
+            if (activeChildOrder.getPrice() == bestBidPrice) {
+                logger.info("[MyAlgoLogic] Cancelling order: " + activeChildOrder);
+                return new CancelChildOrder(activeChildOrder);
+            } else {
+                logger.info("[MyAlgoLogic]: No orders to cancel");
+                return NoAction.NoAction;
             }
-            // once we have 6 orders in the market stop trading
+
         } else {
             logger.info("[MyAlgoLogic] Have:" + state.getChildOrders().size() + " children, want 6, done.");
             return NoAction.NoAction;
+
         }
 
-        return NoAction.NoAction;
     }
 }
