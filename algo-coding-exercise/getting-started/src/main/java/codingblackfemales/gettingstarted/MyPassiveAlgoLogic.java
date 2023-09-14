@@ -32,12 +32,12 @@ public class MyPassiveAlgoLogic  implements AlgoLogic
         long price = nearTouch.price;
 
         //until we have three child orders....
-        if(state.getChildOrders().size() < 3){
+        if(state.getChildOrders().size() < 7){
             //then keep creating a new one
-            logger.info("[MYPASSIVEALGO] Have:" + state.getChildOrders().size() + " children, want 3, joining passive side of book with: " + quantity + " @ " + price);
+            logger.info("[MYPASSIVEALGO] Have:" + state.getChildOrders().size() + " children, want 7, joining passive side of book with: " + quantity + " @ " + price);
             return new CreateChildOrder(Side.BUY, quantity, price);
         }else{
-            logger.info("[MYPASSIVEALGO] Have:" + state.getChildOrders().size() + " children, want 3, done.");
+            logger.info("[MYPASSIVEALGO] Have:" + state.getChildOrders().size() + " children, want 7, done.");
             return NoAction;
         }
 

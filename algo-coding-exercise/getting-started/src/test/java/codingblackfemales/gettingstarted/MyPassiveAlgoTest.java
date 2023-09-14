@@ -35,7 +35,7 @@ public class MyPassiveAlgoTest extends SequencerTestCase {
 
         container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
         //set my algo logic
-        container.setLogic(new PassiveAlgoLogic());
+        container.setLogic(new MyPassiveAlgoLogic());
 
         network.addConsumer(new LoggingConsumer());
         network.addConsumer(container.getMarketDataService());
@@ -56,12 +56,12 @@ public class MyPassiveAlgoTest extends SequencerTestCase {
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
 
-        encoder.askBookCount(3)
+        encoder.askBookCount(7)
                 .next().price(100L).size(101L)
                 .next().price(110L).size(200L)
                 .next().price(115L).size(5000L);
 
-        encoder.bidBookCount(3)
+        encoder.bidBookCount(7)
                 .next().price(98L).size(100L)
                 .next().price(95L).size(200L)
                 .next().price(91L).size(300L);
@@ -79,6 +79,6 @@ public class MyPassiveAlgoTest extends SequencerTestCase {
         send(createSampleMarketDataTick());
 
         //simple assert to check we had 3 orders created
-        assertEquals(container.getState().getChildOrders().size(), 3);
+        assertEquals(container.getState().getChildOrders().size(), 7);
     }
 }
