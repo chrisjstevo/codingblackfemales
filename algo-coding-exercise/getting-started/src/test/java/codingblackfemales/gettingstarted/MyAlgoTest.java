@@ -34,4 +34,13 @@ public class MyAlgoTest extends AbstractAlgoTest {
         //simple assert to check we had 3 orders created
         assertEquals(container.getState().getChildOrders().size(), 3);
     }
+
+    @Test
+    public void testCancelChildOrder()throws Exception{
+        //create a sample market data tick....
+        send(createTick());
+        long orderCount = container.getState().getChildOrders().size();
+
+    }
+
 }
