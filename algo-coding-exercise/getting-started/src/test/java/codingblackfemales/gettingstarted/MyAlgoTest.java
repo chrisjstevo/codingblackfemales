@@ -1,7 +1,7 @@
 package codingblackfemales.gettingstarted;
 
+import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
-import codingblackfemales.algo.PassiveAlgoLogic;
 import codingblackfemales.container.Actioner;
 import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.container.RunTrigger;
@@ -15,9 +15,10 @@ import codingblackfemales.sequencer.consumer.LoggingConsumer;
 import codingblackfemales.sequencer.net.TestNetwork;
 import codingblackfemales.service.MarketDataService;
 import codingblackfemales.service.OrderService;
+import codingblackfemales.sotw.SimpleAlgoState;
+import codingblackfemales.sotw.SimpleAlgoStateImpl;
 import messages.marketdata.*;
 import org.agrona.concurrent.UnsafeBuffer;
-import org.junit.Test;
 
 import java.nio.ByteBuffer;
 
@@ -38,8 +39,19 @@ public class MyAlgoTest extends AbstractAlgoTest {
 
     private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
     private final BookUpdateEncoder encoder = new BookUpdateEncoder();
+    private MyAlgoLogic algoLogic = new MyAlgoLogic();
+    RunTrigger runTrigger = new RunTrigger();
+    MarketDataService dataService = new MarketDataService(runTrigger);
+    OrderService orderService = new OrderService(runTrigger);
+    SimpleAlgoState state;
+    Actioner actioner;
 
     private AlgoContainer container;
+
+
+
+
+
 
     @Override
     public AlgoLogic createAlgoLogic() {
@@ -102,13 +114,22 @@ public class MyAlgoTest extends AbstractAlgoTest {
         return directBuffer;
     }
 
-    @Test
-    public void testDispatchThroughSequencer() throws Exception {
+    @org.junit.jupiter.api.Test
+    void evaluate() {
 
-        //create a sample market data tick....
-        send(createTick2());
+        container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
+        //set my algo logic
+        container.setLogic(new MyAlgoLogic());
 
-        //simple assert to check we had 3 orders created
-        assertEquals(container.getState().getChildOrders().size(), 3);
+        this.state = new SimpleAlgoStateImpl(dataService, orderService);
+
+        var actual = this.algoLogic.evaluate(state);
+
+        var result   = new NoAction();
+
+        assertEquals(result.toString(),actual.toString());
+
+
     }
+
 }
