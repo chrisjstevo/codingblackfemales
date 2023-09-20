@@ -74,7 +74,6 @@ public class PassiveAlgoTest extends SequencerTestCase {
 
     @Test
     public void testDispatchThroughSequencer() throws Exception {
-
         //create a sample market data tick....
         send(createSampleMarketDataTick());
 
