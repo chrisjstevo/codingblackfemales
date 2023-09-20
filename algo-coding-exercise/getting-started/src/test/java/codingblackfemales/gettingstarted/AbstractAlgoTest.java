@@ -60,13 +60,13 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
         encoder.instrumentId(123L);
 
         encoder.askBookCount(3)
-                .next().price(100L).size(101L)
-                .next().price(110L).size(200L)
-                .next().price(115L).size(5000L);
+                .next().price(98L).size(111L)
+                .next().price(97L).size(222L)
+                .next().price(95L).size(3333L);
 
         encoder.bidBookCount(3)
-                .next().price(98L).size(100L)
-                .next().price(95L).size(200L)
+                .next().price(100L).size(100L)
+                .next().price(101L).size(200L)
                 .next().price(91L).size(300L);
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
@@ -76,5 +76,69 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
     }
 
 
+    protected UnsafeBuffer createTick2(){
+        //market moving towards sellers - bids are higher than asks
+        final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+        final BookUpdateEncoder encoder = new BookUpdateEncoder();
 
+        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+
+        //write the encoded output to the direct buffer
+        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+
+        //set the fields to desired values
+        encoder.venue(Venue.XLON);
+        encoder.instrumentId(123L);
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //!!!! Why does this say askBook when it is on the bid side of the book???!!!!!!
+        encoder.askBookCount(3)
+                .next().price(101L).size(100L)
+                .next().price(102L).size(200L)
+                .next().price(98L).size(5000L);
+
+        encoder.bidBookCount(3)
+                .next().price(100L).size(111L)
+                .next().price(101L).size(222L)
+                .next().price(102L).size(3333L);
+
+        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+        encoder.source(Source.STREAM);
+
+        return directBuffer;
+    }
+
+    protected UnsafeBuffer createTick3(){
+        //market moving towards buyers - asks are lower than bids
+        final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+        final BookUpdateEncoder encoder = new BookUpdateEncoder();
+
+        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+
+        //write the encoded output to the direct buffer
+        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+
+        //set the fields to desired values
+        encoder.venue(Venue.XLON);
+        encoder.instrumentId(123L);
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //!!!! Why does this say askBook when it is on the bid side of the book???!!!!!!
+        encoder.askBookCount(3)
+                .next().price(101L).size(100L)
+                .next().price(102L).size(200L)
+                .next().price(98L).size(5000L);
+
+        encoder.bidBookCount(3)
+                .next().price(100L).size(111L)
+                .next().price(101L).size(222L)
+                .next().price(102L).size(3333L);
+
+        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+        encoder.source(Source.STREAM);
+
+        return directBuffer;
+    }
 }
