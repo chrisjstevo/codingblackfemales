@@ -45,54 +45,53 @@ public class MyAlgoTest extends AbstractAlgoTest {
 
         //create a sample market data tick....
         send(createTick());
-
         //simple assert to check we had 5 orders created
-        assertEquals(container.getState().getChildOrders().size(), 0);
+        assertEquals(container.getState().getChildOrders().size(), 5);
         assertNotNull(createTick());
         
     }
 
-    // protected UnsafeBuffer createTickTwo(){
+    protected UnsafeBuffer createTickTwo(){
 
-    //     final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
-    //     final BookUpdateEncoder encoder = new BookUpdateEncoder();
+        final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+        final BookUpdateEncoder encoder = new BookUpdateEncoder();
 
-    //     final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-    //     final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-    //     //write the encoded output to the direct buffer
-    //     encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+        //write the encoded output to the direct buffer
+        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-    //     //set the fields to desired values
-    //     encoder.venue(Venue.XLON);
-    //     encoder.instrumentId(123L);
+        //set the fields to desired values
+        encoder.venue(Venue.XLON);
+        encoder.instrumentId(123L);
 
-    //     encoder.askBookCount(3)
-    //             .next().price(100L).size(101L)
-    //             .next().price(110L).size(200L)
-    //             .next().price(115L).size(100L);
+        encoder.askBookCount(3)
+            .next().price(110L).size(50L)
+            .next().price(113L).size(100L)
+            .next().price(116L).size(200L);
 
-    //     encoder.bidBookCount(3)
-    //             .next().price(98L).size(100L)
-    //             .next().price(95L).size(200L)
-    //             .next().price(91L).size(300L);
 
-    //     encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
-    //     encoder.source(Source.STREAM);
+        encoder.bidBookCount(3)
+            .next().price(108L).size(100L)
+            .next().price(105L).size(500L)
+            .next().price(103L).size(750L);
 
-    //     return directBuffer;
-    // }
 
-    //     @Test
-    // public void testDispatchThroughSequencerTwo() throws Exception {
+        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+        encoder.source(Source.STREAM);
 
-    //     //create a sample market data tick....
-    //     send(createTickTwo());
+        return directBuffer;
+    }
 
-    //     //simple assert to check we had 5 orders created
-    //     assertEquals(container.getState().getChildOrders().size(), 0);
-    //     assertNotNull(createTickTwo());
+        @Test
+    public void testDispatchThroughSequencerTwo() throws Exception {
+
+        //create a sample market data tick....
+        send(createTickTwo());
+        assertEquals(container.getState().getChildOrders().size(), 0);
+        assertNotNull(createTickTwo());
         
-    // }
+    }
 
 }

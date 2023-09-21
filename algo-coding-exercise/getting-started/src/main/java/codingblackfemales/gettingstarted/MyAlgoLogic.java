@@ -43,10 +43,11 @@ public class MyAlgoLogic implements AlgoLogic {
         long totalTickVolume = quantityAtIndexZero + quantityAtIndexOne + quantityAtIndexTwo;
 
         if (quantity > (totalTickVolume * 0.2)){
+            logger.info("[MYALGO] Quantity exceeds 20% of the current market");
             return NoAction.NoAction;
         }
         //until we have 5 orders...
-        else if (state.getChildOrders().size() < 5){
+        else if (quantity < (totalTickVolume * 0.2) && state.getChildOrders().size() < 5){
             //create a new child order at this price and this quantity
             logger.info("[MYALGO] Have:" + state.getChildOrders() + "children, want 5, joining BID side of the book with: " + quantity + " @ " + averageTickPrice);
             return new CreateChildOrder(Side.BUY, quantity, averageTickPrice);
