@@ -1,7 +1,6 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.action.Action;
-import codingblackfemales.action.CancelChildOrder;
 import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
@@ -14,8 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MyAlgoLogic implements AlgoLogic {
-//could do a TWAP algo - which purchases based off the average price with arket data ticks at 3 different levels 
-// We want to be discrete in the order book and not effect the market or price too much - if the quantity we want to buy at that period is over 25% of the market volume then return no action
+
     private static final Logger logger = LoggerFactory.getLogger(MyAlgoLogic.class);
 
     @Override
@@ -23,55 +21,70 @@ public class MyAlgoLogic implements AlgoLogic {
 
         var orderBookAsString = Util.orderBookToString(state);
         logger.info("[MYALGO] The state of the order book is:\n" + orderBookAsString);
-        
-        final BidLevel bidAtIndexZero = state.getBidAt(0);
-        long priceAtIndexZero = bidAtIndexZero.price; 
-        long quantityAtIndexZero = bidAtIndexZero.quantity;
 
-        final BidLevel bidAtIndexOne = state.getBidAt(1);
-        long priceAtIndexOne = bidAtIndexOne.price;
-         long quantityAtIndexOne = bidAtIndexZero.quantity;
+        long totalTickPrice = 0; // Total price at all levels
+        long totalTickVolume = 0; // Total volume at all bid levels 
 
-        final BidLevel bidAtIndexTwo = state.getBidAt(2);
-        long priceAtIndexTwo = bidAtIndexTwo.price;
-         long quantityAtIndexTwo = bidAtIndexZero.quantity;
-        
-        //we want to be discrete so we don't buy too many at once
-        long quantity = 200;
+        for (int i = 0; i < state.getBidLevels(); i++) {
+            BidLevel bidLevel = state.getBidAt(i);
+            totalTickPrice += bidLevel.price;
+            totalTickVolume += bidLevel.quantity;
+        }
 
-        long averageTickPrice = (priceAtIndexZero + priceAtIndexOne + priceAtIndexTwo) / 3;
-        long totalTickVolume = quantityAtIndexZero + quantityAtIndexOne + quantityAtIndexTwo;
+        long averageTickPrice = totalTickPrice / state.getBidLevels(); 
 
-        if (quantity > (totalTickVolume * 0.2)){
-            logger.info("[MYALGO] Quantity exceeds 20% of the current market");
+        long quantity = 2000;
+
+            if (quantity > (totalTickVolume / 5)){
+            logger.info("[MYALGO] Quantity of " + quantity + " exceeds 20% of the current market volume");
             return NoAction.NoAction;
         }
-        //until we have 5 orders...
-        else if (quantity < (totalTickVolume * 0.2) && state.getChildOrders().size() < 5){
-            //create a new child order at this price and this quantity
-            logger.info("[MYALGO] Have:" + state.getChildOrders() + "children, want 5, joining BID side of the book with: " + quantity + " @ " + averageTickPrice);
+        
+       else if (quantity < (totalTickVolume / 5) && state.getChildOrders().size() < 3){
+            
+            logger.info("[MYALGO] Have:" + state.getChildOrders().size() + "children, want 3, joining BID side of the book with: " + quantity + " @ " + averageTickPrice);
             return new CreateChildOrder(Side.BUY, quantity, averageTickPrice);
         } else{
-            logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 5, all added to the order book.");
+            logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 3, all added to the order book.");
             return NoAction.NoAction;
-        }
     }
+   
 }
+}
+// TO DO: 
+// - can we get the top 10% of prices from the market data and then calculate the average? 
+// - getBidLevels/ 10 
+// -  loop until getBidLevels/10 
+// - accumulator to caculate total amount 
+// - divide by the number of of levels to calculate the top 10%
 
-// adding complexity - done!
-// in this example, if its over 10% of the whole market then its not discrete anymore - dependendent on the client in a real life situation
-// if (quantity > (averageTickVolume / 5)) at that specific time interval is greater than 25% of the total volume in the market 
-// return no action 
+// old code - less efficient 
+   //     final BidLevel bidAtIndexZero = state.getBidAt(0);
+    //     long priceAtIndexZero = bidAtIndexZero.price; 
+    //     long quantityAtIndexZero = bidAtIndexZero.quantity;
 
-//Things left to do
-// 1. create various market ticks 
-// 2. update createTickTwo
-// 3. test these marketDataTicks
+    //     final BidLevel bidAtIndexOne = state.getBidAt(1);
+    //     long priceAtIndexOne = bidAtIndexOne.price;
+    //     long quantityAtIndexOne = bidAtIndexOne.quantity;
 
-//homework: debug mode on all of the tests of passive algo test to further understand everything 
+    //     final BidLevel bidAtIndexTwo = state.getBidAt(2);
+    //     long priceAtIndexTwo = bidAtIndexTwo.price;
+    //     long quantityAtIndexTwo = bidAtIndexTwo.quantity;
+        
+    //     long quantity = 200;
 
-// question?
-// clarify ask - so youre buying from the ask and selling to the Bid?
+    //     long averageTickPrice = (priceAtIndexZero + priceAtIndexOne + priceAtIndexTwo) / 3;
+    //     long totalTickVolume = quantityAtIndexZero + quantityAtIndexOne + quantityAtIndexTwo; 
+
+// REMINDER: write documentation for this algo exercise 
+// can work on code base after submission to extend my knowledge and practice 
+// complexity: looping through each price in the market then calculating an average price - done
+// implementation: if price is lower then quantity is higher 
+// can i get the overall amount of options? working on the top 10% of prices 
+// make sure it is working first! - done
+
+
+
     
         
         
