@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
  * cancelled in the childOrders of the state object.
  */
 public class MyAlgoBackTest extends AbstractAlgoBackTest {
-        public OrderService orderService;
 
         @Override
         public AlgoLogic createAlgoLogic() {
@@ -45,7 +44,6 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
                 send(createTick());
 
                 var myChildOrders = container.getState().getChildOrders();
-                
 
                 // simple assert to check I have 6 orders created
                 assertEquals(myChildOrders.size(), 6);

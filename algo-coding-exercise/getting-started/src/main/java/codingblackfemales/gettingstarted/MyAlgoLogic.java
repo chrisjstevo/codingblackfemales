@@ -54,7 +54,7 @@ public class MyAlgoLogic implements AlgoLogic {
         // No further action is taken once 6 orders are in the market.
         if (state.getChildOrders().size() < 6) {
 
-            logger.info("[MyAlgoLogic] Adding order for: " + quantity + " @ " +
+            logger.info("[MyAlgoLogic]: Adding order for: " + quantity + " @ " +
                     buyPrice);
             return new CreateChildOrder(Side.BUY, quantity, buyPrice);
 
@@ -63,7 +63,7 @@ public class MyAlgoLogic implements AlgoLogic {
             var activeChildOrder = option.get();
 
             if (activeChildOrder.getPrice() == bestBidPrice) {
-                logger.info("[MyAlgoLogic] Cancelling order: " + activeChildOrder);
+                logger.info("[MyAlgoLogic]: Cancelling order: " + activeChildOrder);
                 return new CancelChildOrder(activeChildOrder);
             } else {
                 logger.info("[MyAlgoLogic]: No orders to cancel");
