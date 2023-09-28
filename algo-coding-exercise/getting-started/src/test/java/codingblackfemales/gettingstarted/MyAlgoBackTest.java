@@ -1,7 +1,6 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
-import codingblackfemales.service.OrderService;
 import codingblackfemales.sotw.ChildOrder;
 
 import static org.junit.Assert.assertEquals;
