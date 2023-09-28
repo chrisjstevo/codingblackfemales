@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="backtest" />
+        <module name="getting-started" />
+        <module name="dictionary" />
+        <module name="oms" />
+        <module name="collection" />
+        <module name="algo" />
+        <module name="sequencer" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>

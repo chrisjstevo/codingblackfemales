@@ -2,6 +2,7 @@ package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -21,7 +22,6 @@ public class MyAlgoTest extends AbstractAlgoTest {
         //this adds your algo logic to the container classes
         return new MyAlgoLogic();
     }
-
 
     @Test
     public void testDispatchThroughSequencer() throws Exception {
