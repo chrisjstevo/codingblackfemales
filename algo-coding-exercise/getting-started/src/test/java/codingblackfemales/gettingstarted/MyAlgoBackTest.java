@@ -1,7 +1,11 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
+import codingblackfemales.sotw.ChildOrder;
+import codingblackfemales.util.Util;
+
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * This test plugs together all of the infrastructure, including the order book (which you can trade against)
@@ -28,18 +32,19 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         send(createTick());
 
         //ADD asserts when you have implemented your algo logic
-        //assertEquals(container.getState().getChildOrders().size(), 3);
+        //assertEquals(container.getState().getChildOrders().size(), 2);
 
         //when: market data moves towards us
-        send(createTick2());
+        //update order book with more market data? Not overwrite. But how?
+        //send(createTick2());
 
         //then: get the state
-        var state = container.getState();
-
+        //var state = container.getState();
+        
         //Check things like filled quantity, cancelled order count etc....
         //long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
-        //and: check that our algo state was updated to reflect our fills when the market data
-        //assertEquals(225, filledQuantity);
+        //and: check that our algo state was updated to reflect our fills when the market data moves towards us
+        //assertEquals(101, filledQuantity);
     }
 
 }
