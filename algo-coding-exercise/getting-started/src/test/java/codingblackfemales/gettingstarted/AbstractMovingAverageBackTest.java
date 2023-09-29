@@ -79,7 +79,7 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
                 .next().price(104L).size(2000L)
                 .next().price(105L).size(5000L)
                 .next().price(106L).size(300L)
-                .next().price(106L).size(1000L);
+                .next().price(107L).size(1000L);
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
 
@@ -100,15 +100,15 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
 
         encoder.bidBookCount(3)
                 .next().price(105L).size(300L)
-                .next().price(101L).size(100L)
-                .next().price(100L).size(200L);
+                .next().price(104L).size(100L)
+                .next().price(103L).size(200L);
 
 
         encoder.askBookCount(4)
-                .next().price(104L).size(600L)
-                .next().price(105L).size(700L)
-                .next().price(106L).size(800L)
-                .next().price(108L).size(400L);
+                .next().price(103L).size(600L)
+                .next().price(104L).size(700L)
+                .next().price(105L).size(800L)
+                .next().price(106L).size(400L);
 
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
@@ -129,15 +129,15 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
         encoder.source(Source.STREAM);
 
         encoder.bidBookCount(3)
-                .next().price(105L).size(1500L)
-                .next().price(103L).size(2500L)
-                .next().price(100L).size(3500L);
+                .next().price(103L).size(1500L)
+                .next().price(102L).size(2500L)
+                .next().price(101L).size(3500L);
 
         encoder.askBookCount(4)
                 .next().price(104L).size(650L)
                 .next().price(105L).size(850L)
-                .next().price(107L).size(750L)
-                .next().price(109L).size(450L);
+                .next().price(106L).size(750L)
+                .next().price(107L).size(450L);
 
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
@@ -192,9 +192,9 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
 
         encoder.askBookCount(4)
                 .next().price(105L).size(3000L)
-                .next().price(107L).size(2500L)
-                .next().price(108L).size(400L)
-                .next().price(109L).size(500L);
+                .next().price(106L).size(2500L)
+                .next().price(107L).size(400L)
+                .next().price(108L).size(500L);
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
 
@@ -214,15 +214,15 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
         encoder.source(Source.STREAM);
 
         encoder.bidBookCount(3)
-                .next().price(101L).size(2200L)
-                .next().price(99L).size(2800L)
-                .next().price(98L).size(3200L);
+                .next().price(106L).size(2200L)
+                .next().price(104L).size(2800L)
+                .next().price(105L).size(3200L);
 
         encoder.askBookCount(4)
                 .next().price(106L).size(3800L)
                 .next().price(107L).size(3300L)
                 .next().price(108L).size(2700L)
-                .next().price(110L).size(1700L);
+                .next().price(109L).size(1700L);
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
 
@@ -243,14 +243,15 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
 
         encoder.bidBookCount(3)
                 .next().price(110L).size(4500L)
-                .next().price(107L).size(3000L)
-                .next().price(106L).size(2000L);
+                .next().price(109L).size(3000L)
+                .next().price(108L).size(2000L);
 
 
         encoder.askBookCount(4)
-                .next().price(111L).size(600L)
-                .next().price(112L).size(1000L)
-                .next().price(113L).size(3000L);
+                .next().price(109L).size(600L)
+                .next().price(110L).size(1000L)
+                .next().price(111L).size(3000L)
+                .next().price(112L).size(3000L);
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
 
