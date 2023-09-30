@@ -1,6 +1,9 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
+
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 
@@ -30,6 +33,20 @@ public class MyAlgoTest extends AbstractAlgoTest {
         send(createTick());
 
         //simple assert to check we had 3 orders created
-        //assertEquals(container.getState().getChildOrders().size(), 3);
+        assertEquals(container.getState().getChildOrders().size(), 20);
+    }
+
+    @Test
+    public void checkIfOrdersCancelled() throws Exception{
+
+        send(createTick());
+        int initialOrderCount = 20;
+        // what is the initial ordr count
+
+        int expectedCanceledOrderCount = 17;
+        // how many order should be cancelled
+        var state = container.getState();
+
+        assertEquals(expectedCanceledOrderCount, initialOrderCount - state.getActiveChildOrders().size());
     }
 }
