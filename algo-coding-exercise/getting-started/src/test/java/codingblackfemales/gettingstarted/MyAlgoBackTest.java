@@ -1,6 +1,10 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
+import codingblackfemales.sotw.ChildOrder;
+
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 /**
@@ -28,7 +32,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         send(createTick());
 
         //ADD asserts when you have implemented your algo logic
-        //assertEquals(container.getState().getChildOrders().size(), 3);
+        assertEquals(container.getState().getChildOrders().size(), 45);
 
         //when: market data moves towards us
         send(createTick2());
@@ -37,9 +41,29 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         var state = container.getState();
 
         //Check things like filled quantity, cancelled order count etc....
-        //long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
+        long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
         //and: check that our algo state was updated to reflect our fills when the market data
-        //assertEquals(225, filledQuantity);
+        assertEquals(501, filledQuantity);
     }
+
+    // private MarketData createMarketDataWithHighAsk() {
+    //     // Create a sample market data tick with a high ask price
+    //     MarketData marketData = new MarketData();
+    //     marketData.setAskPrice(1000); // Set a high ask price that exceeds your threshold
+
+    //     // You may need to set other properties of marketData as well depending on your algorithm's requirements
+
+    //     return marketData;
+    // }
+
+    // private MarketData createMarketDataWithFallingPrice() {
+    //     // Create a sample market data tick with a falling price
+    //     MarketData marketData = new MarketData();
+    //     marketData.setBidPrice(950); // Set a lower bid price than the previous market data
+
+    //     // You may need to set other properties of marketData as well depending on your algorithm's requirements
+
+    //     return marketData;
+    // }
 
 }

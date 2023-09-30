@@ -41,7 +41,7 @@ public class MyAlgoLogic implements AlgoLogic {
 
         final var activeOrders = state.getActiveChildOrders();
 
-        if(totalOrderCount < 20){
+        if(totalOrderCount < 45){
             //logger and sys out will only show until TOC reaches required num
             BidLevel level = state.getBidAt(0);
             final long price = level.price;
@@ -50,7 +50,7 @@ public class MyAlgoLogic implements AlgoLogic {
             System.out.println("total order count is " +totalOrderCount); 
             return new CreateChildOrder(Side.BUY, quantity, price);
         }
-        if(activeOrders.size() > 2){
+        if(activeOrders.size() > 5){
             final var option = activeOrders.stream().findFirst();
             // System.out.println("this is option "+option);
             // option is an object
@@ -84,7 +84,7 @@ public class MyAlgoLogic implements AlgoLogic {
                 return NoAction.NoAction;
             }
         }else{
-             logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 20, done.");
+             logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 45, done.");
         // logs the order and what was returned
         return NoAction.NoAction;
         }

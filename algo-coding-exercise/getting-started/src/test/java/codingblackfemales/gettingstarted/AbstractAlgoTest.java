@@ -75,6 +75,4 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
         return directBuffer;
     }
 
-
-
 }

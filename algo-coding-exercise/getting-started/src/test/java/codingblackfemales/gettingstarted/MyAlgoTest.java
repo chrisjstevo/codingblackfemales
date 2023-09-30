@@ -33,20 +33,38 @@ public class MyAlgoTest extends AbstractAlgoTest {
         send(createTick());
 
         //simple assert to check we had 3 orders created
-        assertEquals(container.getState().getChildOrders().size(), 20);
+        assertEquals(container.getState().getChildOrders().size(), 45);
     }
 
     @Test
     public void checkIfOrdersCancelled() throws Exception{
 
         send(createTick());
-        int initialOrderCount = 20;
+        int initialOrderCount = 45;
         // what is the initial ordr count
 
-        int expectedCanceledOrderCount = 17;
+        int expectedCanceledOrderCount = 40;
         // how many order should be cancelled
         var state = container.getState();
 
         assertEquals(expectedCanceledOrderCount, initialOrderCount - state.getActiveChildOrders().size());
     }
+
+    // @Test
+    // public void priceTooHigh() throws Exception{
+
+    //     send(creatHighTick());
+
+    //     assertEquals(0, container.getState().getChildOrders().size());
+    // }
+
+    // @Test
+    // public void testingFallingPrice(){
+    //     send(createFallingPriceTick());
+
+    //     int currentOrderCount = container.getState().getChildOrders().size();
+    //      // You can adjust the expected behavior based on your algorithm's logic
+    //     // For example, if the price falls, you might expect the algorithm to create a new order
+    //     assertEquals(expectedOrderCount, currentOrderCount);
+    // }
 }
