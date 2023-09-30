@@ -2,6 +2,7 @@ package codingblackfemales.gettingstarted;
 
 import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
+import codingblackfemales.algo.PassiveAlgoLogic;
 import codingblackfemales.container.Actioner;
 import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.container.RunTrigger;
@@ -12,6 +13,7 @@ import codingblackfemales.orderbook.consumer.OrderBookInboundOrderConsumer;
 import codingblackfemales.sequencer.DefaultSequencer;
 import codingblackfemales.sequencer.Sequencer;
 import codingblackfemales.sequencer.consumer.LoggingConsumer;
+import codingblackfemales.sequencer.marketdata.SequencerTestCase;
 import codingblackfemales.sequencer.net.TestNetwork;
 import codingblackfemales.service.MarketDataService;
 import codingblackfemales.service.OrderService;
@@ -23,6 +25,7 @@ import org.agrona.concurrent.UnsafeBuffer;
 import java.nio.ByteBuffer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -35,29 +38,13 @@ import static org.junit.Assert.assertEquals;
  * When you are comfortable you algo does what you expect, then you can move on to creating the MyAlgoBackTest.
  *
  */
-public class MyAlgoTest extends AbstractAlgoTest {
+public class MyAlgoTest extends SequencerTestCase {
 
     private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
     private final BookUpdateEncoder encoder = new BookUpdateEncoder();
-    private MyAlgoLogic algoLogic = new MyAlgoLogic();
-    RunTrigger runTrigger = new RunTrigger();
-    MarketDataService dataService = new MarketDataService(runTrigger);
-    OrderService orderService = new OrderService(runTrigger);
-    SimpleAlgoState state;
-    Actioner actioner;
 
     private AlgoContainer container;
 
-
-
-
-
-
-    @Override
-    public AlgoLogic createAlgoLogic() {
-        //this adds your algo logic to the container classes
-        return new MyAlgoLogic();
-    }
 
     @Override
     public Sequencer getSequencer() {
@@ -67,26 +54,19 @@ public class MyAlgoTest extends AbstractAlgoTest {
         final RunTrigger runTrigger = new RunTrigger();
         final Actioner actioner = new Actioner(sequencer);
 
-        final MarketDataChannel marketDataChannel = new MarketDataChannel(sequencer);
-        final OrderChannel orderChannel = new OrderChannel(sequencer);
-        final OrderBook book = new OrderBook(marketDataChannel, orderChannel);
-
-        final OrderBookInboundOrderConsumer orderConsumer = new OrderBookInboundOrderConsumer(book);
-
         container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
         //set my algo logic
         container.setLogic(new MyAlgoLogic());
 
         network.addConsumer(new LoggingConsumer());
-        network.addConsumer(book);
         network.addConsumer(container.getMarketDataService());
         network.addConsumer(container.getOrderService());
-        network.addConsumer(orderConsumer);
         network.addConsumer(container);
 
         return sequencer;
     }
     private UnsafeBuffer createTick2(){
+
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
@@ -96,38 +76,31 @@ public class MyAlgoTest extends AbstractAlgoTest {
         //set the fields to desired values
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
-        encoder.source(Source.STREAM);
+
+        encoder.askBookCount(3)
+                .next().price(100L).size(101L)
+                .next().price(110L).size(200L)
+                .next().price(115L).size(5000L);
 
         encoder.bidBookCount(3)
-                .next().price(95L).size(100L)
-                .next().price(93L).size(200L)
+                .next().price(98L).size(100L)
+                .next().price(95L).size(200L)
                 .next().price(91L).size(300L);
 
-        encoder.askBookCount(4)
-                .next().price(98L).size(501L)
-                .next().price(101L).size(200L)
-                .next().price(110L).size(5000L)
-                .next().price(119L).size(5600L);
-
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+        encoder.source(Source.STREAM);
 
         return directBuffer;
     }
 
     @org.junit.jupiter.api.Test
-    void evaluate() {
+    void evaluate() throws Exception {
 
-        container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
-        //set my algo logic
-        container.setLogic(new MyAlgoLogic());
+        //create a sample market data tick....
+        send(createTick2());
 
-        this.state = new SimpleAlgoStateImpl(dataService, orderService);
-
-        var actual = this.algoLogic.evaluate(state);
-
-        var result   = new NoAction();
-
-        assertEquals(result.toString(),actual.toString());
+        //simple assert to check we had 3 orders created
+        assertTrue(container.getState().getChildOrders().size() >=1);
 
 
     }
