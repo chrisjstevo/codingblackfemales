@@ -1,15 +1,9 @@
 package codingblackfemales.gettingstarted;
 
-import codingblackfemales.action.NoAction;
-import codingblackfemales.algo.AlgoLogic;
-import codingblackfemales.algo.PassiveAlgoLogic;
+import ch.qos.logback.classic.Logger;
 import codingblackfemales.container.Actioner;
 import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.container.RunTrigger;
-import codingblackfemales.orderbook.OrderBook;
-import codingblackfemales.orderbook.channel.MarketDataChannel;
-import codingblackfemales.orderbook.channel.OrderChannel;
-import codingblackfemales.orderbook.consumer.OrderBookInboundOrderConsumer;
 import codingblackfemales.sequencer.DefaultSequencer;
 import codingblackfemales.sequencer.Sequencer;
 import codingblackfemales.sequencer.consumer.LoggingConsumer;
@@ -17,14 +11,11 @@ import codingblackfemales.sequencer.marketdata.SequencerTestCase;
 import codingblackfemales.sequencer.net.TestNetwork;
 import codingblackfemales.service.MarketDataService;
 import codingblackfemales.service.OrderService;
-import codingblackfemales.sotw.SimpleAlgoState;
-import codingblackfemales.sotw.SimpleAlgoStateImpl;
 import messages.marketdata.*;
 import org.agrona.concurrent.UnsafeBuffer;
+import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
@@ -42,6 +33,8 @@ public class MyAlgoTest extends SequencerTestCase {
 
     private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
     private final BookUpdateEncoder encoder = new BookUpdateEncoder();
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(MyAlgoTest.class);
+
 
     private AlgoContainer container;
 
@@ -100,7 +93,9 @@ public class MyAlgoTest extends SequencerTestCase {
         send(createTick2());
 
         //simple assert to check we had 3 orders created
-        assertTrue(container.getState().getChildOrders().size() >=1);
+        assertTrue(container.getState().getChildOrders().size() !=0);
+
+        logger.info("[MYALGO] Has:" + container.getState().getChildOrders().size() + " children");
 
 
     }

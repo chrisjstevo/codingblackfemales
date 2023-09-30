@@ -57,7 +57,7 @@ public class MyAlgoLogic implements AlgoLogic {
 
 
         BidLevel nearTouch = state.getBidAt(0);
-        long bidQuantity = 75;
+        long bidQuantity = nearTouch.quantity;
         long bidPrice = nearTouch.price;
         long bidVwap = bidPV / bidVol;
 
@@ -69,18 +69,17 @@ public class MyAlgoLogic implements AlgoLogic {
 
         if (state.getChildOrders().size() < 3) {
             for (int i = 0; i < maxLevels; i++) {
-                if (bidPrice > bidVwap) { return new NoAction();
-                } else if (bidPrice < bidVwap) {
-                    return new CreateChildOrder(Side.BUY, bidQuantity, bidPrice);
+                if (askPrice > bidVwap) { return new NoAction();
+                } else if (askPrice < bidVwap) {
+                    return new CreateChildOrder(Side.BUY, bidQuantity, askPrice);
                 }
 
-                if (askPrice < askVwap) {
+                if (bidPrice < askVwap) {
                     return new NoAction();
-                } else if (askPrice > askVwap) {
-                    return new CreateChildOrder(Side.SELL, askQuantity, askPrice);}
+                } else if (bidPrice > askVwap) {
+                    return new CreateChildOrder(Side.SELL, askQuantity, bidPrice);}
             }
         } else {
-            logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 3, done.");
             return NoAction;
         }
         return NoAction;
