@@ -1,7 +1,6 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.action.Action;
-import codingblackfemales.action.CancelChildOrder;
 import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
@@ -21,21 +20,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MovingAverage implements AlgoLogic {
-    // Todo - problem. buys multiple stocks at the best price in tick 1
-    // it's first selling before it buys
-    // it should buy first and only after then should it sell
+
     private static final Logger logger = LoggerFactory.getLogger(MovingAverage.class);
 
-    int SHORT_TERM_PERIOD = 2;
-    int LONG_TERM_PERIOD = 4;
+    int SHORT_TERM_PERIOD = 3;
+    int LONG_TERM_PERIOD = 7;
 
     List<Long> askHistoricalPrices = new ArrayList<>();
     List<Long> bidHistoricalPrices = new ArrayList<>();
 
-    // For storing the quantity of all the stocks I bought
-    // todo my stock quantity should be a number start from 0 then increase as
-    // quantity increases
-    long myStockQuantity = 0L;
 
     @Override
     public Action evaluate(SimpleAlgoState state) {
@@ -47,66 +40,48 @@ public class MovingAverage implements AlgoLogic {
         final AskLevel ask = state.getAskAt(0);
         long bidPrice = bid.price;
         long askPrice = ask.price;
-        long buyQuantity = 100;
+        long bidQuantity = 100;
+        long askQuantity = 0;
 
         var totalOrderCount = state.getChildOrders().size();
 
-        if (totalOrderCount > 9) {
+        if (totalOrderCount > 19) {
             logger.info("[MOVINGAVERAGE]: we have " + totalOrderCount + " orders in the market. Want " + totalOrderCount
                     + " done.");
             return NoAction.NoAction;
         }
 
-        var gatherBidHistoricalPrices = getHistoricalPrices(bidHistoricalPrices, bidPrice);
+        List<Long> gatherBidHistoricalPrices = getHistoricalPrices(bidHistoricalPrices, bidPrice);
         logger.info("bidHistoricalPrices: " + bidHistoricalPrices);
 
-        var gatherAskHistoricalPrices = getHistoricalPrices(askHistoricalPrices, askPrice);
+        List<Long> gatherAskHistoricalPrices = getHistoricalPrices(askHistoricalPrices, askPrice);
         logger.info("askHistoricalPrices: " + askHistoricalPrices);
 
-        var askLongTermMovingAverage = calculateSMA(gatherAskHistoricalPrices, LONG_TERM_PERIOD);
-        var askShortTermMovingAverage = calculateSMA(gatherAskHistoricalPrices, SHORT_TERM_PERIOD);
+        long askShortTermMovingAverage = calculateSMA(gatherAskHistoricalPrices, SHORT_TERM_PERIOD);
+        long askLongTermMovingAverage = calculateSMA(gatherAskHistoricalPrices, LONG_TERM_PERIOD);
 
-        var bidLongTermMovingAverage = calculateSMA(gatherBidHistoricalPrices, LONG_TERM_PERIOD);
-        var bidShortTermMovingAverage = calculateSMA(gatherBidHistoricalPrices, SHORT_TERM_PERIOD);
+        long bidShortTermMovingAverage = calculateSMA(gatherBidHistoricalPrices, SHORT_TERM_PERIOD);
+        long bidLongTermMovingAverage = calculateSMA(gatherBidHistoricalPrices, LONG_TERM_PERIOD);
 
 
-        OptionalLong filledQuantityOptional = state.getChildOrders().stream().mapToLong(ChildOrder::getFilledQuantity)
+        OptionalLong filledQuantitySum = state.getChildOrders().stream().mapToLong(ChildOrder::getFilledQuantity)
                 .reduce(Long::sum);
-        long filledQuantity = filledQuantityOptional.orElse(0L);
+        long filledQuantity = filledQuantitySum.orElse(0L);
 
         if (filledQuantity == 0) {
-
-            if (shouldBuy(askLongTermMovingAverage, askShortTermMovingAverage)) {
-
-                logger.info(
-                        "[MOVINGAVERAGE]: Adding buy order for: quantity = " + buyQuantity + " @ price=" + bidPrice);
-                addAvailableQuantity(buyQuantity);
-                return new CreateChildOrder(Side.BUY, buyQuantity, bidPrice);
-
+            if (shouldBuy(askShortTermMovingAverage, askLongTermMovingAverage)) {
+                logger.info("[MOVINGAVERAGE]: Adding buy order for: quantity = " + bidQuantity + " @ price=" + bidPrice);
+                return new CreateChildOrder(Side.BUY, bidQuantity, bidPrice);
             }
-
-        } else if (filledQuantity > 0 && getAvailableQuantity() > 0) {
-            if (shouldSell(bidLongTermMovingAverage, bidShortTermMovingAverage)) {
-                // do not sell at a price less than or equals to the price you bought the stock
-//                if (askPrice > bidPrice) {
-                var availableQuantity = getAvailableQuantity();
-                logger.info("availableQuantity: " + availableQuantity);
-                subtractAvailableQuantity(availableQuantity);
-                // todo - sell all the quantity you bought.
-                logger.info("[MOVINGAVERAGE]: Adding sell order for: quantity=" + availableQuantity + " @ price="
+        } else if (filledQuantity > 0) {
+            if (shouldSell(bidShortTermMovingAverage, bidLongTermMovingAverage)) {
+                askQuantity = filledQuantity;
+                logger.info("[MOVINGAVERAGE]: Adding sell order for: quantity=" + askQuantity + " @ price="
                         + askPrice);
-                return new CreateChildOrder(Side.SELL, availableQuantity, askPrice);
-//                }
+                return new CreateChildOrder(Side.SELL, askQuantity, askPrice);
             }
-        } else {
-            if (shouldBuy(askLongTermMovingAverage, askShortTermMovingAverage)) {
-
-                logger.info(
-                        "[MOVINGAVERAGE]: Adding buy order for: quantity = " + buyQuantity + " @ price=" + bidPrice);
-                addAvailableQuantity(buyQuantity);
-                return new CreateChildOrder(Side.BUY, buyQuantity, bidPrice);
-
-            }
+        } else if (filledQuantity < askQuantity) {
+            filledQuantity = 0;
         }
 
         logger.info("[MOVINGAVERAGE]: No orders to execute");
@@ -132,34 +107,14 @@ public class MovingAverage implements AlgoLogic {
     }
 
 
-    public long addAvailableQuantity(long quantity) {
-        return myStockQuantity = myStockQuantity + quantity;
-    }
-
-    public long getAvailableQuantity() {
-        return myStockQuantity;
-    }
-
-    public long subtractAvailableQuantity(long quantity) {
-        return myStockQuantity = myStockQuantity - quantity;
-    }
-
-    public long getFilledQuantityMA(SimpleAlgoState state) {
-        OptionalLong filledQuantityOptional = state.getChildOrders().stream().mapToLong(ChildOrder::getFilledQuantity)
-                .reduce(Long::sum);
-        return filledQuantityOptional.orElse(0L);
-//    logger.info("filledQuantity: " + filledQuantity);
-//    var activeOrderChild = state.getActiveChildOrders().size();
-    }
     // make money when price is going down - should buy
-    // make money when price is going up - should sell
-
-    public boolean shouldBuy(long askLatestLongTermSMA, long askLatestShortTermSMA) {
+    public boolean shouldBuy(long askLatestShortTermSMA, long askLatestLongTermSMA) {
         // Check if the short-term SMA crosses above the long-term SMA (Golden Cross)
         return askLatestShortTermSMA > askLatestLongTermSMA;
     }
 
-    public boolean shouldSell(long bidLatestLongTermSMA, long bidLatestShortTermSMA) {
+    // make money when price is going up - should sell
+    public boolean shouldSell(long bidLatestShortTermSMA, long bidLatestLongTermSMA) {
         // Check if the long-term SMA is greater than the short-term SMA (Death Cross)
         return bidLatestShortTermSMA < bidLatestLongTermSMA;
     }

@@ -19,6 +19,7 @@ import messages.marketdata.*;
 import org.agrona.concurrent.UnsafeBuffer;
 
 import java.nio.ByteBuffer;
+import java.util.Random;
 
 
 public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
@@ -58,204 +59,45 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
 
     public abstract AlgoLogic createAlgoLogic();
 
-    protected UnsafeBuffer createSampleMarketDataTick() {
-        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+    protected UnsafeBuffer[] createSampleMarketDataTick(int numTicks) {
+        UnsafeBuffer[] marketDataTicks = new UnsafeBuffer[numTicks];
+        Random random = new Random();
 
-        //write the encoded output to the direct buffer
-        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+        for (int i = 0; i < numTicks; i++) {
 
-        //set the fields to desired values
-        encoder.venue(Venue.XLON);
-        encoder.instrumentId(123L);
-        encoder.source(Source.STREAM);
+            final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+            final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        encoder.bidBookCount(3)
-                .next().price(102L).size(500L)
-                .next().price(101L).size(200L)
-                .next().price(99L).size(800L);
+            //write the encoded output to the direct buffer
+            encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-        encoder.askBookCount(4)
-                .next().price(104L).size(2000L)
-                .next().price(105L).size(5000L)
-                .next().price(106L).size(300L)
-                .next().price(107L).size(1000L);
+            //set the fields to desired values
+            encoder.venue(Venue.XLON);
+            encoder.instrumentId(123L);
+            encoder.source(Source.STREAM);
 
-        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+            int bidBookCount = random.nextInt(5) + 1;  // Random number of bid book entries (1 to 5)
+            int askBookCount = random.nextInt(5) + 1; // Random number of ask book entries (1 to 5)
 
-        return directBuffer;
-    }
-
-    protected UnsafeBuffer createSampleMarketDataTick2() {
-        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
-
-        //write the encoded output to the direct buffer
-        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
-
-        //set the fields to desired values
-        encoder.venue(Venue.XLON);
-        encoder.instrumentId(123L);
-        encoder.source(Source.STREAM);
-
-        encoder.bidBookCount(3)
-                .next().price(105L).size(300L)
-                .next().price(104L).size(100L)
-                .next().price(103L).size(200L);
+            var bidEncoder = encoder.bidBookCount(bidBookCount);
+            for (int j = 0; j < bidBookCount; j++) {
+                long price = random.nextInt(100) + 90; // Random bid price between 90 and 189
+                long size = random.nextInt(1000) + 100; // Random bid size between 100 and 1099
+                bidEncoder.next().price(price).size(size);
+            }
 
 
-        encoder.askBookCount(4)
-                .next().price(103L).size(600L)
-                .next().price(104L).size(700L)
-                .next().price(105L).size(800L)
-                .next().price(106L).size(400L);
+            var askEncoder = encoder.askBookCount(askBookCount);
+            for (int j = 0; j < askBookCount; j++) {
+                long price = random.nextInt(100) + 110; // Random ask price between 110 and 209
+                long size = random.nextInt(1000) + 100; // Random ask size between 100 and 1099
+                askEncoder.next().price(price).size(size);
+            }
 
-
-        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
-
-        return directBuffer;
-    }
-
-    protected UnsafeBuffer createSampleMarketDataTick3() {
-        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
-
-        //write the encoded output to the direct buffer
-        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
-
-        //set the fields to desired values
-        encoder.venue(Venue.XLON);
-        encoder.instrumentId(123L);
-        encoder.source(Source.STREAM);
-
-        encoder.bidBookCount(3)
-                .next().price(103L).size(1500L)
-                .next().price(102L).size(2500L)
-                .next().price(101L).size(3500L);
-
-        encoder.askBookCount(4)
-                .next().price(104L).size(650L)
-                .next().price(105L).size(850L)
-                .next().price(106L).size(750L)
-                .next().price(107L).size(450L);
-
-
-        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
-
-        return directBuffer;
-    }
-
-    protected UnsafeBuffer createSampleMarketDataTick4() {
-        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
-
-        //write the encoded output to the direct buffer
-        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
-
-        //set the fields to desired values
-        encoder.venue(Venue.XLON);
-        encoder.instrumentId(123L);
-        encoder.source(Source.STREAM);
-
-        encoder.bidBookCount(3)
-                .next().price(104L).size(500L)
-                .next().price(103L).size(600L)
-                .next().price(102L).size(700L);
-
-        encoder.askBookCount(4)
-                .next().price(102L).size(950L)
-                .next().price(103L).size(850L)
-                .next().price(106L).size(750L)
-                .next().price(110L).size(550L);
-
-        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
-
-        return directBuffer;
-    }
-
-    protected UnsafeBuffer createSampleMarketDataTick5() {
-        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
-
-        //write the encoded output to the direct buffer
-        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
-
-        //set the fields to desired values
-        encoder.venue(Venue.XLON);
-        encoder.instrumentId(123L);
-        encoder.source(Source.STREAM);
-
-        encoder.bidBookCount(3)
-                .next().price(101L).size(1800L)
-                .next().price(99L).size(400L)
-                .next().price(98L).size(2500L);
-
-        encoder.askBookCount(4)
-                .next().price(105L).size(3000L)
-                .next().price(106L).size(2500L)
-                .next().price(107L).size(400L)
-                .next().price(108L).size(500L);
-
-        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
-
-        return directBuffer;
-    }
-
-    protected UnsafeBuffer createSampleMarketDataTick6() {
-        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
-
-        //write the encoded output to the direct buffer
-        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
-
-        //set the fields to desired values
-        encoder.venue(Venue.XLON);
-        encoder.instrumentId(123L);
-        encoder.source(Source.STREAM);
-
-        encoder.bidBookCount(3)
-                .next().price(106L).size(2200L)
-                .next().price(104L).size(2800L)
-                .next().price(105L).size(3200L);
-
-        encoder.askBookCount(4)
-                .next().price(106L).size(3800L)
-                .next().price(107L).size(3300L)
-                .next().price(108L).size(2700L)
-                .next().price(109L).size(1700L);
-
-        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
-
-        return directBuffer;
-    }
-
-    protected UnsafeBuffer createSampleMarketDataTick7() {
-        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
-
-        //write the encoded output to the direct buffer
-        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
-
-        //set the fields to desired values
-        encoder.venue(Venue.XLON);
-        encoder.instrumentId(123L);
-        encoder.source(Source.STREAM);
-
-        encoder.bidBookCount(3)
-                .next().price(110L).size(4500L)
-                .next().price(109L).size(3000L)
-                .next().price(108L).size(2000L);
-
-
-        encoder.askBookCount(4)
-                .next().price(109L).size(600L)
-                .next().price(110L).size(1000L)
-                .next().price(111L).size(3000L)
-                .next().price(112L).size(3000L);
-
-        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
-
-        return directBuffer;
+            encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+            marketDataTicks[i] = directBuffer;
+        }
+        return marketDataTicks;
     }
 
 
