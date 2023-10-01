@@ -6,6 +6,7 @@ import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
 import codingblackfemales.sotw.SimpleAlgoState;
+import codingblackfemales.sotw.marketdata.AskLevel;
 import codingblackfemales.sotw.marketdata.BidLevel;
 import codingblackfemales.util.Util;
 import messages.order.Side;
@@ -44,9 +45,12 @@ public class MyAlgoLogic implements AlgoLogic {
         if(totalOrderCount < 45){
             //logger and sys out will only show until TOC reaches required num
             BidLevel level = state.getBidAt(0);
+            // AskLevel farTouch = state.getAskAt(0);
+            // long quantity = farTouch.quantity;
+            // long price = farTouch.price;
             final long price = level.price;
             final long quantity = level.quantity;
-            logger.info("[MYALGO] Adding order for" + quantity + "@" + price);
+            logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 45. Adding order for" + quantity + "@" + price);
             System.out.println("total order count is " +totalOrderCount); 
             return new CreateChildOrder(Side.BUY, quantity, price);
         }
@@ -56,7 +60,7 @@ public class MyAlgoLogic implements AlgoLogic {
             // option is an object
             // System.out.println("total order count is" +totalOrderCount);
             // total num of orders place not num once they start cancelling. for that check active orders 
-
+             logger.info("[MYALGO] Have:" + activeOrders.size() + " children, want 5, done.");
             if (option.isPresent()){
                 
                 // logger.info("[MYALGO] option is present total order count is" + totalOrderCount);
@@ -84,7 +88,7 @@ public class MyAlgoLogic implements AlgoLogic {
                 return NoAction.NoAction;
             }
         }else{
-             logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 45, done.");
+            
         // logs the order and what was returned
         return NoAction.NoAction;
         }
