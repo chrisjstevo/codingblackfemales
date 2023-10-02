@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="codingblackfemales.dictionary.EncodingDecodingTest" time="0.053" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="codingblackfemales.dictionary.EncodingDecodingTest" time="0.073" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="GB"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/mireille/Documents/GitHub/codingblackfemales-algo/algo-coding-exercise/dictionary/target/surefire/surefirebooter12418971921703655130.jar /home/mireille/Documents/GitHub/codingblackfemales-algo/algo-coding-exercise/dictionary/target/surefire 2023-10-02T02-15-08_963-jvmRun1 surefire3452435436802540622tmp surefire_014228879641817378426tmp"/>
+    <property name="sun.java.command" value="/home/mireille/Documents/GitHub/codingblackfemales-algo/algo-coding-exercise/dictionary/target/surefire/surefirebooter11955672350084173138.jar /home/mireille/Documents/GitHub/codingblackfemales-algo/algo-coding-exercise/dictionary/target/surefire 2023-10-02T04-10-06_304-jvmRun1 surefire3452779998390522183tmp surefire_09893694374225310121tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/mireille/Documents/GitHub/codingblackfemales-algo/algo-coding-exercise/dictionary/target/test-classes:/home/mireille/Documents/GitHub/codingblackfemales-algo/algo-coding-exercise/dictionary/target/classes:/home/mireille/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/mireille/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/mireille/.m2/repository/org/agrona/agrona/1.16.0/agrona-1.16.0.jar:/home/mireille/.m2/repository/uk/co/real-logic/sbe-all/1.26.0/sbe-all-1.26.0.jar:/home/mireille/.m2/repository/org/mockito/mockito-core/5.4.0/mockito-core-5.4.0.jar:/home/mireille/.m2/repository/net/bytebuddy/byte-buddy/1.14.5/byte-buddy-1.14.5.jar:/home/mireille/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.5/byte-buddy-agent-1.14.5.jar:/home/mireille/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/home/mireille/.m2/repository/ch/qos/logback/logback-core/1.3.5/logback-core-1.3.5.jar:/home/mireille/.m2/repository/org/slf4j/slf4j-api/2.0.4/slf4j-api-2.0.4.jar:/home/mireille/.m2/repository/ch/qos/logback/logback-classic/1.3.5/logback-classic-1.3.5.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -27,7 +27,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="/home/mireille/Documents/GitHub/codingblackfemales-algo/algo-coding-exercise/dictionary/target/surefire/surefirebooter12418971921703655130.jar"/>
+    <property name="surefire.real.class.path" value="/home/mireille/Documents/GitHub/codingblackfemales-algo/algo-coding-exercise/dictionary/target/surefire/surefirebooter11955672350084173138.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.8.1+1-Ubuntu-0ubuntu122.04"/>
     <property name="user.name" value="mireille"/>
@@ -51,5 +51,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="encodingDecoding" classname="codingblackfemales.dictionary.EncodingDecodingTest" time="0.015"/>
+  <testcase name="encodingDecoding" classname="codingblackfemales.dictionary.EncodingDecodingTest" time="0.023"/>
 </testsuite>
