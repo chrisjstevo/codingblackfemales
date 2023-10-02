@@ -14,13 +14,14 @@ import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.action.NoAction;
 import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.marketdata.gen.RandomMarketDataGenerator;
+import codingblackfemales.sotw.SimpleAlgoState;
 import codingblackfemales.sotw.marketdata.AskLevel;
 import messages.marketdata.Venue;
 import messages.order.Side;
 
 public class TimedLogic {
 
-  Venue venue = new Venue();
+  SimpleAlgoState
 
       //   // Arraylist comprised of data harvested from the market every 15 minutes
 
@@ -40,11 +41,11 @@ public class TimedLogic {
 
         //take as much as we can from the far touch....
         long quantity = farTouch.quantity;
-        long price = farTouch.price;
+        long latestPrices = 0l;
 
-      boolean marketIsOpen = true;
+      boolean isMarketOpen = true;
 
-      if(void isMarketOpen()){
+      if(isMarketOpen(isMarketOpen)){
         schduleDataCollection();
       }
 
@@ -70,14 +71,16 @@ public class TimedLogic {
         }
 
         if(consecutiveRises >= 3){
-          // trigger sell action
+            logger.info("[MYALGO] Market trend is rising selling " + quantity + "child orders at " + latestPrices);
+          new CreateChildOrder(Side.SELL, quantity, latestPrices);
         }else if(consecutiveFalls >= 3){
-          // trigger buy action
+            logger.info("[MYALGO] Market trend is falling buying " + quantity + "child orders at " + latestPrices);
+          new CreateChildOrder(Side.BUY, quantity, latestPrices);
         }
       }
     }
 
-      public boolean isMarketOpen(boolean marketIsOpen){
+      public boolean isMarketOpen(boolean isMarketOpen){
         LocalDateTime currentDateTime = LocalDateTime.now();
         DayOfWeek dayOfWeek = currentDateTime.getDayOfWeek();
         LocalTime timeNow = LocalTime.now();
@@ -87,12 +90,14 @@ public class TimedLogic {
           LocalTime marketClosed = LocalTime.of(16, 30);
           
           if(timeNow.isBefore(marketOpen) || timeNow.isAfter(marketClosed)){
-            marketIsOpen = false;
+            isMarketOpen = false;
+            logger.info("[MYALGO] Market is closed");
+
           }
         }
-        return marketIsOpen;
+        return isMarketOpen;
       }
-
+      
       public void schduleDataCollection(){
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -102,7 +107,7 @@ public class TimedLogic {
 
           // find the method that gives you acces to receivin data from the market 
 
-          long latestPrices = 2020l;
+          latestPrices = newData;
           //find the method;
           logger.info("[MYALGO] latest price on the market is " + latestPrices);
 
@@ -111,6 +116,7 @@ public class TimedLogic {
           ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(harvestMarketData, 0, 15, TimeUnit.MINUTES);
 
       }
+    }
 
 //       public void processMarketDate(){
 
@@ -167,14 +173,3 @@ public class TimedLogic {
 //     // venue is intergers 1 london, 2paris, 3amstadam
   
 //   }
-
-
-
-//   // at some point we would like to say 
-//   if(marketMonitor index increses 3 times in a row){
-//     new CreateChildOrder(Side.SELL, quantity, price);
-//   }
-//   if(marketsMonitor decreases 3 times in a row){
-//     new CreateChildOrder(Side.BUY, quantity, price);
-//   }
-// }
