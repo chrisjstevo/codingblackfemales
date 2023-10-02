@@ -18,7 +18,7 @@ public class AddCancelAlgoLogic implements AlgoLogic {
     @Override
     public Action evaluate(SimpleAlgoState state) {
 
-        logger.info("[ADDCANCELALGO] In Algo Logic....");
+        logger.info("\n\n [ADDCANCELALGO] In Algo Logic....");
 
         final String book = Util.orderBookToString(state);
 
