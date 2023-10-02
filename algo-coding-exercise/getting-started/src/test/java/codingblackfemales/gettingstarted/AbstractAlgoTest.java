@@ -138,58 +138,50 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
         return directBuffer;
     }
 
-    // protected UnsafeBuffer noActionTick(int ordersNotCanx) {
-    //     // active orders less than 5
-    //     // option is not present
-    //     //  has less than number of children that were requested
-    //     // Create a sample market data tick that should trigger no action
-    //     final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
-    //     final BookUpdateEncoder encoder = new BookUpdateEncoder();
+    protected UnsafeBuffer noActionTick(int numActiveOrders) {
+        // active orders less than 5
+        // option is not present
+        //  has less than number of children that were requested
+        // Create a sample market data tick that should trigger no action
+        final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+        final BookUpdateEncoder encoder = new BookUpdateEncoder();
 
-    //     final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-    //     final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-    //     //write the encoded output to the direct buffer
-    //     encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+        //write the encoded output to the direct buffer
+        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-    //     //set the fields to desired values
-    //     encoder.venue(Venue.XLON);
-    //     encoder.instrumentId(123L);
+        //set the fields to desired values
+        encoder.venue(Venue.XLON);
+        encoder.instrumentId(123L);
 
-    //     encoder.askBookCount(3)
-    //             .next().price(100L).size(101L)
-    //             .next().price(110L).size(200L)
-    //             .next().price(115L).size(5000L);
+        // encoder.askBookCount(3)
+        //         .next().price(100L).size(101L)
+        //         .next().price(110L).size(200L)
+        //         .next().price(115L).size(5000L);
 
-    //     encoder.bidBookCount(3)
-    //             .next().price(98L).size(100L)
-    //             .next().price(95L).size(200L)
-    //             .next().price(91L).size(300L);
+        // encoder.bidBookCount(3)
+        //         .next().price(98L).size(100L)
+        //         .next().price(95L).size(200L)
+                // .next().price(91L).size(300L);
 
-    //     encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
-    //     encoder.source(Source.STREAM);
+        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+        encoder.source(Source.STREAM);
 
-    //     for (int i = 0; i < ordersNotCanx; i++) {
-    //         // Create and add orders to the market data
-    //         var state = container.getState();
-    //         // BidLevel level = state.getBidAt(0);
-    //         // final long price = level.price;
-    //         // final long quantity = level.quantity;
-    //         //  AskLevel farTouch = state.getAskAt(0);
-    //         // long quantity = farTouch.quantity;
-    //         // long price = farTouch.price;
-    //         // final BidLevel nearTouch = state.getBidAt(0);
-
-    //         //if values not hardcoded they dont seem to work
-
-    //         long quantity = 2;
-    //         long price = 110L;
+        for (int i = 0; i < numActiveOrders; i++) {
+            encoder.askBookCount(1)
+                .next().price(100L).size(101L);
             
+            encoder.bidBookCount(1)
+                .next().price(98L).size(100L);
+        }
             
-    //         new CreateChildOrder(Side.BUY, quantity, price);
+        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+        encoder.source(Source.STREAM);
 
-    //     return directBuffer;
-    // }
+        return directBuffer;
+    }
 
         // protected UnsafeBuffer createActiveOrderTick(int activeOrderCount) {
         // // Create a sample market data tick with the specified number of active orders
