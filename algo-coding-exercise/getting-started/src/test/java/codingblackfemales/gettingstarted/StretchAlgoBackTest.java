@@ -9,7 +9,6 @@ public class StretchAlgoBackTest extends AbstractStretchAlgoBackTest{
 
     @Override
     public AlgoLogic createAlgoLogic() {
-
         return new StretchAlgoLogic();
     }
 
@@ -17,7 +16,8 @@ public class StretchAlgoBackTest extends AbstractStretchAlgoBackTest{
     public void testExampleBackTest() throws Exception {
         //create a sample market data tick....
         send(createTick());
-
+        send(createTick2());
+        send(createTick3());
     }
 
 }

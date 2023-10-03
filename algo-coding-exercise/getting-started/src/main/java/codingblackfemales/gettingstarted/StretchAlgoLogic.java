@@ -4,42 +4,17 @@ import codingblackfemales.action.Action;
 import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
-import codingblackfemales.sotw.ChildOrder;
 import codingblackfemales.sotw.SimpleAlgoState;
 import codingblackfemales.sotw.marketdata.AskLevel;
-import codingblackfemales.util.Util;
+import codingblackfemales.sotw.marketdata.BidLevel;
 import messages.order.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StretchAlgoLogic implements AlgoLogic {
 
-    private static final Logger logger = LoggerFactory.getLogger(StretchAlgoLogic.class);
-    @Override
-    public Action evaluate(SimpleAlgoState state) {
 
-        logger.info("[STRETCHALGO] In Algo Logic....");
-
-        var orderBookAsString = Util.orderBookToString(state);
-
-        logger.info("[STRETCHALGO] The state of the order book is:\n" + orderBookAsString);
-
-        final AskLevel askLevel = state.getAskAt(0);
-
-        long askPrice = askLevel.price;
-        long askQuantity = askLevel.quantity;
-
-        //create new bid order
-        //ChildOrder newBidOrder = new ChildOrder(Side.BUY, 1, 50L, 105, 1);
-        CreateChildOrder childOrder = new CreateChildOrder(Side.SELL, 50, 105);
-
-        if(newBidOrder.getPrice() >= askPrice){
-
-        }
-        else{
-
-        }
-
-        return NoAction.NoAction;
-    }
 }

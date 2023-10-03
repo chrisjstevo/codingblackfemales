@@ -5,12 +5,15 @@ import codingblackfemales.action.CancelChildOrder;
 import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
+import codingblackfemales.sotw.ChildOrder;
 import codingblackfemales.sotw.SimpleAlgoState;
 import codingblackfemales.sotw.marketdata.BidLevel;
 import codingblackfemales.util.Util;
 import messages.order.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class MyAlgoLogic implements AlgoLogic {
 
@@ -26,43 +29,33 @@ public class MyAlgoLogic implements AlgoLogic {
         logger.info("[MYALGO] The state of the order book is:\n" + orderBookAsString);
 
         final BidLevel bidLevel = state.getBidAt(0);
-
-        var totalChildOrders = state.getChildOrders().size();
-
         long quantity1 = 30;
         long price1 = bidLevel.price;
 
-        final var activeOrders = state.getActiveChildOrders();
+        // Get active orders
+        List<ChildOrder> activeOrders = state.getActiveChildOrders();
+        var totalOrderCount = state.getChildOrders().size();
 
-        //create new child orders if we have less than 5
-        if(totalChildOrders < 5){
-
-            logger.info("[MYALGO] Have:" + totalChildOrders + " children, want 5, done.");
-            return new CreateChildOrder(Side.BUY, quantity1, price1);
-        }
-        // if current child orders are less than 7 then cancel all
-        if (totalChildOrders < 7) {
-            final var option = activeOrders.stream().findFirst();
-
-            if (activeOrders.size() > 0) {
-
-                //check if we have pending orders
-                if (option.isPresent()) {
-                    var childOrder = option.get();
-                    logger.info("[MYALGO] Cancelling order:" + childOrder);
-                    return new CancelChildOrder(childOrder);
-                } else {
-                    return NoAction.NoAction;
-                }
-
-            } else {
-                logger.info("[MYALGO] Have:" + totalChildOrders + " children, want 5, done.");
-                return NoAction.NoAction;
-            }
-        }
-        else{
+        // Exit condition: Do not take action if there are already 5 child orders
+        if (totalOrderCount > 5) {
+            logger.info("Inside the NoAction clause");
             return NoAction.NoAction;
         }
-
+        // If there are fewer than 3 child orders, create a new order on the sell side
+        if (activeOrders.size() < 3) {
+            int childOrderCount = activeOrders.size()+1;
+            logger.info("[MYALGO] Adding order for " + quantity1 + "@" + price1);
+            logger.info("[MYALGO] Have: " + activeOrders.size()  + " active orders, want 3, done.");
+            logger.info("[MYALGO] Total "+ childOrderCount + " child order");
+            return new CreateChildOrder(Side.SELL, quantity1, price1);
+        }
+        // If there are active orders more than 3, cancel the first one
+        if (activeOrders.size() > 3) {
+            ChildOrder childOrderToCancel = activeOrders.get(0);
+            logger.info("[MYALGO] Cancelling order: " + childOrderToCancel);
+            return new CancelChildOrder(childOrderToCancel);
+        }
+        // No action to take
+        return NoAction.NoAction;
     }
 }
