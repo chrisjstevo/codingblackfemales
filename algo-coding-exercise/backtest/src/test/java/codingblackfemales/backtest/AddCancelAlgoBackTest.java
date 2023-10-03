@@ -125,10 +125,10 @@ public class AddCancelAlgoBackTest extends SequencerTestCase {
         send(createSampleMarketDataTick2());
 
         //then: get the state
-        //var state = container.getState();
-        //long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
+        var state = container.getState();
+        // long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
 
         //and: check that our algo state was updated to reflect our fills when the market data
-        //assertEquals(225, filledQuantity);
+        // assertEquals(225, filledQuantity);
     }
 }

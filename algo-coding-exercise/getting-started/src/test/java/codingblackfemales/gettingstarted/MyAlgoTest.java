@@ -1,8 +1,6 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
-import codingblackfemales.sotw.SimpleAlgoState;
-import codingblackfemales.util.Util;
 import messages.marketdata.BookUpdateEncoder;
 import messages.marketdata.InstrumentStatus;
 import messages.marketdata.MessageHeaderEncoder;
@@ -16,20 +14,6 @@ import java.nio.ByteBuffer;
 
 import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-/**
- * This test is designed to check your algo behavior in isolation of the order book.
- *
- * You can tick in market data messages by creating new versions of createTick() (ex. createTick2, createTickMore etc..)
- *
- * You should then add behaviour to your algo to respond to that market data by creating or cancelling child orders.
- *
- * When you are comfortable you algo does what you expect, then you can move on to creating the MyAlgoBackTest.
- *
- */
 
 public class MyAlgoTest extends AbstractAlgoTest {
 
@@ -108,7 +92,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
         encoder.instrumentId(123L);
 
         encoder.askBookCount(6)
-            .next().price(110L).size(500L)
+            .next().price(110L).size(3500L)
             .next().price(111L).size(1000L)
             .next().price(112L).size(1500L)
             .next().price(113L).size(2000L)
