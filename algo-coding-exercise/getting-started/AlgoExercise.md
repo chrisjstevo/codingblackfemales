@@ -4,7 +4,7 @@ This trading algorithm creates child orders orders on the BUY side of the book a
 
 To make it more reflective of a real life market, if the quantity desired exceeds a certain percentage of the overall market volume, no action occurs and no child order is created. 
 
-##### *NOTE*: When trading, you want to be as descrete as possible, causing minimal impact to the market. 
+##### *NOTE*: When trading, you want to be as descrete as possible, causing [minimal](https://www.investopedia.com/terms/v/volumeoftrade.asp) impact to the market. 
 
 ### [MyAlgoLogic](https://github.com/Teyiowuawi/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MyAlgoLogic.java)
 
