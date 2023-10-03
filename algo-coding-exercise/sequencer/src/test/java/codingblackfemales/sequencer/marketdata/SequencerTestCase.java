@@ -19,7 +19,9 @@ public abstract class SequencerTestCase {
 
     public void customSend(DirectBuffer[] buffers) throws Exception {
         for (DirectBuffer buffer : buffers) {
-            getSequencerInternal().onCommand(buffer);
+            if(buffer != null) {
+                getSequencerInternal().onCommand(buffer);
+            }
         }
     }
 

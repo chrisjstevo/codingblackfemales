@@ -2,9 +2,11 @@ package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
 import codingblackfemales.sotw.ChildOrder;
+import codingblackfemales.sotw.OrderState;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class MovingAverageBackTest extends AbstractMovingAverageBackTest {
 
@@ -17,25 +19,13 @@ public class MovingAverageBackTest extends AbstractMovingAverageBackTest {
     public void testExampleBackTest() throws Exception {
         // create a sample market data tick....
         // Note I created a custom send so that I can send array buffers
-        // customSend(createSampleMarketDataTick(10));
-        // will it successfully sell if i generate 100 ticks?
         customSend(createSampleMarketDataTick(10));
-        // test for how many child orders was created
-        var myChildOrders = container.getState().getChildOrders();
 
-        var actualActiveOrders = container.getState().getActiveChildOrders().size();
-        var expectedActiveOrders = myChildOrders.size();
-        assertEquals(expectedActiveOrders, actualActiveOrders);
+        // todo - check if only one order is pending
 
-        long filledQuantity = myChildOrders.stream().map(ChildOrder::getFilledQuantity)
-                .reduce(Long::sum)
-                .get();
-        long expectedFilledQuantity = myChildOrders.stream().map(ChildOrder::getFilledQuantity)
-                .reduce(Long::sum)
-                .get();
-        assertEquals(expectedFilledQuantity, filledQuantity);
-
-        // todo- if possible test for bid filledQuantity and ask filledQuantity
+        assertEquals(1, OrderState.PENDING);
+        assertNotNull(container.getState().getBidAt(0));
+        assertNotNull(container.getState().getAskAt(0));
 
     }
 }

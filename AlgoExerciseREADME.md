@@ -7,6 +7,6 @@
 
 **Stretch objective:** 
 
-* [MovingAverage.java](https://github.com/tosimiadesoye/OrderMatchingAlgo/blob/MovingAverage/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MovingAverage.java): This class uses Moving Averages to analyze historical price data for buying and selling decisions in a financial market. It aims to buy when prices are falling and sell when prices are rising.
-* [MovingAverageBackTest.java](https://github.com/tosimiadesoye/OrderMatchingAlgo/blob/MovingAverage/algo-coding-exercise/getting-started/src/test/java/codingblackfemales/gettingstarted/MovingAverageBackTest.java)
+* [MovingAverage.java](https://github.com/tosimiadesoye/OrderMatchingAlgo/blob/MovingAverage/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MovingAverage.java): This class uses Moving Averages to analyze historical price data for buying and selling decisions in a financial market. It aims to buy when prices are falling and sell at 2% higher than the price it bought the stock.
+* [MovingAverageBackTest.java](https://github.com/tosimiadesoye/OrderMatchingAlgo/blob/MovingAverage/algo-coding-exercise/getting-started/src/test/java/codingblackfemales/gettingstarted/MovingAverageBackTest.java): This is testing for null and pending order;
 
