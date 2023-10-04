@@ -4,6 +4,7 @@ import codingblackfemales.algo.AlgoLogic;
 import codingblackfemales.container.Actioner;
 import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.container.RunTrigger;
+import codingblackfemales.marketdata.api.MarketDataMessage;
 import codingblackfemales.orderbook.OrderBook;
 import codingblackfemales.orderbook.channel.MarketDataChannel;
 import codingblackfemales.orderbook.channel.OrderChannel;
@@ -20,6 +21,7 @@ import org.agrona.concurrent.UnsafeBuffer;
 
 import java.nio.ByteBuffer;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
 
@@ -60,17 +62,17 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
     public abstract AlgoLogic createAlgoLogic();
 
     /**
-     *
      * @param numTicks number of Ticks I want to generate
      * @return an array of UnsafeBuffer[] representing the ticks
      */
     protected UnsafeBuffer[] createSampleMarketDataTick(int numTicks) {
         UnsafeBuffer[] marketDataTicks = new UnsafeBuffer[numTicks];
-        Random random = new Random();
+
+
 
         for (int i = 0; i < numTicks; i++) {
 
-            final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+            final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024 * numTicks);
             final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
             encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
@@ -79,20 +81,26 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
             encoder.instrumentId(123L);
             encoder.source(Source.STREAM);
 
-            int bidBookCount = random.nextInt(3) + 3; // Random number of bid book entries (3 to 5)
-            int askBookCount = random.nextInt(3) + 3; // Random number of ask book entries (3 to 5)
+            int bidBookCount = 3;
+            int askBookCount = 4;
 
             var bidEncoder = encoder.bidBookCount(bidBookCount);
             for (int j = 0; j < bidBookCount; j++) {
-                long price = random.nextInt(100) + 90; // Random bid price between 90 and 189
-                long size = random.nextInt(1000) + 100; // Random bid size between 100 and 1099
+                long price = getRandomLongWithinRange(90, 189);
+                long size = getRandomLongWithinRange(100, 1099);
+
                 bidEncoder.next().price(price).size(size);
             }
 
             var askEncoder = encoder.askBookCount(askBookCount);
             for (int j = 0; j < askBookCount; j++) {
-                long price = random.nextInt(100) + 100; // Random ask price between 100 and 199
-                long size = random.nextInt(1000) + 100; // Random ask size between 100 and 1099
+                long price = getRandomLongWithinRange(100, 199);
+                long size = getRandomLongWithinRange(100, 1099);
+                if(price < 100|| size < 100){
+                    price = getRandomLongWithinRange(100, 199);
+                    size = getRandomLongWithinRange(100, 1099);
+                    askEncoder.next().price(price).size(size);
+                }
                 askEncoder.next().price(price).size(size);
             }
 
@@ -100,6 +108,11 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
             marketDataTicks[i] = directBuffer;
         }
         return marketDataTicks;
+    }
+
+    private  static int getRandomLongWithinRange(int min, int max){
+
+        return ThreadLocalRandom.current().nextInt(min, max +1);
     }
 
 }

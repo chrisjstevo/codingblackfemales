@@ -45,9 +45,8 @@ public class PassiveAlgoBackTest extends SequencerTestCase {
 
                 final OrderBookInboundOrderConsumer orderConsumer = new OrderBookInboundOrderConsumer(book);
 
-                container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger),
-                                runTrigger, actioner);
-                // set my algo logic
+                container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
+                //set my algo logic
                 container.setLogic(new PassiveAlgoLogic());
 
                 network.addConsumer(new LoggingConsumer());
@@ -60,56 +59,56 @@ public class PassiveAlgoBackTest extends SequencerTestCase {
                 return sequencer;
         }
 
-        private UnsafeBuffer createSampleMarketDataTick() {
+        private UnsafeBuffer createSampleMarketDataTick(){
                 final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
                 final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-                // write the encoded output to the direct buffer
+                //write the encoded output to the direct buffer
                 encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-                // set the fields to desired values
+                //set the fields to desired values
                 encoder.venue(Venue.XLON);
                 encoder.instrumentId(123L);
                 encoder.source(Source.STREAM);
 
                 encoder.bidBookCount(3)
-                                .next().price(98L).size(100L)
-                                .next().price(95L).size(200L)
-                                .next().price(91L).size(300L);
+                        .next().price(98L).size(100L)
+                        .next().price(95L).size(200L)
+                        .next().price(91L).size(300L);
 
                 encoder.askBookCount(4)
-                                .next().price(100L).size(101L)
-                                .next().price(110L).size(200L)
-                                .next().price(115L).size(5000L)
-                                .next().price(119L).size(5600L);
+                        .next().price(100L).size(101L)
+                        .next().price(110L).size(200L)
+                        .next().price(115L).size(5000L)
+                        .next().price(119L).size(5600L);
 
                 encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
 
                 return directBuffer;
         }
 
-        private UnsafeBuffer createSampleMarketDataTick2() {
+        private UnsafeBuffer createSampleMarketDataTick2(){
                 final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
                 final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-                // write the encoded output to the direct buffer
+                //write the encoded output to the direct buffer
                 encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-                // set the fields to desired values
+                //set the fields to desired values
                 encoder.venue(Venue.XLON);
                 encoder.instrumentId(123L);
                 encoder.source(Source.STREAM);
 
                 encoder.bidBookCount(3)
-                                .next().price(95L).size(100L)
-                                .next().price(93L).size(200L)
-                                .next().price(91L).size(300L);
+                        .next().price(95L).size(100L)
+                        .next().price(93L).size(200L)
+                        .next().price(91L).size(300L);
 
                 encoder.askBookCount(4)
-                                .next().price(98L).size(501L)
-                                .next().price(101L).size(200L)
-                                .next().price(110L).size(5000L)
-                                .next().price(119L).size(5600L);
+                        .next().price(98L).size(501L)
+                        .next().price(101L).size(200L)
+                        .next().price(110L).size(5000L)
+                        .next().price(119L).size(5600L);
 
                 encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
 
@@ -118,21 +117,19 @@ public class PassiveAlgoBackTest extends SequencerTestCase {
 
         @Test
         public void testExampleBackTest() throws Exception {
-                // create a sample market data tick....
+                //create a sample market data tick....
                 send(createSampleMarketDataTick());
-                // simple assert to check we had 3 orders created
+                //simple assert to check we had 3 orders created
                 assertEquals(container.getState().getChildOrders().size(), 3);
 
-                // when: market data moves towards us
+                //when: market data moves towards us
                 send(createSampleMarketDataTick2());
 
-                // then: get the state
+                //then: get the state
                 var state = container.getState();
-                long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity)
-                                .reduce(Long::sum).get();
+                long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
 
-                // and: check that our algo state was updated to reflect our fills when the
-                // market data
+                //and: check that our algo state was updated to reflect our fills when the market data
                 assertEquals(225, filledQuantity);
         }
 }

@@ -6,19 +6,20 @@ import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
 import codingblackfemales.sotw.ChildOrder;
+import codingblackfemales.sotw.OrderState;
 import codingblackfemales.sotw.SimpleAlgoState;
 import codingblackfemales.sotw.marketdata.AskLevel;
-import codingblackfemales.sotw.marketdata.BidLevel;
+
 import codingblackfemales.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import messages.order.Side;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.OptionalDouble;
-import java.util.OptionalLong;
+import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
+//Todo - clean up
 public class MovingAverage implements AlgoLogic {
 
     private static final Logger logger = LoggerFactory.getLogger(MovingAverage.class);
@@ -27,12 +28,10 @@ public class MovingAverage implements AlgoLogic {
     int LONG_TERM_PERIOD = 7;
 
     List<Long> askHistoricalPrices = new ArrayList<>();
-    long filledQuantity = 0;
+
     long buyAtPrice = 0;
 
     long counter = 0;
-
-    String side = "";
 
     /***
      *
@@ -44,7 +43,7 @@ public class MovingAverage implements AlgoLogic {
     public Action evaluate(SimpleAlgoState state) {
         final String orderBookAsString = Util.orderBookToString(state);
         logger.info("[MOVINGAVERAGE] The state of the order book is:\n" + orderBookAsString);
-        final BidLevel bidLevel = state.getBidAt(0);
+
         final AskLevel askLevel = state.getAskAt(0);
         long bidQuantity = 100;
 
@@ -56,54 +55,64 @@ public class MovingAverage implements AlgoLogic {
             return NoAction.NoAction;
         }
 
-        if (askLevel != null && bidLevel != null) {
+        if (askLevel != null) {
             long askLevelPrice = askLevel.price;
 
-            List<Long> gatherAskHistoricalPrices = getHistoricalPrices(askHistoricalPrices, askLevelPrice);
+            askHistoricalPrices = getHistoricalPrices(askHistoricalPrices, askLevelPrice);
 
-            long askShortTermMovingAverage = calculateSMA(gatherAskHistoricalPrices, SHORT_TERM_PERIOD);
-            long askLongTermMovingAverage = calculateSMA(gatherAskHistoricalPrices, LONG_TERM_PERIOD);
+            long askShortTermMovingAverage = calculateSMA(askHistoricalPrices, SHORT_TERM_PERIOD);
+            long askLongTermMovingAverage = calculateSMA(askHistoricalPrices, LONG_TERM_PERIOD);
 
-            OptionalLong filledQuantitySum = state.getChildOrders().stream().mapToLong(ChildOrder::getFilledQuantity)
-                    .reduce(Long::sum);
+            // I am using supplier because stream can be consumed only once. I am using
+            // Supplier in order to use
+            // stream multiple times more info:
+            // https://stackoverflow.com/questions/52689103/java-8-once-stream-is-consumed-and-operated-giving-error-but-in-another-case
+            Supplier<Stream<ChildOrder>> activeChildOrdersSupplier = () -> state.getActiveChildOrders().stream();
 
-            long newFilledQuantity = filledQuantitySum.orElse(0L);
+            Stream<ChildOrder> myChildOrdersBuy = activeChildOrdersSupplier.get()
+                    .filter(order -> order.getSide() == Side.BUY);
+            Stream<ChildOrder> myChildOrdersSell = activeChildOrdersSupplier.get()
+                    .filter(order -> order.getSide() == Side.SELL);
 
-            if (newFilledQuantity > filledQuantity) {
-                if (side == "BUY") {
-                    long askQuantity = newFilledQuantity - filledQuantity;
-                    filledQuantity = newFilledQuantity;
+            long filledBuyOrderQty = myChildOrdersBuy.mapToLong(ChildOrder::getFilledQuantity).reduce(Long::sum)
+                    .orElse(0L);
+            long sellOrderQty = myChildOrdersSell.mapToLong(ChildOrder::getQuantity).reduce(Long::sum).orElse(0L);
 
-                    logger.info("[MOVINGAVERAGE]: Adding sell order for: quantity=" + askQuantity + " @ price="
-                            + (long) (buyAtPrice * 1.02));
-                    side = "SELL";
-                    return new CreateChildOrder(Side.SELL, askQuantity, (long) (buyAtPrice * 1.02));
-                } else {
-                    side = "";
+            long stockQty = filledBuyOrderQty - sellOrderQty;
+
+            Supplier<Stream<ChildOrder>> pendingBuyOrders = () -> state.getActiveChildOrders().stream()
+                    .filter(order -> order.getState() == OrderState.PENDING)
+                    .filter(order -> order.getSide() == Side.BUY);
+
+            Stream<ChildOrder> pendingSellOrders = activeChildOrdersSupplier.get()
+                    .filter(order -> order.getState() == OrderState.PENDING)
+                    .filter(order -> order.getSide() == Side.SELL);
+
+            if (pendingSellOrders.toList().isEmpty() && pendingBuyOrders.get().toList().isEmpty()) {
+                if ((shouldBuy(askShortTermMovingAverage, askLongTermMovingAverage)) && stockQty == 0) {
+                    logger.info("[MOVINGAVERAGE]: Adding buy order for quantity: " + bidQuantity + " @ price="
+                            + askLevelPrice);
+                    buyAtPrice = askLevelPrice;
+                    counter = 0;
+                    return new CreateChildOrder(Side.BUY, bidQuantity, askLevelPrice);
+
                 }
             } else if (counter >= 5) {
-                final var option = state.getActiveChildOrders().stream().findFirst();
-                counter = 0;
-                side = "";
+                final var option = pendingBuyOrders.get().findFirst();
                 if (option.isPresent()) {
                     var childOrder = option.get();
                     logger.info("[MOVINGAVERAGE] Cancelling order: " + childOrder);
 
                     return new CancelChildOrder(childOrder);
                 }
-            } else if (newFilledQuantity == filledQuantity) {
-                if (side == "") {
-                    if ((shouldBuy(askShortTermMovingAverage, askLongTermMovingAverage))
-                            && (state.getActiveChildOrders().size() == 0)) {
-                        logger.info("[MOVINGAVERAGE]: Adding buy order for: quantity = " + bidQuantity + " @ price="
-                                + askLevelPrice);
-                        buyAtPrice = askLevelPrice;
-                        side = "BUY";
-                        return new CreateChildOrder(Side.BUY, bidQuantity, askLevelPrice);
-                    }
-                } else if (side == "BUY") {
-                    counter += 1;
-                }
+            } else if (stockQty > 0) {
+                logger.info("[MOVINGAVERAGE]: Adding sell order for quantity: " + stockQty + " @ price="
+                        + (long) (buyAtPrice * 1.01));
+
+                return new CreateChildOrder(Side.SELL, stockQty, (long) (buyAtPrice * 1.01));
+
+            } else if (!pendingBuyOrders.get().toList().isEmpty()) {
+                counter += 1;
             }
 
         }
