@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * This test is designed to check your algo behavior in isolation of the order book.
  *
- * You can tick in market data messages by creating new versions of createTick() (ex. createTick2, createTickMore etc..)
+ * You can tick in market data messages by creating new versions of createTick() (ex. createTick2, createTickMore etc.)
  *
  * You should then add behaviour to your algo to respond to that market data by creating or cancelling child orders.
  *
@@ -33,5 +33,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
 
         //simple assert to check we had 3 orders created
         assertEquals(container.getState().getChildOrders().size(), 3);
+
+
     }
 }
