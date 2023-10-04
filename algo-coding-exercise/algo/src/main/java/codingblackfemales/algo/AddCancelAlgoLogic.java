@@ -26,7 +26,7 @@ public class AddCancelAlgoLogic implements AlgoLogic {
 
         var totalOrderCount = state.getChildOrders().size();
 
-        //make sure we have an exit condition...
+        // make sure we have an exit condition...
         if (totalOrderCount > 20) {
             return NoAction.NoAction;
         }
@@ -41,8 +41,7 @@ public class AddCancelAlgoLogic implements AlgoLogic {
                 var childOrder = option.get();
                 logger.info("[ADDCANCELALGO] Cancelling order:" + childOrder);
                 return new CancelChildOrder(childOrder);
-            }
-            else{
+            } else {
                 return NoAction.NoAction;
             }
         } else {
