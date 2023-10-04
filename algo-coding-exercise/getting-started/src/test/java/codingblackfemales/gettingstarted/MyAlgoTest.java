@@ -1,6 +1,5 @@
 package codingblackfemales.gettingstarted;
 
-import ch.qos.logback.classic.Logger;
 import codingblackfemales.container.Actioner;
 import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.container.RunTrigger;
@@ -13,6 +12,7 @@ import codingblackfemales.service.MarketDataService;
 import codingblackfemales.service.OrderService;
 import messages.marketdata.*;
 import org.agrona.concurrent.UnsafeBuffer;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
@@ -33,10 +33,9 @@ public class MyAlgoTest extends SequencerTestCase {
 
     private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
     private final BookUpdateEncoder encoder = new BookUpdateEncoder();
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(MyAlgoTest.class);
-
 
     private AlgoContainer container;
+    private static final Logger logger = LoggerFactory.getLogger(MyAlgoTest.class);
 
 
     @Override
@@ -69,6 +68,15 @@ public class MyAlgoTest extends SequencerTestCase {
         //set the fields to desired values
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
+
+
+
+
+
+
+
+
+
 
         encoder.askBookCount(3)
                 .next().price(100L).size(101L)
