@@ -1,1 +1,8 @@
 /session1/target/
+/algo-coding-excercise/target
+.classpath
+.project
+.settings/
+target/
+.vscode/
+.idea/

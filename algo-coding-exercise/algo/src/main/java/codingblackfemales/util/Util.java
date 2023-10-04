@@ -14,7 +14,7 @@ public class Util {
         return String.format("%" + n + "s", s);
     }
 
-    public static String orderBookToString(final SimpleAlgoState state){
+    public static String orderBookToString(final SimpleAlgoState state) {
 
         final StringBuilder builder = new StringBuilder();
 
@@ -22,23 +22,27 @@ public class Util {
 
         builder.append(padLeft("|----BID-----", 12) + "|" + padLeft("|----ASK----", 12) + "|" + "\n");
 
-        for(int i=0; i<maxLevels; i++){
+        for (int i = 0; i < maxLevels; i++) {
 
-            if(state.getBidLevels() > i){
+            if (state.getBidLevels() > i) {
                 BidLevel level = state.getBidAt(i);
-                builder.append(padLeft(level.quantity + " @ " + level.price, 12));
-            }else{
-                builder.append(padLeft(" - ", 12) + "");
+                if (level != null) {
+                    builder.append(padLeft(level.quantity + " @ " + level.price, 12));
+                } else {
+                    builder.append(padLeft(" - ", 12) + "");
+                }
             }
 
-            if(state.getAskLevels() > i){
+            if (state.getAskLevels() > i) {
                 AskLevel level = state.getAskAt(i);
-                builder.append(padLeft(level.quantity + " @ " + level.price, 12));
-            }else{
-                builder.append(padLeft(" - ", 12) + "");
+                if (level != null) {
+                    builder.append(padLeft(level.quantity + " @ " + level.price, 12));
+                } else {
+                    builder.append(padLeft(" - ", 12) + "");
+                }
+                builder.append("\n");
             }
 
-            builder.append("\n");
         }
 
         builder.append(padLeft("|------------", 12) + "|" + padLeft("|-----------", 12) + "|" + "\n");

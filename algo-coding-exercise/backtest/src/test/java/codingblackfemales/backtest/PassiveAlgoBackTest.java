@@ -26,110 +26,110 @@ import static org.junit.Assert.assertEquals;
 
 public class PassiveAlgoBackTest extends SequencerTestCase {
 
-    private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
-    private final BookUpdateEncoder encoder = new BookUpdateEncoder();
+        private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+        private final BookUpdateEncoder encoder = new BookUpdateEncoder();
 
-    private AlgoContainer container;
+        private AlgoContainer container;
 
-    @Override
-    public Sequencer getSequencer() {
-        final TestNetwork network = new TestNetwork();
-        final Sequencer sequencer = new DefaultSequencer(network);
+        @Override
+        public Sequencer getSequencer() {
+                final TestNetwork network = new TestNetwork();
+                final Sequencer sequencer = new DefaultSequencer(network);
 
-        final RunTrigger runTrigger = new RunTrigger();
-        final Actioner actioner = new Actioner(sequencer);
+                final RunTrigger runTrigger = new RunTrigger();
+                final Actioner actioner = new Actioner(sequencer);
 
-        final MarketDataChannel marketDataChannel = new MarketDataChannel(sequencer);
-        final OrderChannel orderChannel = new OrderChannel(sequencer);
-        final OrderBook book = new OrderBook(marketDataChannel, orderChannel);
+                final MarketDataChannel marketDataChannel = new MarketDataChannel(sequencer);
+                final OrderChannel orderChannel = new OrderChannel(sequencer);
+                final OrderBook book = new OrderBook(marketDataChannel, orderChannel);
 
-        final OrderBookInboundOrderConsumer orderConsumer = new OrderBookInboundOrderConsumer(book);
+                final OrderBookInboundOrderConsumer orderConsumer = new OrderBookInboundOrderConsumer(book);
 
-        container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
-        //set my algo logic
-        container.setLogic(new PassiveAlgoLogic());
+                container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
+                //set my algo logic
+                container.setLogic(new PassiveAlgoLogic());
 
-        network.addConsumer(new LoggingConsumer());
-        network.addConsumer(book);
-        network.addConsumer(container.getMarketDataService());
-        network.addConsumer(container.getOrderService());
-        network.addConsumer(orderConsumer);
-        network.addConsumer(container);
+                network.addConsumer(new LoggingConsumer());
+                network.addConsumer(book);
+                network.addConsumer(container.getMarketDataService());
+                network.addConsumer(container.getOrderService());
+                network.addConsumer(orderConsumer);
+                network.addConsumer(container);
 
-        return sequencer;
-    }
+                return sequencer;
+        }
 
-    private UnsafeBuffer createSampleMarketDataTick(){
-        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+        private UnsafeBuffer createSampleMarketDataTick(){
+                final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+                final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        //write the encoded output to the direct buffer
-        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+                //write the encoded output to the direct buffer
+                encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-        //set the fields to desired values
-        encoder.venue(Venue.XLON);
-        encoder.instrumentId(123L);
-        encoder.source(Source.STREAM);
+                //set the fields to desired values
+                encoder.venue(Venue.XLON);
+                encoder.instrumentId(123L);
+                encoder.source(Source.STREAM);
 
-        encoder.bidBookCount(3)
-                .next().price(98L).size(100L)
-                .next().price(95L).size(200L)
-                .next().price(91L).size(300L);
+                encoder.bidBookCount(3)
+                        .next().price(98L).size(100L)
+                        .next().price(95L).size(200L)
+                        .next().price(91L).size(300L);
 
-        encoder.askBookCount(4)
-                .next().price(100L).size(101L)
-                .next().price(110L).size(200L)
-                .next().price(115L).size(5000L)
-                .next().price(119L).size(5600L);
+                encoder.askBookCount(4)
+                        .next().price(100L).size(101L)
+                        .next().price(110L).size(200L)
+                        .next().price(115L).size(5000L)
+                        .next().price(119L).size(5600L);
 
-        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+                encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
 
-        return directBuffer;
-    }
+                return directBuffer;
+        }
 
-    private UnsafeBuffer createSampleMarketDataTick2(){
-        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+        private UnsafeBuffer createSampleMarketDataTick2(){
+                final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+                final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        //write the encoded output to the direct buffer
-        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+                //write the encoded output to the direct buffer
+                encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-        //set the fields to desired values
-        encoder.venue(Venue.XLON);
-        encoder.instrumentId(123L);
-        encoder.source(Source.STREAM);
+                //set the fields to desired values
+                encoder.venue(Venue.XLON);
+                encoder.instrumentId(123L);
+                encoder.source(Source.STREAM);
 
-        encoder.bidBookCount(3)
-                .next().price(95L).size(100L)
-                .next().price(93L).size(200L)
-                .next().price(91L).size(300L);
+                encoder.bidBookCount(3)
+                        .next().price(95L).size(100L)
+                        .next().price(93L).size(200L)
+                        .next().price(91L).size(300L);
 
-        encoder.askBookCount(4)
-                .next().price(98L).size(501L)
-                .next().price(101L).size(200L)
-                .next().price(110L).size(5000L)
-                .next().price(119L).size(5600L);
+                encoder.askBookCount(4)
+                        .next().price(98L).size(501L)
+                        .next().price(101L).size(200L)
+                        .next().price(110L).size(5000L)
+                        .next().price(119L).size(5600L);
 
-        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+                encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
 
-        return directBuffer;
-    }
+                return directBuffer;
+        }
 
-    @Test
-    public void testExampleBackTest() throws Exception {
-        //create a sample market data tick....
-        send(createSampleMarketDataTick());
-        //simple assert to check we had 3 orders created
-        assertEquals(container.getState().getChildOrders().size(), 3);
+        @Test
+        public void testExampleBackTest() throws Exception {
+                //create a sample market data tick....
+                send(createSampleMarketDataTick());
+                //simple assert to check we had 3 orders created
+                assertEquals(container.getState().getChildOrders().size(), 3);
 
-        //when: market data moves towards us
-        send(createSampleMarketDataTick2());
+                //when: market data moves towards us
+                send(createSampleMarketDataTick2());
 
-        //then: get the state
-        var state = container.getState();
-        long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
+                //then: get the state
+                var state = container.getState();
+                long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
 
-        //and: check that our algo state was updated to reflect our fills when the market data
-        assertEquals(225, filledQuantity);
-    }
+                //and: check that our algo state was updated to reflect our fills when the market data
+                assertEquals(225, filledQuantity);
+        }
 }
