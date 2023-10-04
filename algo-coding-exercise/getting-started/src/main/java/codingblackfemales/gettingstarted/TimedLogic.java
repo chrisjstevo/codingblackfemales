@@ -4,7 +4,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -32,43 +34,19 @@ public class TimedLogic implements AlgoLogic {
 
   private static final Logger logger = LoggerFactory.getLogger(TimedLogic.class);
   private SimpleFileMarketDataGenerator marketDataGenerator;
-  private List<Long> marketMonitor = new ArrayList<>();
+//   private Map<Long, Long> marketMonitor = new HashMap<>();
   private long quantity;// SNIPER
   private long price; // SNIPER
+  private MyAlgoLogic myAlgoLogic;
+  Map<Long, Long>marketMonitor = new HashMap<>();
+
 
    @Override
       public Action evaluate(SimpleAlgoState state) {
 
-//           var orderBookAsString = Util.orderBookToString(state);
-
-//           logger.info("[TIMEDLOGIC] The state of the order book is:\n" + orderBookAsString);
-          
-
-//           var totalOrderCount = state.getChildOrders().size();
-//           final var activeOrders = state.getActiveChildOrders();
-//           final AskLevel farTouch = state.getAskAt(0);//min seller is looking to accept SNIPER
-         
-//           //take as much as we can from the far touch....
-//         long quantity = farTouch.quantity;
-//         long price = farTouch.price;
-
-
-//           // Arraylist comprised of data harvested from the market every 15 minutes
-//       List<Long>marketMonitor = new ArrayList<Long>();
-
-//          if(isMarketOpen()){
-//             scheduleDataCollection(farTouch);
-//          }
         return NoAction.NoAction;
-
-         
          
         }
-       
-                //  List<Long>marketMonitor = new ArrayList<Long>();
-
-      
-
 
      // this method defines the opening and closing times of the stock market. If the market is open the scheduled event is able to run.
         public boolean isMarketOpen(){
@@ -78,7 +56,8 @@ public class TimedLogic implements AlgoLogic {
     
             if (dayOfWeek != DayOfWeek.SATURDAY || dayOfWeek != DayOfWeek.SUNDAY){
               LocalTime marketOpen = LocalTime.of(8, 0);
-              LocalTime marketClosed = LocalTime.of(16, 30);
+            //   LocalTime marketClosed = LocalTime.of(16, 30);
+            LocalTime marketClosed = LocalTime.of(23, 30);
               
                 if(timeNow.isBefore(marketOpen) || timeNow.isAfter(marketClosed)){
                 logger.info("[TIMEDLOGIC] Market is closed");
@@ -86,13 +65,17 @@ public class TimedLogic implements AlgoLogic {
                     
                 } else{
                     logger.info("[TIMEDLOGIC] Market is open");
+                    // marketDataGenerator.generate(1);
                     return true;
                 }
             }
             return isMarketOpen();
         }
 
+        //schedule data collection schedules a data collection using the simpleFileMarketDataGenerator method as previously seen in code base every 15 into the marketMonitor hashmap. 
         public void scheduleDataCollection(AskLevel farTouch){
+            LocalTime currentTime = LocalTime.now();
+            // Map<Long, Long>marketMonitor = new HashMap<>();
         final long instrumentId = 1234;
         final Venue venue = Venue.XLON;
         final long priceLevel = 1000;
@@ -100,27 +83,34 @@ public class TimedLogic implements AlgoLogic {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         Runnable harvestData = () -> {
-          //what are task are you looking to do at scheduled intervals?
-        // long quantity = farTouch.quantity;// SNIPER
+        
         long price = farTouch.price; // SNIPER
+        long quantity = farTouch.quantity;
           
-        // push price to marketMonitor arraylist 
-
-        marketDataGenerator.generate(10);
-        // marketDataGenerator = new SimpleFileMarketDataGenerator("src/main/java/codingblackfemales/gettingstarted/marketdatasimulation.json", new RandomMarketDataGenerator(instrumentId, venue, priceLevel, priceMaxDelta, 15));
-        marketMonitor.add(price);
-        logger.info("[TIMEDLOGIC] data harvested");
+        marketDataGenerator = new SimpleFileMarketDataGenerator("src/main/java/codingblackfemales/gettingstarted/marketdatasimulation.json", new RandomMarketDataGenerator(instrumentId, venue, priceLevel, priceMaxDelta, 15));
+        // logger.info("[TIMEDLOGIC] what did it generate " + marketDataGenerator.generate(10));
+        marketMonitor.put(price, quantity);
+        logger.info("[TIMEDLOGIC] data harvesting");
         System.out.println("Current market monitor list is ");
-        marketMonitor.forEach(System.out::println);
+        marketMonitor.forEach((priceKey, quantityValue) -> {
+            System.out.println("yolo Price: " + priceKey + ", Quantity: " + quantityValue + "Current time: " + currentTime);
+            logger.info("[Sheza2] market monitor size is " + marketMonitor.size());
+
+        });
         System.out.println("Current market monitor size is " + marketMonitor.size());
+        logger.info("[Sheza3] market monitor size is " + marketMonitor.size());
+
         };
         // ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(harvestData, 0, 15, TimeUnit.MINUTES);
         ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate( harvestData, 0, 15, TimeUnit.SECONDS);
-      }
+    //   logger.info("[Sheza4] market monitor size is " + marketMonitor.size());
+    }
 
-        public void checkForTrend(List<Long> marketMonitor) {
+// checking for trends in the market monitor arrayList. If there are 3 upticks in a row we sell, and for 3 downtick in a row we sell.
+        public void checkForTrend() {
         int consecutiveRises = 0;
         int consecutiveFalls = 0;
+        // List<Long> prices = new ArrayList<>(marketMonitor.values());
         int listSize = marketMonitor.size();
   
         for(int i = listSize - 1; i >= 2; i--){
@@ -133,23 +123,47 @@ public class TimedLogic implements AlgoLogic {
             consecutiveFalls = 0;
           }else if(currentPrice > previousPrice && previousPrice > thirdPrice){
             consecutiveFalls++;
-            consecutiveRises = 0; //we rest the counter
+            consecutiveRises = 0; //we reset the counter
           }else{
             consecutiveFalls = 0;
             consecutiveRises = 0;
           }
-  
+
+         long totalQuantity = 0;
+         long profit = 0;
           if(consecutiveRises >= 3){
             logger.info("[TIMEDLOGIC] Market trend is rising selling " + quantity + "child orders at " + price);
+            totalQuantity -= quantity;
+            profit -= price;
             new CreateChildOrder(Side.SELL, quantity, price);
-            // am i matching or am i buying and selling.
           }else if(consecutiveFalls >= 3){
-              logger.info("[TIMEDLOGIC] Market trend is falling buying " + quantity + "child orders at " + price);
+            logger.info("[TIMEDLOGIC] Market trend is falling buying " + quantity + "child orders at " + price);
+            totalQuantity += quantity;
+            profit += price;
             new CreateChildOrder(Side.BUY, quantity, price);
           }
+          logger.info("[TIMEDLOGIC] Total quantity at the end of this trade is " + totalQuantity + " profit / loss are as follows : " + profit );
         }
-    }
-
-          
-  
+    } 
 }
+//         //   look for event
+//         [14:28] Young, Tobyn
+
+// for i in cat market data file
+
+// [14:28] Young, Tobyn
+
+// string (bid p, bid q, ask p, ask q)
+
+// [14:28] Young, Tobyn
+
+// put those in variable
+
+// [14:28] Young, Tobyn
+
+// run your algo
+
+// [14:29] Young, Tobyn
+
+// next
+  

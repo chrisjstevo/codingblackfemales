@@ -1,11 +1,11 @@
 -------------------------------------------------------------------------------
 Test set: codingblackfemales.gettingstarted.MyAlgoBackTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.507 s <<< FAILURE! -- in codingblackfemales.gettingstarted.MyAlgoBackTest
-codingblackfemales.gettingstarted.MyAlgoBackTest.testExampleBackTest -- Time elapsed: 0.080 s <<< ERROR!
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.616 s <<< FAILURE! -- in codingblackfemales.gettingstarted.MyAlgoBackTest
+codingblackfemales.gettingstarted.MyAlgoBackTest.testExampleBackTest -- Time elapsed: 0.115 s <<< ERROR!
 java.lang.NullPointerException: Cannot read field "quantity" because "level" is null
 	at codingblackfemales.util.Util.orderBookToString(Util.java:36)
-	at codingblackfemales.gettingstarted.MyAlgoLogic.evaluate(MyAlgoLogic.java:34)
+	at codingblackfemales.gettingstarted.MyAlgoLogic.evaluate(MyAlgoLogic.java:37)
 	at codingblackfemales.container.AlgoContainer.runAlgoLogic(AlgoContainer.java:57)
 	at codingblackfemales.container.AlgoContainer.onMessage(AlgoContainer.java:49)
 	at codingblackfemales.sequencer.net.TestNetwork.dispatch(TestNetwork.java:15)

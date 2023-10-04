@@ -20,7 +20,9 @@ import messages.order.Side;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,17 +30,6 @@ import org.slf4j.LoggerFactory;
 public class MyAlgoLogic implements AlgoLogic {
 
     private static final Logger logger = LoggerFactory.getLogger(MyAlgoLogic.class);
-    private List<Long> marketMonitor = new ArrayList<>();
-    private long quantity;
-    private long price;
-
-    public MyAlgoLogic(){
-        TimedLogic timedLogic = new TimedLogic();
-    // }
-
-    // public List<Long>getMarketMonitor(){
-    //     return marketMonitor;
-    // }
 
     @Override
     public Action evaluate(SimpleAlgoState state) {
@@ -53,46 +44,42 @@ public class MyAlgoLogic implements AlgoLogic {
          *
          */
 
-        //  TimedLogic timedLogic = new TimedLogic();
+        TimedLogic timedLogic = new TimedLogic();
         final String book = Util.orderBookToString(state);
-
-        logger.info("[MYALGO] Algo Sees Book as: \n" + book);
-
-        var totalOrderCount = state.getChildOrders().size();
-
-        final var activeOrders = state.getActiveChildOrders();
-
         final AskLevel farTouch = state.getAskAt(0);
-
+        logger.info("[MYALGO] Algo Sees Book as: \n" + book);
+        var totalOrderCount = state.getChildOrders().size();
+        var activeOrders = state.getActiveChildOrders();
+        
         //take as much as we can from the far touch....
         long quantity = farTouch.quantity;
         long price = farTouch.price;
 
+        // hasmap comprised of data harvested from the market every 15 minutes
+        // Map<Long, Long>marketMonitor = new HashMap<>();
+        // logger.info("[Sheza5] market monitor size is " + marketMonitor.size());
 
-          // Arraylist comprised of data harvested from the market every 15 minutes
-    //   List<Long>marketMonitor = new ArrayList<Long>();
-      BidLevel bidLevel = state.getBidAt(0);
-      long currentBidPrice = bidLevel.price;
-      
-      AskLevel askLevel = state.getAskAt(0);
-      long currentAskPrice = askLevel.price;
+        logger.info("[MYALGO] Initial quantity" + quantity + " price " + price);
+        System.out.println("Current market monitor list is ");
+        marketMonitor.forEach((priceKey, quantityValue) -> {
+            System.out.println("Price: " + priceKey + ", Quantity: " + quantityValue);
+        });
+        System.out.println("MYALGO- Current market monitor size is " + marketMonitor.size());
 
-      logger.info("[TIMEDLOGIC] current ask price " + currentAskPrice );
-      logger.info("[TIMEDLOGIC] current bid price " + currentBidPrice);
-    //   boolean isMarketOpen = true;
-                // timedLogic.marketMonitor.forEach(System.out::println);
-                // System.out.println("MYALGO- Current market monitor size is " + marketMonitor.size());
+        if(timedLogic.isMarketOpen()){
+            if(totalOrderCount < 75){
+                timedLogic.scheduleDataCollection(farTouch);
+                BidLevel level = state.getBidAt(0);
+                // final long price = level.price;
+                // final long quantity = level.quantity;
+                logger.info("[MYALGO] Adding order for" + quantity + "@" + price);
+                System.out.println("total order count is " +totalOrderCount);
+                // logger.info("[Sheza6] market monitor size is " + marketMonitor.size());
 
-      if(timedLogic.isMarketOpen()){
-        logger.info("[TIMEDLOGIC] running scheduled event.");
-        timedLogic.scheduleDataCollection(farTouch);
-        List<Long> marketMonitor = timedLogic.getMarketMonitor();
-            System.out.println("Current market monitor list in if statement is ");
+                return new CreateChildOrder(Side.BUY, quantity, price);
+            }
 
-        timedLogic.getMarketMonitor().forEach(System.out::println);
-                System.out.println("MOPN -Current market monitor size is " + timedLogic.getMarketMonitor().size());
-      }else{
-                if(activeOrders.size() > 5){
+             if(activeOrders.size() > 7){
             final var option = activeOrders.stream().findFirst();
             // option is an object
              logger.info("[MYALGO] Have:" + activeOrders.size() + " children, want 5, done.");
@@ -109,102 +96,165 @@ public class MyAlgoLogic implements AlgoLogic {
                 // this else is causing failure
                 return NoAction.NoAction;
             }
+ 
+        }else{
+            return NoAction.NoAction;
+        }
+            
+        } else{
+            return NoAction.NoAction;
+        }
+        
+    }
+
+}
+// This is how the method was going to work
+//     if(timedLogic.isMarketOpen()){
+    //     logger.info("[MYALGO] running scheduled timed logic event.");
+    //     timedLogic.scheduleDataCollection(farTouch);
+    //     marketMonitor.forEach(System.out::println);
+    //     System.out.println("MOPN -Current market monitor size is " + marketMonitor.size());
+    //   }else{
+    //     return NoAction.NoAction;
+    //   }
+    //   return NoAction.NoAction;
+    // }
 
 
-      }
-
-    //   logger.info("[TIMEDLOGIC] latest market monitor is " + Arrays.toString(marketMonitor));
-    //   logger.info("[TIMEDLOGIC] market monitor has " + marketMonitor.size() + " items inside.");
-    // //   System.out.println(Arrays.toString(marketMonitor));
-    //   marketMonitor.forEach(System.out::println);
-    //   timedLogic.checkForTrend(marketMonitor);
-      return NoAction.NoAction;
     
 
+    
+        
 
-//       SimpleFileMarketDataGenerator simpleGenerator = new SimpleFileMarketDataGenerator(book, null);
-//       simpleGenerator.generate(0);
-
-//       AlgoContainer algoContainer = new AlgoContainer(null, null, null, null);
-//       algoContainer.runAlgoLogic();
-
-//       RunTrigger runTrigger = new RunTrigger();
-
-//         // MarketDataGenerator marketDataGenerator = new MarketDataGenerator() {
-
-//         //     @Override
-//         //     public MarketDataMessage next() {
-//         //         // TODO Auto-generated method stub
-//         //         throw new UnsupportedOperationException("Unimplemented method 'next'");
-//         //     }
-            
-//         // };
+       
 
 
-// //         BELOW IS THE INITIAL ALGO THAT I WAS PLAYING WITH 
-// final String book = Util.orderBookToString(state);
+          
+//       BidLevel bidLevel = state.getBidAt(0);
+//       long currentBidPrice = bidLevel.price;
+      
+//       AskLevel askLevel = state.getAskAt(0);
+//       long currentAskPrice = askLevel.price;
 
-//         logger.info("[MYALGO] Algo Sees Book as:\n" + book);
-
-//         var totalOrderCount = state.getChildOrders().size();
+//       logger.info("[TIMEDLOGIC] current ask price " + currentAskPrice );
+//       logger.info("[TIMEDLOGIC] current bid price " + currentBidPrice);
+//     //   boolean isMarketOpen = true;
+    
 
       
-
-//         final var activeOrders = state.getActiveChildOrders();
-
-//         if(totalOrderCount < 45){
-//             //logger and sys out will only show until TOC reaches required num
-//             BidLevel level = state.getBidAt(0);
-//             AskLevel farTouch = state.getAskAt(0);
-//             long quantity = farTouch.quantity;
-//             long price = farTouch.price;
-//             // final long price = level.price;
-//             // final long quantity = level.quantity;
-//             logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 45. Adding order for" + quantity + "@" + price);
-//             System.out.println("total order count is " +totalOrderCount); 
-//             ChildOrder childOrder = new ChildOrder(null, price, quantity, price, 0);
-//             logger.info("[MYALGO] child order quantities:" + childOrder.getQuantity());
-//             return new CreateChildOrder(Side.BUY, quantity, price);
-//         }
-//         if(activeOrders.size() > 5){
+//                 if(activeOrders.size() > 5){
 //             final var option = activeOrders.stream().findFirst();
-//             // System.out.println("this is option "+option);
 //             // option is an object
-//             // System.out.println("total order count is" +totalOrderCount);
-//             // total num of orders place not num once they start cancelling. for that check active orders 
 //              logger.info("[MYALGO] Have:" + activeOrders.size() + " children, want 5, done.");
 //             if (option.isPresent()){
-                
-//                 // logger.info("[MYALGO] option is present total order count is" + totalOrderCount);
-//                 // stays constant at totalOrder count
-
-//                 // logger.info("[MYALGO] option is present, active orders are "+ activeOrders);
-// // shows order ids
 //                 logger.info("[MYALGO] active orders are "+ activeOrders.size());
 //                 // active orders is what we will track to cancel the orders
-                
-//                 // System.out.println("total order count is" +totalOrderCount);
-//                 // System.out.println("active orders are " + state.getActiveChildOrders());
 //                 var childOrder = option.get();
 //                 // get the child order
 //                 logger.info("[MYALGO] Cancelling order:" + childOrder);
 //                 // logs info for child order
 //                 logger.info("[MYALGO] option is present, number of active orders are "+ activeOrders.size());
-//                 // logger.info("[MYALGO] option is present active orders are:" + activeOrders);
-//                 // logger.info("[MYALGO] bolo total order count is now that we are cancelling is " +totalOrderCount);
-//                 // logger.info("[MYALGO] child order to string"+childOrder.toString());
-//                 // to string and deep to string do not work on childOrder, activeOrders or totalOrderCount. may work abother way not yet found
-                
 //                 return new CancelChildOrder(childOrder);
 //             }else{
 //                 // this else is causing failure
 //                 return NoAction.NoAction;
 //             }
-//         }else{
+
+//         }
+      
+
+//     //   logger.info("[TIMEDLOGIC] latest market monitor is " + Arrays.toString(marketMonitor));
+//       logger.info("[TIMEDLOGIC] market monitor has " + marketMonitor.size() + " items inside.");
+//     //   System.out.println(Arrays.toString(marketMonitor));
+//       marketMonitor.forEach(System.out::println);
+//       timedLogic.checkForTrend(marketMonitor);
+//       return NoAction.NoAction;
+    
+//     }
+
+// //       SimpleFileMarketDataGenerator simpleGenerator = new SimpleFileMarketDataGenerator(book, null);
+// //       simpleGenerator.generate(0);
+
+// //       AlgoContainer algoContainer = new AlgoContainer(null, null, null, null);
+// //       algoContainer.runAlgoLogic();
+
+// //       RunTrigger runTrigger = new RunTrigger();
+
+// //         // MarketDataGenerator marketDataGenerator = new MarketDataGenerator() {
+
+// //         //     @Override
+// //         //     public MarketDataMessage next() {
+// //         //         // TODO Auto-generated method stub
+// //         //         throw new UnsupportedOperationException("Unimplemented method 'next'");
+// //         //     }
             
-//         // logs the order and what was returned
-//         return NoAction.NoAction;
-        }
-return NoAction.NoAction;
-    }
-}
+// //         // };
+
+
+// // //         BELOW IS THE INITIAL ALGO THAT I WAS PLAYING WITH 
+// // final String book = Util.orderBookToString(state);
+
+// //         logger.info("[MYALGO] Algo Sees Book as:\n" + book);
+
+// //         var totalOrderCount = state.getChildOrders().size();
+
+      
+
+// //         final var activeOrders = state.getActiveChildOrders();
+
+// //         if(totalOrderCount < 45){
+// //             //logger and sys out will only show until TOC reaches required num
+// //             BidLevel level = state.getBidAt(0);
+// //             AskLevel farTouch = state.getAskAt(0);
+// //             long quantity = farTouch.quantity;
+// //             long price = farTouch.price;
+// //             // final long price = level.price;
+// //             // final long quantity = level.quantity;
+// //             logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 45. Adding order for" + quantity + "@" + price);
+// //             System.out.println("total order count is " +totalOrderCount); 
+// //             ChildOrder childOrder = new ChildOrder(null, price, quantity, price, 0);
+// //             logger.info("[MYALGO] child order quantities:" + childOrder.getQuantity());
+// //             return new CreateChildOrder(Side.BUY, quantity, price);
+// //         }
+// //         if(activeOrders.size() > 5){
+// //             final var option = activeOrders.stream().findFirst();
+// //             // System.out.println("this is option "+option);
+// //             // option is an object
+// //             // System.out.println("total order count is" +totalOrderCount);
+// //             // total num of orders place not num once they start cancelling. for that check active orders 
+// //              logger.info("[MYALGO] Have:" + activeOrders.size() + " children, want 5, done.");
+// //             if (option.isPresent()){
+                
+// //                 // logger.info("[MYALGO] option is present total order count is" + totalOrderCount);
+// //                 // stays constant at totalOrder count
+
+// //                 // logger.info("[MYALGO] option is present, active orders are "+ activeOrders);
+// // // shows order ids
+// //                 logger.info("[MYALGO] active orders are "+ activeOrders.size());
+// //                 // active orders is what we will track to cancel the orders
+                
+// //                 // System.out.println("total order count is" +totalOrderCount);
+// //                 // System.out.println("active orders are " + state.getActiveChildOrders());
+// //                 var childOrder = option.get();
+// //                 // get the child order
+// //                 logger.info("[MYALGO] Cancelling order:" + childOrder);
+// //                 // logs info for child order
+// //                 logger.info("[MYALGO] option is present, number of active orders are "+ activeOrders.size());
+// //                 // logger.info("[MYALGO] option is present active orders are:" + activeOrders);
+// //                 // logger.info("[MYALGO] bolo total order count is now that we are cancelling is " +totalOrderCount);
+// //                 // logger.info("[MYALGO] child order to string"+childOrder.toString());
+// //                 // to string and deep to string do not work on childOrder, activeOrders or totalOrderCount. may work abother way not yet found
+                
+// //                 return new CancelChildOrder(childOrder);
+// //             }else{
+// //                 // this else is causing failure
+// //                 return NoAction.NoAction;
+//             }
+// //         }else{
+            
+// //         // logs the order and what was returned
+// //         return NoAction.NoAction;
+//         // }
+// return NoAction.NoAction;
+//     }
+// }
