@@ -92,32 +92,55 @@ public class TimedLogic implements AlgoLogic {
             return isMarketOpen();
         }
 
-        public void scheduleDataCollection(AskLevel farTouch){
-        final long instrumentId = 1234;
-        final Venue venue = Venue.XLON;
-        final long priceLevel = 1000;
-        final long priceMaxDelta = 100;
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        public void scheduleDataCollection(AskLevel farTouch) {
+            final long instrumentId = 1234;
+            final Venue venue = Venue.XLON;
+            final long priceLevel = 1000;
+            final long priceMaxDelta = 100;
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        
+            Runnable harvestData = () -> {
+                long price = farTouch.price; // SNIPER
+        
+                // Push price to the class-level marketMonitor ArrayList
+                marketDataGenerator = new SimpleFileMarketDataGenerator("src/main/java/codingblackfemales/gettingstarted/marketdatasimulation.json", new RandomMarketDataGenerator(instrumentId, venue, priceLevel, priceMaxDelta, 15));
+                marketMonitor.add(price);
+        
+                logger.info("[TIMEDLOGIC] data harvested");
+                System.out.println("Current market monitor list is ");
+                marketMonitor.forEach(System.out::println);
+                System.out.println("Current market monitor size is " + marketMonitor.size());
+            };
+        
+            ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(harvestData, 0, 15, TimeUnit.SECONDS);
+        }
 
-        Runnable harvestData = () -> {
-          //what are task are you looking to do at scheduled intervals?
-        // long quantity = farTouch.quantity;// SNIPER
-        long price = farTouch.price; // SNIPER
+        // Check RandomMarketDataGeneratorTest
+    //     public void scheduleDataCollection(AskLevel farTouch){
+    //     final long instrumentId = 1234;
+    //     final Venue venue = Venue.XLON;
+    //     final long priceLevel = 1000;
+    //     final long priceMaxDelta = 100;
+    //     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    //     Runnable harvestData = () -> {
+    //       //what are task are you looking to do at scheduled intervals?
+    //     // long quantity = farTouch.quantity;// SNIPER
+    //     long price = farTouch.price; // SNIPER
           
-        // push price to marketMonitor arraylist 
+    //     // push price to marketMonitor arraylist 
 
-        marketDataGenerator.generate(10);
-        // marketDataGenerator = new SimpleFileMarketDataGenerator("src/main/java/codingblackfemales/gettingstarted/marketdatasimulation.json", new RandomMarketDataGenerator(instrumentId, venue, priceLevel, priceMaxDelta, 15));
-        marketMonitor.add(price);
-        logger.info("[TIMEDLOGIC] data harvested");
-        System.out.println("Current market monitor list is ");
-        marketMonitor.forEach(System.out::println);
-        System.out.println("Current market monitor size is " + marketMonitor.size());
-        };
-        // ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(harvestData, 0, 15, TimeUnit.MINUTES);
-        ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate( harvestData, 0, 15, TimeUnit.SECONDS);
-      }
-
+    //     marketDataGenerator = new SimpleFileMarketDataGenerator("src/main/java/codingblackfemales/gettingstarted/marketdatasimulation.json", new RandomMarketDataGenerator(instrumentId, venue, priceLevel, priceMaxDelta, 15));
+    //     marketMonitor.add(price);
+    //     logger.info("[TIMEDLOGIC] data harvested");
+    //     System.out.println("Current market monitor list is ");
+    //     marketMonitor.forEach(System.out::println);
+    //     System.out.println("Current market monitor size is " + marketMonitor.size());
+    //     };
+    //     // ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(harvestData, 0, 15, TimeUnit.MINUTES);
+    //     ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate( harvestData, 0, 15, TimeUnit.SECONDS);
+    //   }
+// may have to say the first thing is on the askBook wheer we buy, the next trade will be a sell.
         public void checkForTrend(List<Long> marketMonitor) {
         int consecutiveRises = 0;
         int consecutiveFalls = 0;
@@ -138,18 +161,27 @@ public class TimedLogic implements AlgoLogic {
             consecutiveFalls = 0;
             consecutiveRises = 0;
           }
-  
+
+         long totalQuantity = 0;
+         long profit = 0;
           if(consecutiveRises >= 3){
             logger.info("[TIMEDLOGIC] Market trend is rising selling " + quantity + "child orders at " + price);
+            totalQuantity -= quantity;
+            profit -= price;
             new CreateChildOrder(Side.SELL, quantity, price);
             // am i matching or am i buying and selling.
           }else if(consecutiveFalls >= 3){
-              logger.info("[TIMEDLOGIC] Market trend is falling buying " + quantity + "child orders at " + price);
+            logger.info("[TIMEDLOGIC] Market trend is falling buying " + quantity + "child orders at " + price);
+            totalQuantity += quantity;
+            profit += price;
             new CreateChildOrder(Side.BUY, quantity, price);
           }
+          logger.info("[TIMEDLOGIC] total quantity at the end of this trade is " + quantity + " profit / loss are as follows : " + profit );
         }
     }
 
-          
+          public List<Long> getMarketMonitor() {
+    return marketMonitor;
+}
   
 }

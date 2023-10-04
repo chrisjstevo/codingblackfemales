@@ -32,13 +32,13 @@ public class MyAlgoLogic implements AlgoLogic {
     private long quantity;
     private long price;
 
-    public MyAlgoLogic(){
+    // public MyAlgoLogic(){
         TimedLogic timedLogic = new TimedLogic();
     // }
 
-    // public List<Long>getMarketMonitor(){
-    //     return marketMonitor;
-    // }
+    public List<Long>getMarketMonitor(){
+        return marketMonitor;
+    }
 
     @Override
     public Action evaluate(SimpleAlgoState state) {
