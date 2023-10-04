@@ -2,6 +2,10 @@ package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -15,7 +19,7 @@ import org.junit.Test;
  *
  */
 public class MyAlgoTest extends AbstractAlgoTest {
-
+    private static final Logger logger = LoggerFactory.getLogger(MyAlgoTest.class);
     @Override
     public AlgoLogic createAlgoLogic() {
         //this adds your algo logic to the container classes
@@ -28,8 +32,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
 
         //create a sample market data tick....
         send(createTick());
-
         //simple assert to check we had 3 orders created
-        //assertEquals(container.getState().getChildOrders().size(), 3);
+        assertEquals(container.getState().getChildOrders().size(), 3);
     }
 }

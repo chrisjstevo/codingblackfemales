@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="codingblackfemales.gettingstarted.MyAlgoTest" time="0.005" tests="1" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="17"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.class.path" value="C:\Users\jenel\trading-algo\algo-coding-exercise\getting-started\target\test-classes;C:\Users\jenel\trading-algo\algo-coding-exercise\getting-started\target\classes;C:\Users\jenel\trading-algo\algo-coding-exercise\algo\target\classes;C:\Users\jenel\trading-algo\algo-coding-exercise\dictionary\target\classes;C:\Users\jenel\.m2\repository\org\agrona\agrona\1.16.0\agrona-1.16.0.jar;C:\Users\jenel\trading-algo\algo-coding-exercise\sequencer\target\classes;C:\Users\jenel\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar;C:\Users\jenel\.m2\repository\org\apache\commons\commons-lang3\3.12.0\commons-lang3-3.12.0.jar;C:\Users\jenel\trading-algo\algo-coding-exercise\backtest\target\classes;C:\Users\jenel\trading-algo\algo-coding-exercise\collection\target\classes;C:\Users\jenel\trading-algo\algo-coding-exercise\sequencer\target\test-classes;C:\Users\jenel\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\jenel\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\jenel\.m2\repository\uk\co\real-logic\sbe-all\1.26.0\sbe-all-1.26.0.jar;C:\Users\jenel\.m2\repository\org\mockito\mockito-core\5.4.0\mockito-core-5.4.0.jar;C:\Users\jenel\.m2\repository\net\bytebuddy\byte-buddy\1.14.5\byte-buddy-1.14.5.jar;C:\Users\jenel\.m2\repository\net\bytebuddy\byte-buddy-agent\1.14.5\byte-buddy-agent-1.14.5.jar;C:\Users\jenel\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;C:\Users\jenel\.m2\repository\ch\qos\logback\logback-core\1.3.5\logback-core-1.3.5.jar;C:\Users\jenel\.m2\repository\org\slf4j\slf4j-api\2.0.4\slf4j-api-2.0.4.jar;C:\Users\jenel\.m2\repository\ch\qos\logback\logback-classic\1.3.5\logback-classic-1.3.5.jar;"/>
+    <property name="java.vm.vendor" value="Red Hat, Inc."/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://access.redhat.com/"/>
+    <property name="user.timezone" value="Europe/London"/>
+    <property name="os.name" value="Windows 10"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="GB"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\RedHat\java-17-openjdk-17.0.7.0.7-1\bin"/>
+    <property name="sun.java.command" value="C:\Users\jenel\AppData\Local\Temp\surefire6510044863686322990\surefirebooter-20230817140536186_26.jar C:\Users\jenel\AppData\Local\Temp\surefire6510044863686322990 2023-08-17T14-05-14_664-jvmRun1 surefire-20230817140536186_24tmp surefire_2-20230817140536186_25tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="C:\Users\jenel\trading-algo\algo-coding-exercise\getting-started\target\test-classes;C:\Users\jenel\trading-algo\algo-coding-exercise\getting-started\target\classes;C:\Users\jenel\trading-algo\algo-coding-exercise\algo\target\classes;C:\Users\jenel\trading-algo\algo-coding-exercise\dictionary\target\classes;C:\Users\jenel\.m2\repository\org\agrona\agrona\1.16.0\agrona-1.16.0.jar;C:\Users\jenel\trading-algo\algo-coding-exercise\sequencer\target\classes;C:\Users\jenel\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar;C:\Users\jenel\.m2\repository\org\apache\commons\commons-lang3\3.12.0\commons-lang3-3.12.0.jar;C:\Users\jenel\trading-algo\algo-coding-exercise\backtest\target\classes;C:\Users\jenel\trading-algo\algo-coding-exercise\collection\target\classes;C:\Users\jenel\trading-algo\algo-coding-exercise\sequencer\target\test-classes;C:\Users\jenel\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\jenel\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\jenel\.m2\repository\uk\co\real-logic\sbe-all\1.26.0\sbe-all-1.26.0.jar;C:\Users\jenel\.m2\repository\org\mockito\mockito-core\5.4.0\mockito-core-5.4.0.jar;C:\Users\jenel\.m2\repository\net\bytebuddy\byte-buddy\1.14.5\byte-buddy-1.14.5.jar;C:\Users\jenel\.m2\repository\net\bytebuddy\byte-buddy-agent\1.14.5\byte-buddy-agent-1.14.5.jar;C:\Users\jenel\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;C:\Users\jenel\.m2\repository\ch\qos\logback\logback-core\1.3.5\logback-core-1.3.5.jar;C:\Users\jenel\.m2\repository\org\slf4j\slf4j-api\2.0.4\slf4j-api-2.0.4.jar;C:\Users\jenel\.m2\repository\ch\qos\logback\logback-classic\1.3.5\logback-classic-1.3.5.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\jenel"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2023-04-18"/>
+    <property name="java.home" value="C:\Program Files\RedHat\java-17-openjdk-17.0.7.0.7-1"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="C:\Users\jenel\trading-algo\algo-coding-exercise\getting-started"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="C:\Users\jenel\AppData\Local\Temp\surefire6510044863686322990\surefirebooter-20230817140536186_26.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="17.0.7+7-LTS"/>
+    <property name="user.name" value="jenel"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="Cp1252"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="(Red_Hat-17.0.7.0+7-1)"/>
+    <property name="localRepository" value="C:\Users\jenel\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://bugzilla.redhat.com/enter_bug.cgi"/>
+    <property name="java.io.tmpdir" value="C:\Users\jenel\AppData\Local\Temp\"/>
+    <property name="idea.version" value="2023.2"/>
+    <property name="java.version" value="17.0.7"/>
+    <property name="user.dir" value="C:\Users\jenel\trading-algo\algo-coding-exercise\getting-started"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="native.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Program Files\RedHat\java-17-openjdk-17.0.7.0.7-1\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Python311\Scripts\;C:\Python311\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Program Files\RedHat\java-17-openjdk-17.0.7.0.7-1\bin;C:\Users\jenel\AppData\Local\Microsoft\WindowsApps;C:\Users\jenel\AppData\Roaming\npm;C:\Users\jenel\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\jenel\AppData\Local\GitHubDesktop\bin;."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.vendor" value="Red Hat, Inc."/>
+    <property name="java.vm.version" value="17.0.7+7-LTS"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="61.0"/>
+  </properties>
+  <testcase name="testDispatchThroughSequencer" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.004">
+    <system-out><![CDATA[14:05:38.978 [main] INFO  c.sequencer.consumer.LoggingConsumer - [1] 
+|----BID-----|
+   101 @ 100
+   200 @ 110
+  5000 @ 115
+|----ASK-----|
+    100 @ 98
+    200 @ 95
+    300 @ 91
+
+14:05:38.978 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:100 quantity:101
+14:05:38.978 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:110 quantity:200
+14:05:38.979 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:115 quantity:5000
+14:05:38.979 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:98 quantity:100
+14:05:38.979 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:95 quantity:200
+14:05:38.979 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:91 quantity:300
+14:05:38.983 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] The state of the order book is:
+|----BID-----||----ASK----|
+   101 @ 100    100 @ 98
+   200 @ 110    200 @ 95
+  5000 @ 115    300 @ 91
+|------------||-----------|
+
+]]></system-out>
+  </testcase>
+</testsuite>
