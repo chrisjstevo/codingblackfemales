@@ -54,7 +54,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
                 long filledQuantity = myChildOrders.stream().map(ChildOrder::getFilledQuantity)
                                 .reduce(Long::sum)
                                 .get();
-                // check that there are no fullfilled order
+                // check that there are no fulfilled order
                 assertEquals(0, filledQuantity);
 
                 // get cancelled order

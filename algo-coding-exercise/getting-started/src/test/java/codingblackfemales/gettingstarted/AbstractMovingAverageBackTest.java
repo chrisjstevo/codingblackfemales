@@ -4,7 +4,6 @@ import codingblackfemales.algo.AlgoLogic;
 import codingblackfemales.container.Actioner;
 import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.container.RunTrigger;
-import codingblackfemales.marketdata.api.MarketDataMessage;
 import codingblackfemales.orderbook.OrderBook;
 import codingblackfemales.orderbook.channel.MarketDataChannel;
 import codingblackfemales.orderbook.channel.OrderChannel;
@@ -20,7 +19,6 @@ import messages.marketdata.*;
 import org.agrona.concurrent.UnsafeBuffer;
 
 import java.nio.ByteBuffer;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
@@ -68,8 +66,6 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
     protected UnsafeBuffer[] createSampleMarketDataTick(int numTicks) {
         UnsafeBuffer[] marketDataTicks = new UnsafeBuffer[numTicks];
 
-
-
         for (int i = 0; i < numTicks; i++) {
 
             final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024 * numTicks);
@@ -96,12 +92,15 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
             for (int j = 0; j < askBookCount; j++) {
                 long price = getRandomLongWithinRange(100, 199);
                 long size = getRandomLongWithinRange(100, 1099);
-                if(price < 100|| size < 100){
+
+                if (price < 100L || size < 100L) {
                     price = getRandomLongWithinRange(100, 199);
                     size = getRandomLongWithinRange(100, 1099);
                     askEncoder.next().price(price).size(size);
                 }
+
                 askEncoder.next().price(price).size(size);
+
             }
 
             encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
@@ -110,9 +109,8 @@ public abstract class AbstractMovingAverageBackTest extends SequencerTestCase {
         return marketDataTicks;
     }
 
-    private  static int getRandomLongWithinRange(int min, int max){
-
-        return ThreadLocalRandom.current().nextInt(min, max +1);
+    private static int getRandomLongWithinRange(int min, int max) {
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 
 }

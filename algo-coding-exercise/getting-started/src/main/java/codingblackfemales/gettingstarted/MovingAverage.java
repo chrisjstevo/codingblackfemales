@@ -19,19 +19,18 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-//Todo - clean up
 public class MovingAverage implements AlgoLogic {
 
     private static final Logger logger = LoggerFactory.getLogger(MovingAverage.class);
-
-    int SHORT_TERM_PERIOD = 3;
-    int LONG_TERM_PERIOD = 7;
-
+    private static final int MAX_TOTAL_ORDERS = 30;
+    final int SHORT_TERM_PERIOD = 3;
+    final int LONG_TERM_PERIOD = 7;
     List<Long> askHistoricalPrices = new ArrayList<>();
 
     long buyAtPrice = 0;
 
     long counter = 0;
+
 
     /***
      *
@@ -49,8 +48,8 @@ public class MovingAverage implements AlgoLogic {
 
         var totalOrderCount = state.getChildOrders().size();
 
-        if (totalOrderCount > 29) {
-            logger.info("[MOVINGAVERAGE]: we have " + totalOrderCount + " orders in the market. Want " + totalOrderCount
+        if (totalOrderCount == MAX_TOTAL_ORDERS) {
+            logger.info("[MOVINGAVERAGE]: we have " + MAX_TOTAL_ORDERS + " orders in the market. Want " + MAX_TOTAL_ORDERS
                     + " done.");
             return NoAction.NoAction;
         }
@@ -69,10 +68,8 @@ public class MovingAverage implements AlgoLogic {
             // https://stackoverflow.com/questions/52689103/java-8-once-stream-is-consumed-and-operated-giving-error-but-in-another-case
             Supplier<Stream<ChildOrder>> activeChildOrdersSupplier = () -> state.getActiveChildOrders().stream();
 
-            Stream<ChildOrder> myChildOrdersBuy = activeChildOrdersSupplier.get()
-                    .filter(order -> order.getSide() == Side.BUY);
-            Stream<ChildOrder> myChildOrdersSell = activeChildOrdersSupplier.get()
-                    .filter(order -> order.getSide() == Side.SELL);
+            Stream<ChildOrder> myChildOrdersBuy = getMyChildOrders(activeChildOrdersSupplier, Side.BUY);
+            Stream<ChildOrder> myChildOrdersSell = getMyChildOrders(activeChildOrdersSupplier, Side.SELL);
 
             long filledBuyOrderQty = myChildOrdersBuy.mapToLong(ChildOrder::getFilledQuantity).reduce(Long::sum)
                     .orElse(0L);
@@ -154,11 +151,21 @@ public class MovingAverage implements AlgoLogic {
      * @param askLatestShortTermSMA the average of the short term SMA
      * @param askLatestLongTermSMA  the average of the long term SMA
      * @return true and initiates a buy order in the evaluate method when
-     *         the short-term SMA crosses above the long-term SMA (Golden Cross)
-     *         otherwise false
+     * the short-term SMA crosses above the long-term SMA (Golden Cross)
+     * otherwise false
      */
     public boolean shouldBuy(long askLatestShortTermSMA, long askLatestLongTermSMA) {
         return askLatestShortTermSMA > askLatestLongTermSMA;
+    }
+
+    /**
+     * @param activeChildOrdersSupplier getting all active orders
+     * @param side                      buy or sell
+     * @return all pending and fulfilled orders of buy or sell
+     */
+    public Stream<ChildOrder> getMyChildOrders(Supplier<Stream<ChildOrder>> activeChildOrdersSupplier, Side side) {
+        return activeChildOrdersSupplier.get()
+                .filter(order -> order.getSide() == side);
     }
 
 }
