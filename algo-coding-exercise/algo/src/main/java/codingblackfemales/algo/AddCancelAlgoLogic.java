@@ -3,13 +3,14 @@ package codingblackfemales.algo;
 import codingblackfemales.action.Action;
 import codingblackfemales.action.CancelChildOrder;
 import codingblackfemales.action.CreateChildOrder;
-import codingblackfemales.action.NoAction;
 import codingblackfemales.sotw.SimpleAlgoState;
 import codingblackfemales.sotw.marketdata.BidLevel;
 import codingblackfemales.util.Util;
 import messages.order.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static codingblackfemales.action.NoAction.NoAction;
 
 public class AddCancelAlgoLogic implements AlgoLogic {
 
@@ -24,16 +25,16 @@ public class AddCancelAlgoLogic implements AlgoLogic {
 
         logger.info("[ADDCANCELALGO] Algo Sees Book as:\n" + book);
 
-        var totalOrderCount = state.getChildOrders().size();
+       // var totalOrderCount = state.getChildOrders().size();
 
         //make sure we have an exit condition...
-        if (totalOrderCount > 20) {
-            return NoAction.NoAction;
-        }
+        // if (totalOrderCount > 20) {
+        //     return NoAction.NoAction;
+        // }
 
         final var activeOrders = state.getActiveChildOrders();
 
-        if (activeOrders.size() > 0) {
+        if (activeOrders.size() > 3) {
 
             final var option = activeOrders.stream().findFirst();
 
@@ -48,9 +49,16 @@ public class AddCancelAlgoLogic implements AlgoLogic {
         } else {
             BidLevel level = state.getBidAt(0);
             final long price = level.price;
-            final long quantity = level.quantity;
-            logger.info("[ADDCANCELALGO] Adding order for" + quantity + "@" + price);
-            return new CreateChildOrder(Side.BUY, quantity, price);
+            final long quantity = 75;
+
+            if(state.getChildOrders().size() < 3){
+                logger.info("[ADDCANCELALGO] Adding order for" + quantity + "@" + price);
+                return new CreateChildOrder(Side.BUY, quantity, price);
+            } else{
+               logger.info("[ADDCANCELALGO] Have:" + state.getChildOrders().size() + " children, want 3, done.");
+               return NoAction;
+        }
+            
         }
     }
 }

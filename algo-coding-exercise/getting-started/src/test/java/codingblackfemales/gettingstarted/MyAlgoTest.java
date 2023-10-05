@@ -1,6 +1,9 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
+
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 
@@ -26,10 +29,10 @@ public class MyAlgoTest extends AbstractAlgoTest {
     @Test
     public void testDispatchThroughSequencer() throws Exception {
 
-        //create a sample market data tick....
-        send(createTick());
+        //I have created a sample market data tick.
+        send(createTick3());
 
-        //simple assert to check we had 3 orders created
-        //assertEquals(container.getState().getChildOrders().size(), 3);
+        //simple assert to check we had 2 orders created
+       assertEquals(container.getState().getChildOrders().size(), 2);
     }
 }
