@@ -42,7 +42,9 @@ public class MarketDataService extends MarketDataEventListener {
         return askLength;
     }
 
-    public long getInstrumentId(){return instrumentId;}
+    public long getInstrumentId(){
+        return instrumentId;
+    }
 
     private static void empty(BidLevel[] levels){
         for (int i=0; i<levels.length; i++) {

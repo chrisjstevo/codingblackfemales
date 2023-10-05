@@ -32,7 +32,8 @@ public class PassiveAlgoLogic implements AlgoLogic{
         //until we have three child orders....
         if(state.getChildOrders().size() < 3){
             //then keep creating a new one
-            logger.info("[PASSIVEALGO] Have:" + state.getChildOrders().size() + " children, want 3, joining passive side of book with: " + quantity + " @ " + price);
+            logger.info("[PASSIVEALGO] Have:" + state.getChildOrders().size() + " children, want 3, joining passive side of book with: "
+                    + quantity + " @ " + price);
             return new CreateChildOrder(Side.BUY, quantity, price);
         }else{
             logger.info("[PASSIVEALGO] Have:" + state.getChildOrders().size() + " children, want 3, done.");
