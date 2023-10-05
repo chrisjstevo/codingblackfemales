@@ -34,19 +34,37 @@ public class TimedLogic implements AlgoLogic {
 
   private static final Logger logger = LoggerFactory.getLogger(TimedLogic.class);
   private SimpleFileMarketDataGenerator marketDataGenerator;
-//   private Map<Long, Long> marketMonitor = new HashMap<>();
   private long quantity;// SNIPER
   private long price; // SNIPER
   private MyAlgoLogic myAlgoLogic;
+  private LocalTime currentTime;
+private DayOfWeek today;
+  // hasmap comprised of data harvested from the market every 15 minutes
   Map<Long, Long>marketMonitor = new HashMap<>();
+
+  
 
 
    @Override
       public Action evaluate(SimpleAlgoState state) {
-
         return NoAction.NoAction;
-         
         }
+
+        public TimedLogic(Map<Long, Long>marketMonitor){
+    this.marketMonitor = marketMonitor;
+  }
+  
+  public Map<Long, Long> getMarketMonitor() {
+            return marketMonitor;
+        }
+
+  public void setDayOfWeek(DayOfWeek today){
+this.today = today;
+  }
+
+  public void setCurrentTime(LocalTime currentTime){
+this.currentTime = currentTime;
+  }
 
      // this method defines the opening and closing times of the stock market. If the market is open the scheduled event is able to run.
         public boolean isMarketOpen(){
@@ -55,9 +73,9 @@ public class TimedLogic implements AlgoLogic {
             LocalTime timeNow = LocalTime.now();
     
             if (dayOfWeek != DayOfWeek.SATURDAY || dayOfWeek != DayOfWeek.SUNDAY){
-              LocalTime marketOpen = LocalTime.of(8, 0);
+              LocalTime marketOpen = LocalTime.of(0, 1);
             //   LocalTime marketClosed = LocalTime.of(16, 30);
-            LocalTime marketClosed = LocalTime.of(23, 30);
+            LocalTime marketClosed = LocalTime.of(16, 30);
               
                 if(timeNow.isBefore(marketOpen) || timeNow.isAfter(marketClosed)){
                 logger.info("[TIMEDLOGIC] Market is closed");
@@ -65,7 +83,6 @@ public class TimedLogic implements AlgoLogic {
                     
                 } else{
                     logger.info("[TIMEDLOGIC] Market is open");
-                    // marketDataGenerator.generate(1);
                     return true;
                 }
             }
@@ -93,20 +110,16 @@ public class TimedLogic implements AlgoLogic {
         logger.info("[TIMEDLOGIC] data harvesting");
         System.out.println("Current market monitor list is ");
         marketMonitor.forEach((priceKey, quantityValue) -> {
-            System.out.println("yolo Price: " + priceKey + ", Quantity: " + quantityValue + "Current time: " + currentTime);
-            logger.info("[Sheza2] market monitor size is " + marketMonitor.size());
-
+            logger.info("[TIMEDLOGIC] Latest markets data in Price: " + priceKey + ", Quantity: " + quantityValue + "Current time: " + currentTime);
+            logger.info("[TIMEDLOGIC] market monitor size is " + marketMonitor.size());
         });
-        System.out.println("Current market monitor size is " + marketMonitor.size());
-        logger.info("[Sheza3] market monitor size is " + marketMonitor.size());
-
         };
         // ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(harvestData, 0, 15, TimeUnit.MINUTES);
         ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate( harvestData, 0, 15, TimeUnit.SECONDS);
     //   logger.info("[Sheza4] market monitor size is " + marketMonitor.size());
     }
 
-// checking for trends in the market monitor arrayList. If there are 3 upticks in a row we sell, and for 3 downtick in a row we sell.
+// checking for trends in the market monitor hashmap. If there are 3 upticks in a row we sell, and for 3 downtick in a row we sell.
         public void checkForTrend() {
         int consecutiveRises = 0;
         int consecutiveFalls = 0;
@@ -123,7 +136,7 @@ public class TimedLogic implements AlgoLogic {
             consecutiveFalls = 0;
           }else if(currentPrice > previousPrice && previousPrice > thirdPrice){
             consecutiveFalls++;
-            consecutiveRises = 0; //we reset the counter
+            consecutiveRises = 0; //we reset the counter to 0 if rise / fall streak is broken.
           }else{
             consecutiveFalls = 0;
             consecutiveRises = 0;

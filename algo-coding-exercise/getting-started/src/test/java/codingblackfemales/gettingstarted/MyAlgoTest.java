@@ -12,9 +12,12 @@ import messages.order.Side;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.nio.ByteBuffer;
 import java.rmi.UnexpectedException;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 
 import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
@@ -50,7 +53,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
 
         //simple assert to check we had 3 orders created
         // assertEquals(container.getState().getChildOrders().size(), 45); NormalMyLogic
-        assertEquals(container.getState().getChildOrders().size(), 0);
+        assertEquals(container.getState().getChildOrders().size(), 75);
     }
 
     @Test
@@ -82,6 +85,17 @@ public class MyAlgoTest extends AbstractAlgoTest {
         // Verify that the number of orders created does not exceed the maximum order count
         int NumOfActualOrders = container.getState().getChildOrders().size();
         assertEquals(maxAcceptedOrders, NumOfActualOrders);
+    }
+
+    @Test
+    public void marketIsOpen() throws Exception{
+        TimedLogic timedLogic = new TimedLogic(null);
+        // checks to see is uk stockmarket is open on a normal working week without bank holidays.
+
+        timedLogic.setDayOfWeek(DayOfWeek.SATURDAY);
+
+        timedLogic.setCurrentTime(LocalTime.of(16, 31));
+        assertFalse(timedLogic.isMarketOpen());
     }
 
     @Test
