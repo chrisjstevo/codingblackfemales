@@ -38,11 +38,11 @@ import org.slf4j.LoggerFactory;
  */
 public class MyAlgoTest extends AbstractAlgoTest {
 
-    // @Override
-    // public AlgoLogic createAlgoLogic() {
-    //     //this adds your algo logic to the container classes
-    //     return new MyAlgoLogic();
-    // }
+    @Override
+    public AlgoLogic createAlgoLogic() {
+        //this adds your algo logic to the container classes
+        return new MyAlgoLogic();
+    }
 
 
     @Test

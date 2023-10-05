@@ -88,54 +88,65 @@ public class TimedLogic implements AlgoLogic {
     return isMarketOpen();
   }
 
-  //schedule data collection schedules a data collection using the simpleFileMarketDataGenerator method as previously seen in code base every 15 into the marketMonitor hashmap. 
-  // scrapping timed logic, i dont have enough time to make it work
-  public void scheduleDataCollection(AskLevel farTouch){
- 
-    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+  public void RandomLogic(AskLevel farTouch){
     LocalTime currentTime = LocalTime.now();
-    Runnable harvestData = () -> {
-    
-      logger.info("[TIMEDLOGIC] Running scheduler");
-      randomLogic(farTouch);
-      logger.info("[TIMEDLOGIC] market monitor size in scheduler is " + marketMonitor.size());
-
-    //     if(marketMonitor.size() > 2){
-    //       checkForTrend();
-    //       logger.info("[TIMEDLOGIC] running check for trend");
-    //     }
-    };
-      // ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(harvestData, 0, 15, TimeUnit.MINUTES);
-      ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate( harvestData, 0, 5, TimeUnit.SECONDS);
-
-      if(!isMarketOpen()){
-        scheduler.shutdown();
-        logger.info("[TIMEDLOGIC] Market is closed, scheduler is shutting down.");
-      }
-      
-  }
-
-    public void randomLogic(AskLevel farTouch){
-      logger.info("[TIMEDLOGIC] are we running yet");
     // Map<Long, Long>marketMonitor = new HashMap<>();
     final long instrumentId = 1234;
     final Venue venue = Venue.XLON;
     final long priceLevel = 1000;
     final long priceMaxDelta = 100;
 
+        
       long price = farTouch.price; // SNIPER
       long quantity = farTouch.quantity;
     
       marketDataGenerator = new SimpleFileMarketDataGenerator("src/main/java/codingblackfemales/gettingstarted/marketdatasimulation.json", new RandomMarketDataGenerator(instrumentId, venue, priceLevel, priceMaxDelta, 15));
-
+      // logger.info("[TIMEDLOGIC] what did it generate " + marketDataGenerator.generate(10));
       marketMonitor.put(price, quantity);
       logger.info("[TIMEDLOGIC] data harvesting");
       System.out.println("Current market monitor list is ");
       marketMonitor.forEach((priceKey, quantityValue) -> {
-        System.out.println("Price: " + priceKey + ", Quantity: " + quantityValue);
+        System.out.println("Price: " + priceKey + ", Quantity: " + quantityValue + "Current time: " + currentTime);
         logger.info("[TIMEDLOGIC] market monitor size is " + marketMonitor.size());
       });
   }
+
+  //schedule data collection schedules a data collection using the simpleFileMarketDataGenerator method as previously seen in code base every 15 into the marketMonitor hashmap. 
+  // scrapping timed logic, i dont have enough time to make it work
+  public void scheduleDataCollection(AskLevel farTouch){
+    // LocalTime currentTime = LocalTime.now();
+    // // Map<Long, Long>marketMonitor = new HashMap<>();
+    // final long instrumentId = 1234;
+    // final Venue venue = Venue.XLON;
+    // final long priceLevel = 1000;
+    // final long priceMaxDelta = 100;
+    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    Runnable harvestData = () -> {
+    
+      // long price = farTouch.price; // SNIPER
+      // long quantity = farTouch.quantity;
+    
+      // marketDataGenerator = new SimpleFileMarketDataGenerator("src/main/java/codingblackfemales/gettingstarted/marketdatasimulation.json", new RandomMarketDataGenerator(instrumentId, venue, priceLevel, priceMaxDelta, 15));
+      // // logger.info("[TIMEDLOGIC] what did it generate " + marketDataGenerator.generate(10));
+      // marketMonitor.put(price, quantity);
+      // logger.info("[TIMEDLOGIC] data harvesting");
+      // System.out.println("Current market monitor list is ");
+      // marketMonitor.forEach((priceKey, quantityValue) -> {
+      //   System.out.println("Price: " + priceKey + ", Quantity: " + quantityValue + "Current time: " + currentTime);
+      //   logger.info("[TIMEDLOGIC] market monitor size is " + marketMonitor.size());
+      logger.info("[TIMEDLOGIC] data harvesting");
+      RandomLogic(farTouch);
+        if(marketMonitor.size() > 2){
+          checkForTrend();
+          logger.info("[TIMEDLOGIC] running check for trend");
+        }
+    
+    };
+      // ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(harvestData, 0, 15, TimeUnit.MINUTES);
+      ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate( harvestData, 0, 15, TimeUnit.SECONDS);
+  }
+
 
   // checking for trends in the market monitor hashmap. If there are 3 upticks in a row we sell, and for 3 downtick in a row we sell.
   public void checkForTrend() {
@@ -172,7 +183,6 @@ public class TimedLogic implements AlgoLogic {
         new CreateChildOrder(Side.SELL, quantity, price);
         logger.info("[TIMEDLOGIC] Market trend is rising selling " + quantity + "child orders at " + price);
         consecutiveRises = 0;
-        
       }else if(consecutiveFalls >= 3){
         // for 3 consecutiveFalls we make a buy order 
         totalQuantity += quantity;
