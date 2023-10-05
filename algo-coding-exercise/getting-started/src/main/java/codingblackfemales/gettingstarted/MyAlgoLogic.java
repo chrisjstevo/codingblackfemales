@@ -1,6 +1,7 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.action.Action;
+import codingblackfemales.action.CancelChildOrder;
 import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
@@ -18,27 +19,41 @@ public class MyAlgoLogic implements AlgoLogic {
     @Override
     public Action evaluate(SimpleAlgoState state) {
 
-        var orderBookAsString = Util.orderBookToString(state);
 
-        logger.info("[MYALGO] The state of the order book is:\n" + orderBookAsString);
+        logger.info("[MYALGO_ADDCANCELALGO] In Algo Logic....");
 
+        final String book = Util.orderBookToString(state);
 
+        logger.info("[MYALGO_ADDCANCELALGO] Algo Sees Book as:\n" + book);
 
-        final BidLevel nearTouch = state.getBidAt(0);
+        var totalOrderCount = state.getChildOrders().size();
 
-        long quantity = 60;
-        long price = nearTouch.price;
-
-        //until we have three child orders....
-        if (state.getChildOrders().size() < 3) {
-            //then keep creating a new one
-            logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 10, joining passive side of book with: " + quantity + " @ " + price);
-           // quantity -= 10;
-            return new CreateChildOrder(Side.BUY, quantity, price);
-        } else {
-            logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 3, done.");
-
+        //make sure we have an exit condition...
+        if (totalOrderCount > 3) {
             return NoAction.NoAction;
         }
+
+        final var activeOrders = state.getActiveChildOrders();
+
+        if (activeOrders.size() > 0) {
+
+            final var option = activeOrders.stream().findFirst();
+
+            if (option.isPresent()) {
+                var childOrder = option.get();
+                logger.info("[ADDCANCELALGO] Cancelling order:" + childOrder);
+                return new CancelChildOrder(childOrder);
+            }
+            else{
+                return NoAction.NoAction;
+            }
+        } else {//else if(topOfBid >topOfAsk && state.getChildOrders().size()<3)
+            BidLevel level = state.getBidAt(0);
+            final long price = level.price;
+            final long quantity = level.quantity;
+            logger.info("[ADDCANCELALGO] Adding order for" + quantity + "@" + price);
+            return new CreateChildOrder(Side.BUY, quantity, price);
+        }
+
     }
 }
