@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbe:messageSchema xmlns:sbe="http://fixprotocol.io/2016/sbe"
+                   xmlns:xi="http://www.w3.org/2001/XInclude"
+                   package="messages.marketdata"
+                   id="1"
+                   version="0"
+                   semanticVersion="5.2"
+                   description="Market Data Schema Package"
+                   byteOrder="littleEndian">
+    <xi:include href="common-types.xml"/>
+
+    <types>
+        <type name="int32Enum" primitiveType="int32" />
+
+        <enum name="Venue" encodingType="int32Enum">
+            <validValue name="XLON">1</validValue>
+            <validValue name="XPAR">2</validValue>
+            <validValue name="XAMS">3</validValue>
+        </enum>
+    </types>
+
+    <types>
+        <enum name="Source" encodingType="int32Enum">
+            <validValue name="ORDERBOOK">1</validValue>
+            <validValue name="STREAM">2</validValue>
+        </enum>
+    </types>
+
+    <types>
+        <enum name="InstrumentStatus" encodingType="char">
+            <validValue name="CONTINUOUS">C</validValue>
+            <validValue name="AUCTION">A</validValue>
+            <validValue name="CLOSED">X</validValue>
+        </enum>
+    </types>
+
+    <types>
+        <enum name="InstrumentSubStatus" encodingType="char">
+            <validValue name="LUNCHAUC">L</validValue>
+            <validValue name="EVENINGAUC">E</validValue>
+            <validValue name="CLOSED">X</validValue>
+            <validValue name="CONTAUCT">C</validValue>
+        </enum>
+    </types>
+
+    <sbe:message name="BookUpdate" id="1" description="Full Book Update">
+
+        <field name="instrumentId" id="1" type="uint64"/>
+        <field name="venue" id="2" type="Venue"/>
+        <field name="instrumentStatus" id="9" type="InstrumentStatus"/>
+        <field name="source" id="21" type="Source"/>
+
+        <group name="bidBook" id="3" dimensionType="groupSizeEncoding">
+            <field name="price" id="4" type="uint64"/>
+            <field name="size" id="5" type="uint64"/>
+        </group>
+
+        <group name="askBook" id="6" dimensionType="groupSizeEncoding">
+            <field name="price" id="7" type="uint64"/>
+            <field name="size" id="8" type="uint64"/>
+        </group>
+
+    </sbe:message>
+
+    <sbe:message name="BidBookUpdate" id="9" description="Bid Side Book Update">
+
+        <field name="instrumentId" id="10" type="uint64"/>
+        <field name="venue" id="11" type="Venue"/>
+
+        <group name="bidBook" id="12" dimensionType="groupSizeEncoding">
+            <field name="price" id="13" type="uint64"/>
+            <field name="size" id="14" type="uint64"/>
+        </group>
+
+    </sbe:message>
+
+    <sbe:message name="AskBookUpdate" id="15" description="Ask Side Book Update">
+
+        <field name="instrumentId" id="16" type="uint64"/>
+        <field name="venue" id="17" type="Venue"/>
+
+        <group name="askBook" id="18" dimensionType="groupSizeEncoding">
+            <field name="price" id="19" type="uint64"/>
+            <field name="size" id="20" type="uint64"/>
+        </group>
+
+    </sbe:message>
+
+
+
+
+</sbe:messageSchema>
