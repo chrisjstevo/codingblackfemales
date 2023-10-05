@@ -94,7 +94,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
     public void testMarketOpen() throws Exception {
         TimedLogic timedLogic = new TimedLogic(null);
         timedLogic.setCurrentTime(LocalTime.of(15,30));
-        assertTrue(!timedLogic.isMarketOpen());
+        assertTrue(timedLogic.isMarketOpen());
     }
 
     

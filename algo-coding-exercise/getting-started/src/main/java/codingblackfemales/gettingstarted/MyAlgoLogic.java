@@ -79,8 +79,8 @@ public class MyAlgoLogic implements AlgoLogic {
  
                 logger.info("[MYALGO] Adding order for" + quantitySELL + "@" + priceSELL);
                 logger.info("[MYALGO] Initial quantity" + quantitySELL + " price " + priceSELL);
-                logger.info("[MYALGO] SLL active orders" + activeOrders.size());
-                logger.info("[MYALGO] total orders" + totalOrderCount);
+                logger.info("[MYALGO] Active orders" + activeOrders.size());
+                logger.info("[MYALGO] Total orders" + totalOrderCount);
 
                 return new CreateChildOrder(Side.SELL, quantitySELL, priceSELL);
             }
@@ -88,15 +88,15 @@ public class MyAlgoLogic implements AlgoLogic {
              if(activeOrders.size() > 6){
             final var option = activeOrders.stream().findFirst();
             // option is an object
-             logger.info("[MYALGO] CNX Have:" + activeOrders.size() + " children, want 7, done.");
+             logger.info("[MYALGO] Have:" + activeOrders.size() + " children, want 7, done.");
             if (option.isPresent()){
-                logger.info("[MYALGO] active orders are "+ activeOrders.size());
+                logger.info("[MYALGO] Active orders are "+ activeOrders.size());
                 // active orders is what we will track to cancel the orders
                 var childOrder = option.get();
                 // get the child order
                 logger.info("[MYALGO] Cancelling order:" + childOrder);
                 // logs info for child order
-                logger.info("[MYALGO] option is present, number of active orders are "+ activeOrders.size());
+                logger.info("[MYALGO] Option is present, number of active orders are "+ activeOrders.size());
                 return new CancelChildOrder(childOrder);
             }else{
                 // this else is causing failure
