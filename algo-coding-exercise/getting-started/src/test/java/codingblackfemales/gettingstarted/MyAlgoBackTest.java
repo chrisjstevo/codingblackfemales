@@ -36,6 +36,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         assertEquals(container.getState().getChildOrders().size(), 3);
         assertEquals(container.getState().getActiveChildOrders().size(), 2);
 
+        //when the market moves towards us
         send(createTick2());
 
         //then: get the state
@@ -52,17 +53,15 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         assertEquals(1, cancelledOrderCount);
         assertEquals(container.getState().getActiveChildOrders().size(), 2);
 
-        //When the market moves away from us
-        send(createTick3());
 
         //When the market moves towards us and we can make a profit
-        send(createTick4());
+        send(createTick3());
 
         //once the market is updated we check that we have made another childOrder to sell at a profit
         assertEquals(container.getState().getActiveChildOrders().size(), 3);
         assertEquals(container.getState().getChildOrders().size(), 4);
 
-        send(createTick5());
+        send(createTick4());
     }
 
 }
