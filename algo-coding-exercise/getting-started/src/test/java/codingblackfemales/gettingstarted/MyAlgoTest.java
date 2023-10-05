@@ -1,10 +1,8 @@
 package codingblackfemales.gettingstarted;
-
 import codingblackfemales.algo.AlgoLogic;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import static org.junit.Assert.assertEquals;
 
 
@@ -26,10 +24,8 @@ public class MyAlgoTest extends AbstractAlgoTest {
         return new MyAlgoLogic();
     }
 
-
     @Test
     public void testDispatchThroughSequencer() throws Exception {
-
         //create a sample market data tick....
         send(createTick());
         //simple assert to check we had 3 orders created
