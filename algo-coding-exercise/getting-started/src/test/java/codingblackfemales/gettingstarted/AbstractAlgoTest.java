@@ -59,11 +59,13 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
 
+        //**!!This is on the bid side of the book**!!
         encoder.askBookCount(3)
                 .next().price(100L).size(101L)
                 .next().price(110L).size(200L)
                 .next().price(115L).size(5000L);
 
+        //**!!This is on the ask side of the book**!!
         encoder.bidBookCount(3)
                 .next().price(98L).size(100L)
                 .next().price(95L).size(200L)
