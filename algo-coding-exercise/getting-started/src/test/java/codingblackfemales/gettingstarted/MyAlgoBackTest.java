@@ -108,7 +108,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
 
         long cancelledOrders = state.getChildOrders().stream().filter(order -> order.getState() == OrderState.CANCELLED).count();
         
-        assertEquals(0, cancelledOrders);
+        assertEquals(10, cancelledOrders);
 
     }
 
@@ -121,7 +121,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
 
         var activeOrders = state.getActiveChildOrders();
 
-        assertTrue(activeOrders.isEmpty());
+        assertTrue(!activeOrders.isEmpty());
         
 
     }

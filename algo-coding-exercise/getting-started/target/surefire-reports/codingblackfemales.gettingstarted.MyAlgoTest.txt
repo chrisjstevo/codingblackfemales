@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: codingblackfemales.gettingstarted.MyAlgoTest
 -------------------------------------------------------------------------------
-Tests run: 6, Failures: 4, Errors: 0, Skipped: 0, Time elapsed: 0.012 s <<< FAILURE! -- in codingblackfemales.gettingstarted.MyAlgoTest
-codingblackfemales.gettingstarted.MyAlgoTest.noActionTest -- Time elapsed: 0.002 s <<< FAILURE!
+Tests run: 6, Failures: 4, Errors: 0, Skipped: 0, Time elapsed: 0.046 s <<< FAILURE! -- in codingblackfemales.gettingstarted.MyAlgoTest
+codingblackfemales.gettingstarted.MyAlgoTest.noActionTest -- Time elapsed: 0.001 s <<< FAILURE!
 java.lang.AssertionError: expected:<6> but was:<0>
 	at org.junit.Assert.fail(Assert.java:88)
 	at org.junit.Assert.failNotEquals(Assert.java:743)
@@ -104,7 +104,7 @@ java.lang.AssertionError: expected:<16> but was:<0>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-codingblackfemales.gettingstarted.MyAlgoTest.checkIfOrdersCancelled -- Time elapsed: 0 s <<< FAILURE!
+codingblackfemales.gettingstarted.MyAlgoTest.checkIfOrdersCancelled -- Time elapsed: 0.042 s <<< FAILURE!
 java.lang.AssertionError: expected:<9> but was:<15>
 	at org.junit.Assert.fail(Assert.java:88)
 	at org.junit.Assert.failNotEquals(Assert.java:743)

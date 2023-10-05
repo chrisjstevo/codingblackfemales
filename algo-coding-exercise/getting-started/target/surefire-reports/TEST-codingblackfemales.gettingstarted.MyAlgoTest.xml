@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="codingblackfemales.gettingstarted.MyAlgoTest" time="0.012" tests="6" errors="0" skipped="0" failures="4">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="codingblackfemales.gettingstarted.MyAlgoTest" time="0.046" tests="6" errors="0" skipped="0" failures="4">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="GB"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-17\bin"/>
-    <property name="sun.java.command" value="C:\Users\admin\AppData\Local\Temp\surefire11347978707624485321\surefirebooter-20231005225335536_26.jar C:\Users\admin\AppData\Local\Temp\surefire11347978707624485321 2023-10-05T22-53-26_007-jvmRun1 surefire-20231005225335536_24tmp surefire_2-20231005225335536_25tmp"/>
+    <property name="sun.java.command" value="C:\Users\admin\AppData\Local\Temp\surefire12091331326363450673\surefirebooter-20231005231521358_26.jar C:\Users\admin\AppData\Local\Temp\surefire12091331326363450673 2023-10-05T23-15-13_315-jvmRun1 surefire-20231005231521358_24tmp surefire_2-20231005231521358_25tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\admin\Desktop\Sherelles Stuff\UBS-Assignments\finalCopy\codingblackfemales\algo-coding-exercise\getting-started\target\test-classes;C:\Users\admin\Desktop\Sherelles Stuff\UBS-Assignments\finalCopy\codingblackfemales\algo-coding-exercise\getting-started\target\classes;C:\Users\admin\Desktop\Sherelles Stuff\UBS-Assignments\finalCopy\codingblackfemales\algo-coding-exercise\algo\target\classes;C:\Users\admin\Desktop\Sherelles Stuff\UBS-Assignments\finalCopy\codingblackfemales\algo-coding-exercise\dictionary\target\classes;C:\Users\admin\.m2\repository\org\agrona\agrona\1.16.0\agrona-1.16.0.jar;C:\Users\admin\Desktop\Sherelles Stuff\UBS-Assignments\finalCopy\codingblackfemales\algo-coding-exercise\sequencer\target\classes;C:\Users\admin\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar;C:\Users\admin\.m2\repository\org\apache\commons\commons-lang3\3.12.0\commons-lang3-3.12.0.jar;C:\Users\admin\Desktop\Sherelles Stuff\UBS-Assignments\finalCopy\codingblackfemales\algo-coding-exercise\backtest\target\classes;C:\Users\admin\Desktop\Sherelles Stuff\UBS-Assignments\finalCopy\codingblackfemales\algo-coding-exercise\collection\target\classes;C:\Users\admin\Desktop\Sherelles Stuff\UBS-Assignments\finalCopy\codingblackfemales\algo-coding-exercise\sequencer\target\test-classes;C:\Users\admin\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\admin\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\admin\.m2\repository\uk\co\real-logic\sbe-all\1.26.0\sbe-all-1.26.0.jar;C:\Users\admin\.m2\repository\org\mockito\mockito-core\5.4.0\mockito-core-5.4.0.jar;C:\Users\admin\.m2\repository\net\bytebuddy\byte-buddy\1.14.5\byte-buddy-1.14.5.jar;C:\Users\admin\.m2\repository\net\bytebuddy\byte-buddy-agent\1.14.5\byte-buddy-agent-1.14.5.jar;C:\Users\admin\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;C:\Users\admin\.m2\repository\ch\qos\logback\logback-core\1.3.5\logback-core-1.3.5.jar;C:\Users\admin\.m2\repository\org\slf4j\slf4j-api\2.0.4\slf4j-api-2.0.4.jar;C:\Users\admin\.m2\repository\ch\qos\logback\logback-classic\1.3.5\logback-classic-1.3.5.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\admin\AppData\Local\Temp\surefire11347978707624485321\surefirebooter-20231005225335536_26.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\admin\AppData\Local\Temp\surefire12091331326363450673\surefirebooter-20231005231521358_26.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.7+8-LTS-224"/>
@@ -56,7 +56,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="noActionTest" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.002">
+  <testcase name="noActionTest" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.001">
     <failure message="expected:&lt;6&gt; but was:&lt;0&gt;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: expected:<6> but was:<0>
 	at org.junit.Assert.fail(Assert.java:88)
 	at org.junit.Assert.failNotEquals(Assert.java:743)
@@ -90,25 +90,25 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></failure>
-    <system-out><![CDATA[22:53:37.372 [main] INFO  c.sequencer.consumer.LoggingConsumer - [1] 
+    <system-out><![CDATA[23:15:22.656 [main] INFO  c.sequencer.consumer.LoggingConsumer - [1] 
 |----BID-----|
    101 @ 100
 |----ASK-----|
     100 @ 98
 
-22:53:37.372 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:100 quantity:101
-22:53:37.372 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:98 quantity:100
-22:53:37.372 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] The state of the order book is:
+23:15:22.656 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:100 quantity:101
+23:15:22.656 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:98 quantity:100
+23:15:22.656 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] The state of the order book is:
 |----BID-----||----ASK----|
    101 @ 100    100 @ 98
 |------------||-----------|
 
-22:53:37.372 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as: 
+23:15:22.656 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as: 
 |----BID-----||----ASK----|
    101 @ 100    100 @ 98
 |------------||-----------|
 
-22:53:37.372 [main] INFO  c.gettingstarted.TimedLogic - [TIMEDLOGIC] Market is closed
+23:15:22.658 [main] INFO  c.gettingstarted.TimedLogic - [TIMEDLOGIC] Market is closed
 ]]></system-out>
   </testcase>
   <testcase name="testDispatchThroughSequencer" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.0">
@@ -145,7 +145,7 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></failure>
-    <system-out><![CDATA[22:53:37.373 [main] INFO  c.sequencer.consumer.LoggingConsumer - [1] 
+    <system-out><![CDATA[23:15:22.660 [main] INFO  c.sequencer.consumer.LoggingConsumer - [1] 
 |----BID-----|
    101 @ 100
    200 @ 110
@@ -155,36 +155,36 @@
     200 @ 95
     300 @ 91
 
-22:53:37.373 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:100 quantity:101
-22:53:37.373 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:110 quantity:200
-22:53:37.373 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:115 quantity:5000
-22:53:37.373 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:98 quantity:100
-22:53:37.373 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:95 quantity:200
-22:53:37.373 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:91 quantity:300
-22:53:37.373 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] The state of the order book is:
+23:15:22.660 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:100 quantity:101
+23:15:22.660 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:110 quantity:200
+23:15:22.660 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:115 quantity:5000
+23:15:22.660 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:98 quantity:100
+23:15:22.660 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:95 quantity:200
+23:15:22.660 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:91 quantity:300
+23:15:22.660 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] The state of the order book is:
 |----BID-----||----ASK----|
    101 @ 100    100 @ 98
    200 @ 110    200 @ 95
   5000 @ 115    300 @ 91
 |------------||-----------|
 
-22:53:37.373 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as: 
+23:15:22.660 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as: 
 |----BID-----||----ASK----|
    101 @ 100    100 @ 98
    200 @ 110    200 @ 95
   5000 @ 115    300 @ 91
 |------------||-----------|
 
-22:53:37.373 [main] INFO  c.gettingstarted.TimedLogic - [TIMEDLOGIC] Market is closed
+23:15:22.660 [main] INFO  c.gettingstarted.TimedLogic - [TIMEDLOGIC] Market is closed
 ]]></system-out>
   </testcase>
-  <testcase name="marketIsOpen" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.002">
-    <system-out><![CDATA[22:53:37.375 [main] INFO  c.gettingstarted.TimedLogic - [TIMEDLOGIC] Market is closed
+  <testcase name="marketIsOpen" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.0">
+    <system-out><![CDATA[23:15:22.661 [main] INFO  c.gettingstarted.TimedLogic - [TIMEDLOGIC] Market is closed
 ]]></system-out>
   </testcase>
-  <testcase name="testLogging" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.0">
-    <system-out><![CDATA[22:53:37.377 [main] INFO  c.gettingstarted.MyAlgoLogic - We are testing the logging function.
-22:53:37.377 [main] WARN  c.gettingstarted.MyAlgoLogic - We are testing the warnig method that comes with the logger.
+  <testcase name="testLogging" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.001">
+    <system-out><![CDATA[23:15:22.661 [main] INFO  c.gettingstarted.MyAlgoLogic - We are testing the logging function.
+23:15:22.661 [main] WARN  c.gettingstarted.MyAlgoLogic - We are testing the warnig method that comes with the logger.
 ]]></system-out>
   </testcase>
   <testcase name="testMaximumOrderCount" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.001">
@@ -221,7 +221,7 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></failure>
-    <system-out><![CDATA[22:53:37.379 [main] INFO  c.sequencer.consumer.LoggingConsumer - [1] 
+    <system-out><![CDATA[23:15:22.685 [main] INFO  c.sequencer.consumer.LoggingConsumer - [1] 
 |----BID-----|
    160 @ 110
    220 @ 120
@@ -229,26 +229,26 @@
      95 @ 97
     150 @ 94
 
-22:53:37.379 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:110 quantity:160
-22:53:37.379 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:120 quantity:220
-22:53:37.379 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:97 quantity:95
-22:53:37.379 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:94 quantity:150
-22:53:37.379 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] The state of the order book is:
+23:15:22.686 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:110 quantity:160
+23:15:22.686 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:120 quantity:220
+23:15:22.686 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:97 quantity:95
+23:15:22.686 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:94 quantity:150
+23:15:22.691 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] The state of the order book is:
 |----BID-----||----ASK----|
    160 @ 110     95 @ 97
    220 @ 120    150 @ 94
 |------------||-----------|
 
-22:53:37.379 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as: 
+23:15:22.691 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as: 
 |----BID-----||----ASK----|
    160 @ 110     95 @ 97
    220 @ 120    150 @ 94
 |------------||-----------|
 
-22:53:37.379 [main] INFO  c.gettingstarted.TimedLogic - [TIMEDLOGIC] Market is closed
+23:15:22.691 [main] INFO  c.gettingstarted.TimedLogic - [TIMEDLOGIC] Market is closed
 ]]></system-out>
   </testcase>
-  <testcase name="checkIfOrdersCancelled" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.0">
+  <testcase name="checkIfOrdersCancelled" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.042">
     <failure message="expected:&lt;9&gt; but was:&lt;15&gt;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: expected:<9> but was:<15>
 	at org.junit.Assert.fail(Assert.java:88)
 	at org.junit.Assert.failNotEquals(Assert.java:743)
@@ -282,7 +282,7 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></failure>
-    <system-out><![CDATA[22:53:37.380 [main] INFO  c.sequencer.consumer.LoggingConsumer - [1] 
+    <system-out><![CDATA[23:15:22.711 [main] INFO  c.sequencer.consumer.LoggingConsumer - [1] 
 |----BID-----|
    101 @ 100
    200 @ 110
@@ -292,27 +292,27 @@
     200 @ 95
     300 @ 91
 
-22:53:37.380 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:100 quantity:101
-22:53:37.380 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:110 quantity:200
-22:53:37.380 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:115 quantity:5000
-22:53:37.380 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:98 quantity:100
-22:53:37.380 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:95 quantity:200
-22:53:37.380 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:91 quantity:300
-22:53:37.380 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] The state of the order book is:
+23:15:22.712 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:100 quantity:101
+23:15:22.712 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:110 quantity:200
+23:15:22.712 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:115 quantity:5000
+23:15:22.712 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:98 quantity:100
+23:15:22.712 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:95 quantity:200
+23:15:22.712 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:91 quantity:300
+23:15:22.712 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] The state of the order book is:
 |----BID-----||----ASK----|
    101 @ 100    100 @ 98
    200 @ 110    200 @ 95
   5000 @ 115    300 @ 91
 |------------||-----------|
 
-22:53:37.380 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as: 
+23:15:22.712 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as: 
 |----BID-----||----ASK----|
    101 @ 100    100 @ 98
    200 @ 110    200 @ 95
   5000 @ 115    300 @ 91
 |------------||-----------|
 
-22:53:37.381 [main] INFO  c.gettingstarted.TimedLogic - [TIMEDLOGIC] Market is closed
+23:15:22.712 [main] INFO  c.gettingstarted.TimedLogic - [TIMEDLOGIC] Market is closed
 ]]></system-out>
   </testcase>
 </testsuite>
