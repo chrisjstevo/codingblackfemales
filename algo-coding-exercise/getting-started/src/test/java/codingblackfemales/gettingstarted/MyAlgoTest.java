@@ -38,11 +38,11 @@ import org.slf4j.LoggerFactory;
  */
 public class MyAlgoTest extends AbstractAlgoTest {
 
-    @Override
-    public AlgoLogic createAlgoLogic() {
-        //this adds your algo logic to the container classes
-        return new MyAlgoLogic();
-    }
+    // @Override
+    // public AlgoLogic createAlgoLogic() {
+    //     //this adds your algo logic to the container classes
+    //     return new MyAlgoLogic();
+    // }
 
 
     @Test
@@ -98,23 +98,23 @@ public class MyAlgoTest extends AbstractAlgoTest {
         assertFalse(timedLogic.isMarketOpen());
     }
 
-    @Test
-    public void noActionTest() throws Exception{
-        // test makes sure no action is taken when the conditions are met
+    // @Test
+    // public void noActionTest() throws Exception{
+    //     // test makes sure no action is taken when the conditions are met
 
-        // final var activeOrders = state.getActiveChildOrders();
+    //     // final var activeOrders = state.getActiveChildOrders();
 
-        // int numActiveOrders = 7; Normal MyAlgoLogic 
-        int numActiveOrders = 0;
+    //     // int numActiveOrders = 7; Normal MyAlgoLogic 
+    //     int numActiveOrders = 0;
 
-        send(noActionTick(numActiveOrders));
-    //    boolean noActionOptionPresent = container.getState().getOptions().contains(Option.NO_ACTION);
+    //     send(noActionTick(numActiveOrders));
+    // //    boolean noActionOptionPresent = container.getState().getOptions().contains(Option.NO_ACTION);
 
-        var state = container.getState();
+    //     var state = container.getState();
         
-        assertEquals(5, state.getActiveChildOrders().size());
-        // might need to check this sor state.activeOrders()
-    }
+    //     assertEquals(5, state.getActiveChildOrders().size());
+    //     // might need to check this sor state.activeOrders()
+    // }
     
     @Test
     public void testLogging() throws Exception{

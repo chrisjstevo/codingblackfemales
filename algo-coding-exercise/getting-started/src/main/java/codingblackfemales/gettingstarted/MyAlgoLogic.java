@@ -59,16 +59,21 @@ public class MyAlgoLogic implements AlgoLogic {
         logger.info("[MYALGO] Initial quantity" + quantity + " price " + price);
 
         if(timedLogic.isMarketOpen()){
-            if(totalOrderCount < 75){
+            if(totalOrderCount < 1175){
                 timedLogic.scheduleDataCollection(farTouch);
                 // BidLevel level = state.getBidAt(0);
                 // final long price = level.price;
                 // final long quantity = level.quantity;
-                logger.info("[MYALGO] Adding order for" + quantity + "@" + price);
-                logger.info("[Sheza6] markets monitor size is " + timedLogic.getMarketMonitor().size());
+                // logger.info("[MYALGO] Adding order for" + quantity + "@" + price);
 
-                return new CreateChildOrder(Side.BUY, quantity, price);
+                // return new CreateChildOrder(Side.BUY, quantity, price);
+                logger.info("[MYALGO] current child orders are " + totalOrderCount);
+                logger.info("[MYALGO] total active orders" + activeOrders.size());
+                
             }
+
+            // timedLogic.triggerTrendCheck();
+            
 
             if(timedLogic.getMarketMonitor().size() > 2){
                     timedLogic.checkForTrend();
