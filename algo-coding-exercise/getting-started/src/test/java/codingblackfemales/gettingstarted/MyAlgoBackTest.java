@@ -32,7 +32,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         send(createTick3());
 
         //ADD asserts when you have implemented your algo logic
-        assertEquals(container.getState().getChildOrders().size(), 3);
+        assertEquals(container.getState().getChildOrders().size(), 2);
 
         //when: market data moves towards us
         send(createTick4());
@@ -43,7 +43,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         //Check things like filled quantity, cancelled order count etc....
         long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
         //and: check that our algo state was updated to reflect our fills when the market data
-       assertEquals(270, filledQuantity);
+       assertEquals(90, filledQuantity);
     }
 
 }

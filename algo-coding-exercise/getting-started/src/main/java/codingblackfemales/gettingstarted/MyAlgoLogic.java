@@ -26,9 +26,11 @@ public class MyAlgoLogic implements AlgoLogic {
         logger.info("[MYALGO] The state of the order book is:\n" + orderBookAsString);
 
 
+        //If active orders > 1 : cancel
+
         final var activeOrders = state.getActiveChildOrders();
 
-        if (activeOrders.size() > 3) {
+        if (activeOrders.size() > 1) {
 
             final var option = activeOrders.stream().findFirst();
 
@@ -47,12 +49,12 @@ public class MyAlgoLogic implements AlgoLogic {
             long price = nearTouch.price;
 
                 //until we have three child orders....
-            if(state.getChildOrders().size() < 3){
+            if(state.getChildOrders().size() < 2){
                 //then keep creating a new one
-                logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 3, joining passive side of book with: " + quantity + " @ " + price);
+                logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 2, joining passive side of book with: " + quantity + " @ " + price);
                 return new CreateChildOrder(Side.BUY, quantity, price);
             }else{
-                logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 3, done.");
+                logger.info("[MYALGO] Have:" + state.getChildOrders().size() + " children, want 2, done.");
                 return NoAction;
             }       
             
