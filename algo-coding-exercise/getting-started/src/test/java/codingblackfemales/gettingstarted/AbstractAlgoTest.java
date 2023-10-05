@@ -115,24 +115,14 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
         for (int i = 0; i < maxAcceptedOrders; i++) {
             // Create and add orders to the market data
             var state = container.getState();
-            // BidLevel level = state.getBidAt(0);
-            // final long price = level.price;
-            // final long quantity = level.quantity;
-            //  AskLevel farTouch = state.getAskAt(0);
-            // long quantity = farTouch.quantity;
-            // long price = farTouch.price;
-            // final BidLevel nearTouch = state.getBidAt(0);
-
             //if values not hardcoded they dont seem to work
 
             long quantity = 2;
             // the above is the num orders
             long price = 110L;
             
-            
             new CreateChildOrder(Side.BUY, quantity, price);
-            // Order order = createOrder();
-            // marketData.addOrder(order);
+            
         }
 
         return directBuffer;
@@ -155,16 +145,6 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
         //set the fields to desired values
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
-
-        // encoder.askBookCount(3)
-        //         .next().price(100L).size(101L)
-        //         .next().price(110L).size(200L)
-        //         .next().price(115L).size(5000L);
-
-        // encoder.bidBookCount(3)
-        //         .next().price(98L).size(100L)
-        //         .next().price(95L).size(200L)
-                // .next().price(91L).size(300L);
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
         encoder.source(Source.STREAM);

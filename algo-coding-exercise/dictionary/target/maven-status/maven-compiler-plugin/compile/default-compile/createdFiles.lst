@@ -7,7 +7,6 @@ messages\marketdata\AskBookUpdateEncoder$AskBookEncoder.class
 messages\marketdata\MetaAttribute.class
 messages\order\CreateOrderEncoder.class
 messages\marketdata\Venue.class
-messages\order\PendingOrderDecoder.class
 messages\order\PartialFillOrderEncoder.class
 messages\marketdata\MessageHeaderEncoder.class
 messages\marketdata\AskBookUpdateEncoder.class

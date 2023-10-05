@@ -53,7 +53,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
 
         //simple assert to check we had 3 orders created
         // assertEquals(container.getState().getChildOrders().size(), 45); NormalMyLogic
-        assertEquals(container.getState().getChildOrders().size(), 75);
+        assertEquals(container.getState().getChildOrders().size(), 16);
     }
 
     @Test
@@ -61,11 +61,11 @@ public class MyAlgoTest extends AbstractAlgoTest {
         // checks to make sure that once terms are met, child order gets cancelled.
 
         send(createTick());
-        int initialOrderCount = 75;
+        int initialOrderCount = 15;
         // what is the initial order count
 
         // int expectedCanceledOrderCount = 40; NormalMyAlgoLogic
-        int expectedCanceledOrderCount = 68;
+        int expectedCanceledOrderCount = 9;
         // how many order should be cancelled
         var state = container.getState();
 
@@ -76,8 +76,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
     @Test
     public void testMaximumOrderCount() throws Exception {
         // test makes sure that maximum orders accepted are 45, 
-        int maxAcceptedOrders = 75;
-        // int maxAcceptedOrders = 45;
+        int maxAcceptedOrders = 16;
 
         // Create a sample market data tick that should result in orders being placed
         send(createMaxOrderTick(maxAcceptedOrders));
@@ -98,23 +97,23 @@ public class MyAlgoTest extends AbstractAlgoTest {
         assertFalse(timedLogic.isMarketOpen());
     }
 
-    // @Test
-    // public void noActionTest() throws Exception{
-    //     // test makes sure no action is taken when the conditions are met
+    @Test
+    public void noActionTest() throws Exception{
+        // test makes sure no action is taken when the conditions are met
 
-    //     // final var activeOrders = state.getActiveChildOrders();
+        // final var activeOrders = state.getActiveChildOrders();
 
-    //     // int numActiveOrders = 7; Normal MyAlgoLogic 
-    //     int numActiveOrders = 0;
+        int numActiveOrders = 7; //Normal MyAlgoLogic 
+        // int numActiveOrders = 0;
 
-    //     send(noActionTick(numActiveOrders));
-    // //    boolean noActionOptionPresent = container.getState().getOptions().contains(Option.NO_ACTION);
+        send(noActionTick(numActiveOrders));
+    //    boolean noActionOptionPresent = container.getState().getOptions().contains(Option.NO_ACTION);
 
-    //     var state = container.getState();
+        var state = container.getState();
         
-    //     assertEquals(5, state.getActiveChildOrders().size());
-    //     // might need to check this sor state.activeOrders()
-    // }
+        assertEquals(6, state.getActiveChildOrders().size());
+        // might need to check this sor state.activeOrders()
+    }
     
     @Test
     public void testLogging() throws Exception{
@@ -127,5 +126,5 @@ public class MyAlgoTest extends AbstractAlgoTest {
 }
 
 
-// *two complete tests done with ticks created. create 3 more. not committed
+
 // code is currently working
