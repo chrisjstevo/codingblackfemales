@@ -65,6 +65,7 @@ public class MyAlgoLogic implements AlgoLogic {
             logger.info("[MYALGO] Algo Sees Book as:\n" + orderBookAsString);
             final var option = activeOrders.stream().findFirst();
 
+            //We want to cancel a childOrder so that we only have 2 active child orders
             if (option.isPresent()) {
                 var childOrder = option.get();
                 logger.info("[MYALGO] Now only want 2 children, cancelling order: " + childOrder);
@@ -107,11 +108,14 @@ public class MyAlgoLogic implements AlgoLogic {
 
             if(profit > 0 && bestBidQuantity >= filledQuantity){
                 logger.info("[MYALGO] Can sell at a profit selling: " + bestBidQuantity + " @" + bestBidPrice);
+
+                logger.info("[MYALGO] Algo Sees Book as:\n" + orderBookAsString);
+
                 return new CreateChildOrder(Side.SELL, bestBidQuantity, bestBidPrice);
 
             } else if(profit < -10 && bestBidQuantity >= filledQuantity){
                 logger.info("[MYALGO] Algo Sees Book as:\n" + orderBookAsString);
-//              -10 is the absolute lowest we are willing to hold our stock at - at this price our position has changed and we want to cut our losses
+//              -10 is the absolute lowest we are willing to hold our stock at - at this price our position has changed and so now we want to cut our losses
                 logger.info("[MYALGO] Preventing further loss, I am selling all the stock and adding an ask to the book with: " + filledQuantity + " @ " + bestBidPrice);;
                 return new CreateChildOrder(Side.SELL, filledQuantity, bestBidPrice);
 
@@ -121,7 +125,10 @@ public class MyAlgoLogic implements AlgoLogic {
                 logger.info("[MYALGO] Potential to make a profit is present I am holding");
                 return NoAction;
             }
-
+        } else if(activeOrders.size() == 3) {
+            logger.info("[MYALGO] The state of the order book is:\n" + orderBookAsString);
+            logger.info("[MYALGO] Placed 3 active orders (including the sell order). Done");
+            return NoAction;
         }
 
         return NoAction;
