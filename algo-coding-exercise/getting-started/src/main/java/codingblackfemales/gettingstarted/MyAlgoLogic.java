@@ -20,7 +20,7 @@ public class MyAlgoLogic implements AlgoLogic {
     @Override
     public Action evaluate(SimpleAlgoState state) {
 
-        String orderBookAsString = Util.orderBookToString(state);
+        var orderBookAsString = Util.orderBookToString(state);
 
         logger.info("[MYALGO] The state of the order book is:\n" + orderBookAsString);
 
@@ -31,32 +31,23 @@ public class MyAlgoLogic implements AlgoLogic {
          *
          */
 
-        AskLevel farTouch = state.getAskAt(0);
+        final AskLevel farTouch = state.getAskAt(0);
 
-        final long price = 100;
+        final long price = 102;
         long quantityToBuy = 2000;
         long filledQuantity = 0;
-        var activeOrders = state.getActiveChildOrders();
-        
         
         // do not place more than 5 orders
         if (state.getChildOrders().size() > 4) {
             filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
-            quantityToBuy -= filledQuantity;
-            logger.info("[MyALGO] Has:" + state.getChildOrders().size() + " children and "+ filledQuantity+ " filledQuantity, done");
+            logger.info("[MyALGO] Has:" + state.getChildOrders().size() + " children and "+ filledQuantity+ " filledQuantity");
             return NoAction.NoAction;
-        }
-        
-        // get filledQuantity
-        if (activeOrders.size() >= 1) {
-            filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
-            quantityToBuy -= filledQuantity;
         }
         
         // if price matches, and quantity !=0, place order
         if (price >= farTouch.price && quantityToBuy > 0) {
             logger.info("[MyALGO] Has:" + state.getChildOrders().size() + 
-            " children and "+ filledQuantity+ " filledQuantity, wants " + quantityToBuy + " quantity");
+            " children, wants 5 and " + quantityToBuy + " quantity, joining book @ " + price);
             return new CreateChildOrder(Side.BUY, quantityToBuy, price);
 
         // if price matches, and quantity is 0, do not place order
@@ -66,8 +57,7 @@ public class MyAlgoLogic implements AlgoLogic {
             return NoAction.NoAction;
 
         // if price doesn't match, and quantity != 0, place order
-        // activeOrders.size = 0 so order is placed on the passive side only once
-        } else if (price < farTouch.price && quantityToBuy > 0 && activeOrders.size() == 0) {
+        } else if (price < farTouch.price && quantityToBuy > 0) {
             logger.info("[MyALGO] Has:" + state.getChildOrders().size() + " children and "+ 
             filledQuantity+ " filledQuantity, joining book with: " + quantityToBuy + " @ " + price);
             return new CreateChildOrder(Side.BUY, quantityToBuy, price);
