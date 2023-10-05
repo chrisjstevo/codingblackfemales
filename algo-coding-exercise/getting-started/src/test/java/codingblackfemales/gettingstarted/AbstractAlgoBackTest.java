@@ -40,7 +40,7 @@ public abstract class AbstractAlgoBackTest extends SequencerTestCase {
         final OrderBookInboundOrderConsumer orderConsumer = new OrderBookInboundOrderConsumer(book);
 
         container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
-        //set my algo logic
+        
         container.setLogic(createAlgoLogic());
 
         network.addConsumer(new LoggingConsumer());
@@ -63,10 +63,10 @@ public abstract class AbstractAlgoBackTest extends SequencerTestCase {
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        //write the encoded output to the direct buffer
+        
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-        //set the fields to desired values
+      
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
         encoder.source(Source.STREAM);
@@ -95,10 +95,10 @@ public abstract class AbstractAlgoBackTest extends SequencerTestCase {
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        //write the encoded output to the direct buffer
+        
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-        //set the fields to desired values
+        
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
         encoder.source(Source.STREAM);
@@ -128,10 +128,10 @@ public abstract class AbstractAlgoBackTest extends SequencerTestCase {
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        //write the encoded output to the direct buffer
+       
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-        //set the fields to desired values
+        
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
         encoder.source(Source.STREAM);
@@ -161,17 +161,17 @@ protected UnsafeBuffer createTick4(){
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        //write the encoded output to the direct buffer
+        
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-        //set the fields to desired values
+        
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
         encoder.source(Source.STREAM);
 
 
                 encoder.bidBookCount(5)
-                .next().price(91L).size(40000L)
+                .next().price(91L).size(30000L)
                 .next().price(92L).size(30000L)
                 .next().price(93L).size(20000L)
                 .next().price(94L).size(10000L)
