@@ -29,8 +29,8 @@ public class MyAlgoTest extends AbstractAlgoTest {
     @Test
     public void testDispatchThroughSequencer() throws Exception {
 
-        //create a sample market data tick....
-        send(createTick());
+        //I have created a sample market data tick.
+        send(createTick3());
 
         //simple assert to check we had 3 orders created
        assertEquals(container.getState().getChildOrders().size(), 3);
