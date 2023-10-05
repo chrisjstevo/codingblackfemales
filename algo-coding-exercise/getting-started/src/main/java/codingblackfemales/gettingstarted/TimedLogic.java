@@ -73,7 +73,7 @@ this.currentTime = currentTime;
             LocalTime timeNow = LocalTime.now();
     
             if (dayOfWeek != DayOfWeek.SATURDAY || dayOfWeek != DayOfWeek.SUNDAY){
-              LocalTime marketOpen = LocalTime.of(0, 1);
+              LocalTime marketOpen = LocalTime.of(8, 0);
             //   LocalTime marketClosed = LocalTime.of(16, 30);
             LocalTime marketClosed = LocalTime.of(16, 30);
               
