@@ -15,7 +15,9 @@ import codingblackfemales.sequencer.net.TestNetwork;
 import codingblackfemales.service.MarketDataService;
 import codingblackfemales.service.OrderService;
 import codingblackfemales.sotw.ChildOrder;
+import codingblackfemales.sotw.OrderState;
 import messages.marketdata.*;
+import messages.order.Side;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
 
@@ -46,7 +48,7 @@ public class MyAlgoTest extends SequencerTestCase {
 
         container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
         //set my algo logic
-        container.setLogic(new MyAlgoLogic());
+        container.setLogic(new MeanReversionUsingBidSide());
 
         network.addConsumer(new LoggingConsumer());
         network.addConsumer(book);
@@ -58,20 +60,20 @@ public class MyAlgoTest extends SequencerTestCase {
         return sequencer;
     }
 
-    private UnsafeBuffer createSampleMarketDataTick(){
+    private UnsafeBuffer createSampleMarketDataTick() {
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        //write the encoded output to the direct buffer
+        // Write the encoded output to the direct buffer
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-        //set the fields to desired values
+        // Set the fields to desired values
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
         encoder.source(Source.STREAM);
 
         encoder.bidBookCount(3)
-                .next().price(99L).size(200L)
+                .next().price(98L).size(100L)
                 .next().price(95L).size(200L)
                 .next().price(91L).size(300L);
 
@@ -86,14 +88,14 @@ public class MyAlgoTest extends SequencerTestCase {
         return directBuffer;
     }
 
-    private UnsafeBuffer createSampleMarketDataTick2(){
+    private UnsafeBuffer createSampleMarketDataTick2() {
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        //write the encoded output to the direct buffer
+        // Write the encoded output to the direct buffer
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-        //set the fields to desired values
+        // Set the fields to desired values
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
         encoder.source(Source.STREAM);
@@ -104,10 +106,68 @@ public class MyAlgoTest extends SequencerTestCase {
                 .next().price(91L).size(300L);
 
         encoder.askBookCount(4)
-                .next().price(91L).size(501L)
-                .next().price(101L).size(200L)
-                .next().price(110L).size(5000L)
-                .next().price(119L).size(5600L);
+                .next().price(93L).size(101L)
+                .next().price(94L).size(100L)
+                .next().price(95).size(50L)
+                .next().price(110L).size(56L);
+
+        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+
+        return directBuffer;
+    }
+
+    private UnsafeBuffer createSampleMarketDataTick3() {
+        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+
+        // Write the encoded output to the direct buffer
+        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+
+        // Set the fields to desired values
+        encoder.venue(Venue.XLON);
+        encoder.instrumentId(123L);
+        encoder.source(Source.STREAM);
+
+        encoder.bidBookCount(3)
+                .next().price(120L).size(100L)
+                .next().price(121L).size(200L)
+                .next().price(125L).size(300L);
+
+        encoder.askBookCount(5)
+                .next().price(93L).size(1L)
+                .next().price(94L).size(10L)
+                .next().price(95).size(50L)
+                .next().price(100L).size(56L)
+                .next().price(110L).size(56L);
+
+        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+
+        return directBuffer;
+    }
+
+    private UnsafeBuffer createSampleMarketDataTick4() {
+        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+
+        // Write the encoded output to the direct buffer
+        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+
+        // Set the fields to desired values
+        encoder.venue(Venue.XLON);
+        encoder.instrumentId(123L);
+        encoder.source(Source.STREAM);
+
+        encoder.bidBookCount(3)
+                .next().price(120L).size(100L)
+                .next().price(121L).size(200L)
+                .next().price(125L).size(300L);
+
+        encoder.askBookCount(5)
+                .next().price(93L).size(600L)
+                .next().price(94L).size(10L)
+                .next().price(95).size(50L)
+                .next().price(100L).size(56L)
+                .next().price(110L).size(56L);
 
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
 
@@ -115,20 +175,69 @@ public class MyAlgoTest extends SequencerTestCase {
     }
 
     @Test
-    public void testExampleBackTest() throws Exception {
-        //create a sample market data tick....
+    public void createOrdersUsingAlgo() throws Exception {
+        // Create a sample market data tick....
         send(createSampleMarketDataTick());
-        //simple assert to check we had 3 orders created
-        assertEquals(container.getState().getChildOrders().size(), 2);
 
-        //when: market data moves towards us
+        // Simple assert to check we had 3 orders created
+        assertEquals(container.getState().getChildOrders().size(), 5);
+    }
+
+    @Test
+    public void fillOrdersUsingAlgo() throws Exception {
+        // Create a sample market data tick....
+        send(createSampleMarketDataTick());
+
+        // When Market data moves towards us
         send(createSampleMarketDataTick2());
 
-        //then: get the state
+        // Get the state
         var state = container.getState();
-        long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
-        System.out.println(container.);
-        //and: check that our algo state was updated to reflect our fills when the market data
-//        assertEquals(101, filledQuantity);
+//        long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
+        long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).orElse(0L);
+
+        // Check that our algo state was updated to reflect our fills when the market data
+        assertEquals(251, filledQuantity);
+    }
+
+    @Test
+    public void cancelOrdersUsingAlgo() throws Exception {
+        // Create a sample market data tick....
+        send(createSampleMarketDataTick());
+
+        // When Market data moves towards us
+        send(createSampleMarketDataTick2());
+
+
+        // Check if the algorithm canceled orders
+        var canceledOrders = container.getState().getChildOrders().stream()
+                .filter(order -> order.getState() == OrderState.CANCELLED)
+                .toList();
+
+        assertEquals(1, canceledOrders.size());
+    }
+
+
+    @Test
+    public void createSellOrders() throws Exception {
+        // Create a sample market data tick....
+        send(createSampleMarketDataTick());
+
+        // When Market data moves towards us
+        send(createSampleMarketDataTick2());
+
+        // When Market data moves towards us
+        send(createSampleMarketDataTick3());
+
+        // When Market data moves towards us
+        send(createSampleMarketDataTick4());
+
+        // Check if the algorithm creates sell orders
+        var sellOrders = container.getState().getChildOrders().stream()
+                .filter(order -> order.getSide() == Side.SELL)
+                .toList();
+
+        assertEquals(2, sellOrders.size()); // Adjust this based on the expected number of canceled orders
+
     }
 }
