@@ -31,7 +31,7 @@ public class SniperAlgoLogic implements AlgoLogic {
         long price = farTouch.price;
 
         //until we have three child orders....
-        if (state.getChildOrders().size() < 5) {
+        if (state.getChildOrders().size() < 3) {
             //then keep creating a new one
             logger.info("[SNIPERALGO] Have:" + state.getChildOrders().size() + " children, want 5, sniping far touch of book with: " + quantity + " @ " + price);
             return new CreateChildOrder(Side.BUY, quantity, price);
