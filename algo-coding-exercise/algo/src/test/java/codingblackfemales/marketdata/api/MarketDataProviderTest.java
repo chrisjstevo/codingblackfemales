@@ -1,6 +1,5 @@
 package codingblackfemales.marketdata.api;
 
-
 import codingblackfemales.container.RunTrigger;
 import codingblackfemales.marketdata.impl.SimpleFileMarketDataProvider;
 import codingblackfemales.service.MarketDataService;
