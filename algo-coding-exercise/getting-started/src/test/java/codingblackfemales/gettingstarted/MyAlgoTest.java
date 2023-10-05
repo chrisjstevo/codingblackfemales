@@ -57,7 +57,7 @@ public class MyAlgoTest extends SequencerTestCase {
 
         return sequencer;
     }
-    private UnsafeBuffer createTick2(){
+    private UnsafeBuffer createTick(){
 
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
@@ -68,14 +68,6 @@ public class MyAlgoTest extends SequencerTestCase {
         //set the fields to desired values
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
-
-
-
-
-
-
-
-
 
 
         encoder.askBookCount(3)
@@ -95,15 +87,15 @@ public class MyAlgoTest extends SequencerTestCase {
     }
 
     @org.junit.jupiter.api.Test
-    void evaluate() throws Exception {
+    public void evaluate() throws Exception {
 
         //create a sample market data tick....
-        send(createTick2());
+        send(createTick());
 
         //simple assert to check we had 3 orders created
         assertTrue(container.getState().getChildOrders().size() !=0);
 
-        logger.info("[MYALGO] Has:" + container.getState().getChildOrders().size() + " children");
+        logger.info("[MYALGO] Has:" + container.getState().getChildOrders().size() + " child orders");
 
 
     }
