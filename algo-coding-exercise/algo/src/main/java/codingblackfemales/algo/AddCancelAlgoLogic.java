@@ -28,6 +28,7 @@ public class AddCancelAlgoLogic implements AlgoLogic {
 
         //make sure we have an exit condition...
         if (totalOrderCount > 20) {
+            logger.info("No Action");
             return NoAction.NoAction;
         }
 
