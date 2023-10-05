@@ -24,6 +24,9 @@ public class ChildOrder {
         this.state = state;
     }
 
+    public ChildOrder(Side side, long quantity, long price) {
+    }
+
     public Side getSide() {
         return side;
     }
