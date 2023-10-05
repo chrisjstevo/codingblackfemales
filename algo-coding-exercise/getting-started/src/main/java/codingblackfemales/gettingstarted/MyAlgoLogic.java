@@ -26,7 +26,7 @@ public class MyAlgoLogic implements AlgoLogic {
         logger.info("[MYALGO] The state of the order book is:\n" + orderBookAsString);
         // Get the bid level nearest to the current market price
         final BidLevel nearTouch = state.getBidAt(0);
-        long quantity = 100;
+        long quantity = 501;
         long price = nearTouch.price;
 
         // Get the current list of child orders from the state
