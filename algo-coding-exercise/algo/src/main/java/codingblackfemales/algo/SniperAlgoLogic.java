@@ -4,6 +4,7 @@ import codingblackfemales.action.Action;
 import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.sotw.SimpleAlgoState;
 import codingblackfemales.sotw.marketdata.AskLevel;
+import codingblackfemales.sotw.marketdata.BidLevel;
 import codingblackfemales.util.Util;
 import messages.order.Side;
 import org.slf4j.Logger;
