@@ -61,6 +61,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         assertEquals(container.getState().getActiveChildOrders().size(), 3);
         assertEquals(container.getState().getChildOrders().size(), 4);
 
+        //final tick to see if the Algo tells us its done
         send(createTick4());
     }
 

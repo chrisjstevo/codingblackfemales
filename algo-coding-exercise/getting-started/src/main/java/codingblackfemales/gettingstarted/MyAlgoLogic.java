@@ -5,10 +5,8 @@ import codingblackfemales.action.Action;
 import codingblackfemales.action.CancelChildOrder;
 import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.algo.AlgoLogic;
-import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.sotw.ChildOrder;
 import codingblackfemales.sotw.SimpleAlgoState;
-import codingblackfemales.sotw.marketdata.AskLevel;
 import codingblackfemales.sotw.marketdata.BidLevel;
 import codingblackfemales.util.Util;
 import org.slf4j.Logger;
@@ -27,7 +25,7 @@ public class MyAlgoLogic implements AlgoLogic {
     private final List<Long> listOfOrders = new ArrayList<>();
 
     /**
-     * Context for my Algo - I have created a passive Algo, which waits for a specific stock to reduce in value before buying.
+     * Context for my Algo - I have created an Algo, which waits for a specific stock to reduce in value before buying.
      * Once bought it then waits until the stock hits a certain value where we can sell all of our stock to make a profit.
      * This could be used in the situation where we have done fundamental or technical analysis and the value of the stock is trending downwards but we (based on our analysis) believe that it will eventually trend upwards
      * Therefore we are purchasing while the value of the stock is low
@@ -45,6 +43,7 @@ public class MyAlgoLogic implements AlgoLogic {
         logger.info("[MYALGO] The state of the order book is:\n" + orderBookAsString);
 
 
+        //This is the buying and cancelling logic of the Algo:
         final BidLevel nearTouch = state.getBidAt(0);
 
         long quantity = 100;
@@ -90,19 +89,10 @@ public class MyAlgoLogic implements AlgoLogic {
                 return new CancelChildOrder(childOrder);
             }
 
+
         } else if (activeOrders.size() == 2 && filledQuantity == (quantity * activeOrders.size())) {
-            //This checks that we have the correct number of activeOrders and the filledQuantity is the maximum that we want before trying to sell
-            logger.info("[MYALGO] Algo Sees Book as:\n" + orderBookAsString);
-
-            //variables storing quantity and price for the childOrders that we filled so that we can use them in the weightedPrice calculation
-            long firstChildOrderQuantity = listOfOrders.get(0);
-            long firstChildOrderPrice = listOfOrders.get(1);
-
-            long secondChildOrderQuantity = listOfOrders.get(2);
-            long secondChildOrderPrice = listOfOrders.get(3);
-
-            //weightedPricePaid = ((Q1 x P1) + (Q2 * P2)) / (Q1 + Q2)
-            long weightedPricePaid = ((firstChildOrderQuantity * firstChildOrderPrice) + (secondChildOrderQuantity * secondChildOrderPrice)) / (firstChildOrderQuantity + secondChildOrderQuantity);
+            //This is the selling logic of the ALgo:
+            //The above logic checks that we have the correct number of activeOrders and the filledQuantity is the maximum that we want before trying to sell
 
             //Logic to get the best bid in the order book
             final BidLevel farTouch = state.getBidAt(0);
@@ -114,13 +104,24 @@ public class MyAlgoLogic implements AlgoLogic {
             long nextBestPrice = nextBest.price;
             long nextBestQuantity = nextBest.quantity;
 
-            //Logic to get the worst bid in the order book if the best bid or next best bid cannot not fulfil our filled quantity
+            //Logic to get the worst bid in the order book
             int levels = state.getBidLevels();
             final BidLevel worstBid = state.getBidAt(levels - 1);
             long worstBidPrice = worstBid.price;
             long worstBidQuantity = worstBid.quantity;
 
+            //Variables storing quantity and price for the childOrders that we filled so that we can use them in the weightedPrice calculation
+            long firstChildOrderQuantity = listOfOrders.get(0);
+            long firstChildOrderPrice = listOfOrders.get(1);
+
+            long secondChildOrderQuantity = listOfOrders.get(2);
+            long secondChildOrderPrice = listOfOrders.get(3);
+
+            //WeightedPricePaid = ((Q1 x P1) + (Q2 * P2)) / (Q1 + Q2)
+            long weightedPricePaid = ((firstChildOrderQuantity * firstChildOrderPrice) + (secondChildOrderQuantity * secondChildOrderPrice)) / (firstChildOrderQuantity + secondChildOrderQuantity);
+
             long profit = bestBidPrice - weightedPricePaid;
+
 
             if (profit > 0) {
                 if (bestBidQuantity >= filledQuantity) {
@@ -148,9 +149,15 @@ public class MyAlgoLogic implements AlgoLogic {
                 //-10 is the absolute lowest we are willing to hold our stock at - at this price our position has changed and so now we want to cut our losses and sell all our stock
                 logger.info("[MYALGO] Preventing further loss, I am selling all the stock and adding an ask to the book with: " + filledQuantity + " @ " + bestBidPrice);
                 return new CreateChildOrder(Side.SELL, filledQuantity, bestBidPrice);
+
+            } else if (profit < -10 && bestBidQuantity < filledQuantity && worstBidQuantity >= filledQuantity){
+                logger.info("[MYALGO] Algo Sees Book as:\n" + orderBookAsString);
+                //We sell all of our stock at the absolute worst price just so that we can cut our losses
+                logger.info("[MYALGO] Preventing further loss, I am selling all the stock and adding an ask to the book with: " + filledQuantity + " @ " + worstBidPrice);
+                return new CreateChildOrder(Side.SELL, filledQuantity, worstBidPrice);
+
             } else {
-                //as long as the profit loss is less than -10
-                //we hold our position until the stock goes up which is what we expect according to our analysis
+                //As long as the profit loss is less than -10 we hold our position until the stock goes up which is what we expect according to our analysis
                 logger.info("[MYALGO] Potential to make a profit is present I am holding");
             }
 

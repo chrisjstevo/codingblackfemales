@@ -31,10 +31,11 @@ public class MyAlgoTest extends AbstractAlgoTest {
         //create a sample market data tick....
         send(createTick());
 
-        //simple assert to check we had 3 orders created - under the current market situations
+        //simple assert to check we had 3 orders created and 2 active child orders
         assertEquals(container.getState().getChildOrders().size(), 3);
         assertEquals(container.getState().getActiveChildOrders().size(), 2);
 
+        //assert to check that one of the child orders was cancelled
         var state = container.getState();
         long cancelledOrderCount = state.getChildOrders().size() - state.getActiveChildOrders().size();
         assertEquals(1, cancelledOrderCount);
