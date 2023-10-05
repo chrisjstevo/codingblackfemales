@@ -25,9 +25,9 @@ import static codingblackfemales.action.NoAction.NoAction;
  * - If the order price is greater than the (mean + threshold), CANCEL a child order
  *
  */
-public class MeanReversionUsingBidSide implements AlgoLogic {
+public class MeanReversion implements AlgoLogic {
 
-    private static final Logger logger = LoggerFactory.getLogger(MeanReversionUsingBidSide.class);
+    private static final Logger logger = LoggerFactory.getLogger(MeanReversion.class);
 
     @Override
     public Action evaluate(SimpleAlgoState state) {
@@ -79,7 +79,7 @@ public class MeanReversionUsingBidSide implements AlgoLogic {
 
             //  Exit condition
             //  - when number of child orders is equal to the number of active child orders
-            if (totalChildCount == noOfChildOrders) {
+            if (totalChildCount >= noOfChildOrders) {
                 return NoAction;
             }
 
@@ -97,28 +97,28 @@ public class MeanReversionUsingBidSide implements AlgoLogic {
 
         // Check if the Active BID child orders have a price above the mean + threshold
         // If the child order BID prices are greater than the mean + threshold, this implies that we want
-        // to buy at a price that's not profitable, instead we should cancel the orders and create ASK orders to
-        // take advantage of the fact that the average price people are willing to sell the stock at has increased
+        // to buy at a price that's not profitable, instead we should cancel the orders
+        // IF the  child order BID prices are greater than the current best BID price, create an ASK order to
+        // take advantage of the fact that the price people are willing to buy the stock at has increased
 
-        Side bidSide = Side.BUY;
-        if (childOrders.size() > 0) {
+
+        if (childOrders.size() > 0 && childOrders.size() <=  noOfChildOrders) {
 
             // for each UNFILLED BID child order, if the price is above the mean + threshold, cancel the order
             for (codingblackfemales.sotw.ChildOrder childOrder : childOrders) {
-                if (childOrder.getSide().equals(bidSide) && childOrder.getPrice() > (avgPrice + threshold) && childOrder.getFilledQuantity() == 0) {
+                if (childOrder.getSide().equals(Side.BUY) && childOrder.getPrice() > (avgPrice + threshold) && childOrder.getFilledQuantity() == 0) {
                     // Cancel child BID order
                     logger.info("[Mean Reversion Algo] Cancelling order:"  + childOrder + " \n"
                             + childOrder.getSide() + " Side" + "\n" + "Quantity: " + childOrder.getQuantity() + " @ " + "Price: " + childOrder.getPrice());
                     return new CancelChildOrder(childOrder);
+                }
 
+                // if the filled bid child order prices are less than the current best bid create
+                if(childOrder.getSide().equals(Side.BUY) && childOrder.getPrice() < bestPrice && childOrder.getFilledQuantity() == childOrder.getQuantity()) {
+                    return new CreateChildOrder(Side.SELL, 100, bestPrice);
                 }
             }
-            // Create a new BID child order since the best ASK price is above the (mean - threshold)
-            // All child orders should have qty of 100,
-            if (totalChildCount < noOfChildOrders) {
-                logger.info("[Mean Reversion Algo] Creating child order " + (totalChildCount + 1) + " : " + 100 + " @ " + bestPrice);
-                return new CreateChildOrder(Side.SELL, 100, bestPrice);
-            }
+
         }
 
         // No action if the current price is within the threshold

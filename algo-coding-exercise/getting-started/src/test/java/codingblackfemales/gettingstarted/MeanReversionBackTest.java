@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
 
 import static org.junit.Assert.assertEquals;
 
-public class MyAlgoTest extends SequencerTestCase {
+public class MeanReversionBackTest extends SequencerTestCase {
 
     private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
     private final BookUpdateEncoder encoder = new BookUpdateEncoder();
@@ -48,7 +48,7 @@ public class MyAlgoTest extends SequencerTestCase {
 
         container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
         //set my algo logic
-        container.setLogic(new MeanReversionUsingBidSide());
+        container.setLogic(new MeanReversion());
 
         network.addConsumer(new LoggingConsumer());
         network.addConsumer(book);
@@ -179,7 +179,7 @@ public class MyAlgoTest extends SequencerTestCase {
         // Create a sample market data tick....
         send(createSampleMarketDataTick());
 
-        // Simple assert to check we had 3 orders created
+        // check we had 5 orders created
         assertEquals(container.getState().getChildOrders().size(), 5);
     }
 
@@ -193,7 +193,6 @@ public class MyAlgoTest extends SequencerTestCase {
 
         // Get the state
         var state = container.getState();
-//        long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
         long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).orElse(0L);
 
         // Check that our algo state was updated to reflect our fills when the market data
@@ -237,7 +236,7 @@ public class MyAlgoTest extends SequencerTestCase {
                 .filter(order -> order.getSide() == Side.SELL)
                 .toList();
 
-        assertEquals(2, sellOrders.size()); // Adjust this based on the expected number of canceled orders
+        assertEquals(1, sellOrders.size());
 
     }
 }
