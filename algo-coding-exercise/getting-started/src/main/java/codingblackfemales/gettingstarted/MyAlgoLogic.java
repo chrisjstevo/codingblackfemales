@@ -20,7 +20,7 @@ public class MyAlgoLogic implements AlgoLogic {
     @Override
     public Action evaluate(SimpleAlgoState state) {
 
-        final String orderBookAsString = Util.orderBookToString(state);
+        String orderBookAsString = Util.orderBookToString(state);
 
         logger.info("[MYALGO] The state of the order book is:\n" + orderBookAsString);
 
@@ -31,64 +31,49 @@ public class MyAlgoLogic implements AlgoLogic {
          *
          */
 
-        final AskLevel farTouch = state.getAskAt(0);
+        AskLevel farTouch = state.getAskAt(0);
 
-        final long price = 80;
-        final long myMaxBid = price+15;
+        final long price = 100;
         long quantityToBuy = 2000;
         long filledQuantity = 0;
         var activeOrders = state.getActiveChildOrders();
         
         
         // do not place more than 5 orders
-        if (state.getChildOrders().size() > 4 && quantityToBuy !=0) {
+        if (state.getChildOrders().size() > 4) {
             filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
             quantityToBuy -= filledQuantity;
             logger.info("[MyALGO] Has:" + state.getChildOrders().size() + " children and "+ filledQuantity+ " filledQuantity, done");
             return NoAction.NoAction;
         }
-       
         
-        // if price matches
-        if (price >= farTouch.price && quantityToBuy !=0) {
-            //when there's no active order, create an order
-            if (activeOrders.size() == 0) {
-                logger.info("[MyALGO] Has:" + state.getChildOrders().size() + " children and "+ filledQuantity+ " filledQuantity, joining book with: " + quantityToBuy + " @ " + price);
-                return new CreateChildOrder(Side.BUY, quantityToBuy, price);
-            } 
-
-            //if there's atleast one order and price matches
-            else if (activeOrders.size() >= 1 && farTouch.price<=myMaxBid) {
-                filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
-                quantityToBuy -= filledQuantity;
-                logger.info("[MyALGO] Has:" + state.getChildOrders().size() + " children and"+ filledQuantity+ "filledQuantity");
-                    
-                if (quantityToBuy !=0) {
-                    logger.info("[MyALGO] else-if if Has:" + state.getChildOrders().size() + " children and"+ filledQuantity+ "filledQuantity, joining book with: " + quantityToBuy + " @ " + myMaxBid);
-                    return new CreateChildOrder(Side.BUY, quantityToBuy, myMaxBid);
-                } else {
-                    logger.info("[MyALGO] else-if else Has:" + state.getChildOrders().size() + " children and"+ filledQuantity+ "filledQuantity, joining book with: " + quantityToBuy + " @ " + myMaxBid); 
-                    return NoAction.NoAction;
-                }
-
-            } else {
-                filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
-                quantityToBuy -= filledQuantity;
-                logger.info("[MYALGO] else Has:" + state.getChildOrders().size() + " children, and " + filledQuantity+ " filledQuantity.");
-                return new CreateChildOrder(Side.BUY, quantityToBuy, price);
-            }  }
-        else {
-            // if there's an active order, update quantity
-            if (activeOrders.size() >= 1) {
-                filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
-                quantityToBuy -= filledQuantity;
-                logger.info("[MYALGO] last else if block Has:" + state.getChildOrders().size() + " children, and" + filledQuantity+ "filledQuantity.");
-            } else {
-            //no active order, create order.
-            logger.info("[MYALGO] last else else block Has:" + state.getChildOrders().size() + " children, and" + filledQuantity+ "filledQuantity.");
+        // get filledQuantity
+        if (activeOrders.size() >= 1) {
+            filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
+            quantityToBuy -= filledQuantity;
         }
+        
+        // if price matches, and quantity !=0, place order
+        if (price >= farTouch.price && quantityToBuy > 0) {
+            logger.info("[MyALGO] Has:" + state.getChildOrders().size() + 
+            " children and "+ filledQuantity+ " filledQuantity, wants " + quantityToBuy + " quantity");
             return new CreateChildOrder(Side.BUY, quantityToBuy, price);
-        }   
+
+        // if price matches, and quantity is 0, do not place order
+        } else if (price >= farTouch.price && quantityToBuy <= 0) {
+            logger.info("[MyALGO] Has:" + state.getChildOrders().size() + 
+            " children and "+ filledQuantity+ " filledQuantity");
+            return NoAction.NoAction;
+
+        // if price doesn't match, and quantity != 0, place order
+        // activeOrders.size = 0 so order is placed on the passive side only once
+        } else if (price < farTouch.price && quantityToBuy > 0 && activeOrders.size() == 0) {
+            logger.info("[MyALGO] Has:" + state.getChildOrders().size() + " children and "+ 
+            filledQuantity+ " filledQuantity, joining book with: " + quantityToBuy + " @ " + price);
+            return new CreateChildOrder(Side.BUY, quantityToBuy, price);
+
+        // if price doesn't match, and quantity is 0, do not place order
+        } else return NoAction.NoAction;
     }
 }
 
