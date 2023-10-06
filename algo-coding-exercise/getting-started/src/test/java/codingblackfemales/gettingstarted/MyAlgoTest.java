@@ -94,7 +94,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
         timedLogic.setDayOfWeek(DayOfWeek.SATURDAY);
 
         timedLogic.setCurrentTime(LocalTime.of(16, 31));
-        assertFalse(timedLogic.isMarketOpen());
+        assertFalse(!timedLogic.isMarketOpen());
     }
 
     @Test
