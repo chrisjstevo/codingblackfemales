@@ -28,6 +28,7 @@ public class MyPassiveAlgoLogic  implements AlgoLogic {
         logger.info("[MYALGO] Algo Sees Book as:\n" + book);
 
         var totalOrderCount = state.getChildOrders().size();
+        logger.info("Order count as:\n" + totalOrderCount);
 
         // Make sure we have an exit condition...
         if (totalOrderCount > 20) {
@@ -54,18 +55,21 @@ public class MyPassiveAlgoLogic  implements AlgoLogic {
             final long sellPrice = askLevel.price;
 
             final long buyQuantity = bidLevel.quantity;
-            final long sellQuantity = askLevel.quantity;
+            final long sellQuantity = 3;
 
             // Check if askLevel price is less than or equal to bidLevel price
-            if (sellPrice <= buyPrice) {
-                logger.info("MYPassiveALGO Adding order for " + buyQuantity + "@" + buyPrice);
-                return new CreateChildOrder(Side.BUY, buyQuantity, buyPrice);
-            } else {
-                logger.info("MYPassiveALGO Adding order for " + sellQuantity + "@" + sellPrice);
+            if (sellPrice == buyPrice) {
+                logger.info("MYPassiveALGO Match found for " + buyQuantity + "@" + buyPrice);
+                CreateChildOrder createOrder = new CreateChildOrder(Side.BUY, buyQuantity, buyPrice);
+                logger.info("[MYALGO] Child Order Details: " + createOrder.toString());
+                return createOrder;
 
-                return new CreateChildOrder(Side.SELL, sellQuantity, sellPrice);
+            }
 
-                //return NoAction.NoAction; // Do nothing if askLevel price is higher than bidLevel price
+            else {
+                //return new CreateChildOrder(Side.SELL, sellQuantity, sellPrice);
+
+                return NoAction.NoAction; // Do nothing if askLevel price is higher than bidLevel price
             }
         }
     }

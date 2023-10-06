@@ -2,6 +2,8 @@ package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
 import org.junit.Test;
+import codingblackfemales.sotw.ChildOrder;
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -17,7 +19,7 @@ import org.junit.Test;
  * If you cancel the order your child order will show the order status as cancelled in the childOrders of the state object.
  *
  */
-public class MyAlgoBackTest extends AbstractAlgoBackTest {
+public class MyAlgoBackTest extends AbstractAlgoBackTest{
 
     @Override
     public AlgoLogic createAlgoLogic() {
@@ -30,7 +32,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         send(createTick());
 
         //ADD asserts when you have implemented your algo logic
-        //assertEquals(container.getState().getChildOrders().size(), 3);
+        assertEquals(container.getState().getChildOrders().size(), 0);
 
         //when: market data moves towards us
         send(createTick2());
@@ -41,8 +43,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         //Check things like filled quantity, cancelled order count etc....
         //long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
         //and: check that our algo state was updated to reflect our fills when the market data
-        //assertEquals(225, filledQua
-        // ntity);
+        //assertEquals(225, filledQuantity);
     }
 
 }
