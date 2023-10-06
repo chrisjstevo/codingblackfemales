@@ -28,7 +28,7 @@ public class OrderService extends OrderEventListener {
         return new ChildOrder(create.side(), create.orderId(), create.quantity(), create.price(), OrderState.PENDING);
     }
 
-    private void updateState(ChildOrder child, int state){
+    public void updateState(ChildOrder child, int state){
         child.setState(state);
     }
 
