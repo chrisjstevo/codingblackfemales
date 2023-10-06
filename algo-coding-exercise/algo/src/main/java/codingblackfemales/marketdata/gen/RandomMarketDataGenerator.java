@@ -367,4 +367,4 @@ public class RandomMarketDataGenerator implements MarketDataGenerator {
         }
         return bidBook;
     }
-}
+} 
