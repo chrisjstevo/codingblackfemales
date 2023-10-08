@@ -1,6 +1,7 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
+
 import org.junit.Test;
 
 /**
@@ -34,7 +35,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         send(createTick2());
 
         //then: get the state
-        var state = container.getState();
+        //var state = container.getState();
 
         //Check things like filled quantity, cancelled order count etc....
         //long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
