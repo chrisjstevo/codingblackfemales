@@ -27,12 +27,13 @@ public class AddCancelAlgoLogic implements AlgoLogic {
         var totalOrderCount = state.getChildOrders().size();
 
         //make sure we have an exit condition...
+        
         if (totalOrderCount > 20) {
             return NoAction.NoAction;
         }
 
         final var activeOrders = state.getActiveChildOrders();
-
+        
         if (activeOrders.size() > 0) {
 
             final var option = activeOrders.stream().findFirst();
@@ -43,14 +44,19 @@ public class AddCancelAlgoLogic implements AlgoLogic {
                 return new CancelChildOrder(childOrder);
             }
             else{
+
                 return NoAction.NoAction;
             }
+
         } else {
+            
             BidLevel level = state.getBidAt(0);
             final long price = level.price;
             final long quantity = level.quantity;
             logger.info("[ADDCANCELALGO] Adding order for" + quantity + "@" + price);
             return new CreateChildOrder(Side.BUY, quantity, price);
+
+            
         }
     }
 }

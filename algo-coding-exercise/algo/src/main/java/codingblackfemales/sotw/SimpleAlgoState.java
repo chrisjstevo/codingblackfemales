@@ -2,6 +2,7 @@ package codingblackfemales.sotw;
 
 import codingblackfemales.sotw.marketdata.AskLevel;
 import codingblackfemales.sotw.marketdata.BidLevel;
+import messages.order.Side;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface SimpleAlgoState {
     public List<ChildOrder> getActiveChildOrders();
 
     public long getInstrumentId();
+
+    
 }
