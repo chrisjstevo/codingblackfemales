@@ -15,13 +15,20 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+/********
+ * LOGIC
+ * The following algorithm has been developed based on percentage change of price.
+ * The aim is to examine the price movement of the stock using the percentage change values.
+ * To express each market data update as one entity that can be monitored, I chose to find the average price of all levels in the tick. This follows the idea that if the market moves down, the average price of all levels in the tick will be of a lower value. The percentage change from tick to tick will be calculated.
+ * An average percentage change value will be calculated, following x number of market data updates (algo builds a history of interactions with the market). This number can be amended to reflect 1 week's worth of updates, 1 month's worth, 6 months etc.
+ * Once an average percentage change is established, the percent change values of subsequent market data updates will be calculated and compared to the most recent average.
+ * If the percentage change is significantly higher than the average, the algo will take advantage of this jump and trigger a buy or sell (depending on whether the change was + or -). All other cases signify normal fluctuations in the market.
+ * This average percent change will be updated with each market data update, negating any significant jumps that trigger a buy or sell (leads to a skewed value for the av % change).
+ * Other conditions used to determine a sell or buy: check the quantity of stock available to sell; if buying, we have unlimited money; if buying, is the farTouch price lower than the weighted average price of bought stocks; if selling, is the stock price higher than the weighted average price of bought stocks.
+ */
+
 public class MyStretchAlgoLogic implements AlgoLogic {
     private static final Logger logger = LoggerFactory.getLogger(MyStretchAlgoLogic.class);
-
-    /********
-     * Add your logic here....
-     * As soon as tick is available update data structure with new tick value.
-     */
 
     LinkedList<Long> averageTickPrices = new LinkedList<Long>();
     LinkedList<Double> percentChangeOfTicks = new LinkedList<Double>();
@@ -34,6 +41,7 @@ public class MyStretchAlgoLogic implements AlgoLogic {
     double averagePercentChange;
     long currentAverageTickPrice;
     long previousTickAverage;
+    double percentageChange;
 
     int tickIndex = 0;
 
@@ -44,12 +52,15 @@ public class MyStretchAlgoLogic implements AlgoLogic {
     public Action evaluate(SimpleAlgoState state) {
 
         var orderBookAsString = Util.orderBookToString(state);
-        logger.info("[MYSTRETCHALGO] The state of the order book is:\n" + orderBookAsString);
 
         final AskLevel farTouch = state.getAskAt(0);
 
-        tickIndex+=1;
-        logger.info("This is for Tick " + tickIndex);
+        tickIndex+=1; // for tracking purposes
+
+        logger.info("[MYSTRETCHALGO] The state of the order book is:\n" + orderBookAsString);
+        logger.info("[MYSTRETCHALGO] Market Data Update: " + tickIndex);
+
+
 
 
         if (averageTickPrices.isEmpty()) {
@@ -61,8 +72,9 @@ public class MyStretchAlgoLogic implements AlgoLogic {
             currentAverageTickPrice = calculateAverageTickPrice(state);
             storeAverageTickPrice(currentAverageTickPrice);
 
-            double percentageChange = calculatePercentChange(previousTickAverage,currentAverageTickPrice);
+            percentageChange = calculatePercentChange(previousTickAverage,currentAverageTickPrice);
             percentChangeOfTicks.add(percentageChange);
+
             logger.info("[MYSTRETCHALGO] The most recent percent change of average tick prices are: " + percentChangeOfTicks.toString());
 
         } else { // Buy or Sell Logic
@@ -72,31 +84,27 @@ public class MyStretchAlgoLogic implements AlgoLogic {
             previousTickAverage = averageTickPrices.peekLast();
             currentAverageTickPrice = calculateAverageTickPrice(state);
             logger.info("Current average tick price is: " + currentAverageTickPrice);
-            logger.info("[MYSTRETCHALGO] storeAverageTickPrice: " + averageTickPrices);
+            logger.info("[MYSTRETCHALGO] Log of most recent average tick prices: " + averageTickPrices);
 
-            double percentageChange = calculatePercentChange(previousTickAverage,currentAverageTickPrice);
-            logger.info("[MYSTRETCHALGO] The most recent percent change of average tick prices are: " + percentChangeOfTicks.toString());
+            percentageChange = calculatePercentChange(previousTickAverage,currentAverageTickPrice);
+            logger.info("[MYSTRETCHALGO] Log of most recent percent change values are: " + percentChangeOfTicks.toString());
 
 
-            //Check if latest percent change  is out of bounds for limit (set as 1.5 x average percent change).
+            //Check if latest percent change  is out of bounds for limit (set as 1.5 x average percent change). Do not store percentage change - will skew average percentage change value.
             if((Math.abs(percentageChange)>averagePercentChange) && (percentageChange > 0)) {
                 //sell
                 logger.info("[MYSTRETCHALGO] Current average percent change is: " + averagePercentChange);
                 logger.info("[MYSTRETCHALGO] Latest percent change is " + percentageChange + " which is a positive value and exceeds the current average percent change. Sell now.");
 
-                //percentageChange = calculatePercentChange(previousTickAverage,currentAverageTickPrice);
-                //percentChangeOfTicks.add(percentageChange);
-                storeAverageTickPrice(currentAverageTickPrice);
-                //percentChangeOfTicks.add(percentageChange);
+                storeAverageTickPrice(currentAverageTickPrice); // should this value be stored?
 
                 long price = farTouch.price;
-
+                //Add more conditions?
                 if (price > calculateWeightedAveragePriceOfBoughtStocks() && calculateTotalQuantityOfBoughtStocks()!=0){
                     return new CreateChildOrder(Side.SELL,calculateTotalQuantityOfBoughtStocks(),price);
+                } else if (price <= calculateWeightedAveragePriceOfBoughtStocks()) {
+                    logger.info("The price of the stock is not greater than the weighted average of already purchased stocks.");
                 }
-
-                //should i add the average tick price to the list?
-                //Will not be adding percentage change - will skew the data
 
             } else if ((Math.abs(percentageChange)>averagePercentChange) && (percentageChange < 0)) {
                 // buy - assuming we have unlimited money.
@@ -120,8 +128,6 @@ public class MyStretchAlgoLogic implements AlgoLogic {
             }
 
         }
-
-
         return NoAction.NoAction;
         }
 
@@ -130,7 +136,6 @@ public class MyStretchAlgoLogic implements AlgoLogic {
 
 
     public long calculateAverageTickPrice(SimpleAlgoState state) {
-
         long askLevels = state.getAskLevels();
         long bidLevels = state.getBidLevels();
 
@@ -151,31 +156,25 @@ public class MyStretchAlgoLogic implements AlgoLogic {
         }
 
         return (askPrices+bidPrices)/(askLevels+bidLevels);
-
     }
 
 
 
     public double calculatePercentChange(long averageTickPrice1, long averageTickPrice2) {
-
         double avgTickPrice1 = averageTickPrice1;
         double avgTickPrice2 = averageTickPrice2;
         return (avgTickPrice2 -avgTickPrice1)/(avgTickPrice1)*100;
-
     }
 
 
 
     public void calculateAveragePercentChange() {
-
         double sumOfPercentChange = 0;
         for (Double percentChangeOfTick : percentChangeOfTicks) {
             sumOfPercentChange += Math.abs(percentChangeOfTick);
         }
 
         averagePercentChange = sumOfPercentChange/percentChangeOfTicks.size();
-        logger.info("[MYSTRETCHALGO] Updated averagePercentChange " + averagePercentChange);
-
     }
 
 
@@ -193,6 +192,7 @@ public class MyStretchAlgoLogic implements AlgoLogic {
 
     }
 
+
     public long calculateTotalQuantityOfBoughtStocks() {
         long sumOfQuantities = 0;
         for (long quantity:boughtStocks.values()) {
@@ -202,14 +202,27 @@ public class MyStretchAlgoLogic implements AlgoLogic {
         return sumOfQuantities;
     }
 
+
     public long calculateWeightedAveragePriceOfBoughtStocks() {
+        if (boughtStocks.isEmpty()) {
+            return 0;
+        }
+
         long sumOfProducts = 0;
+        long sumOfQuantities = 0;
         for(Map.Entry<Long, Long> e: boughtStocks.entrySet()) {
-            long product = e.getKey()*e.getValue();
+            long price = e.getKey();
+            long quantity = e.getValue();
+
+            long product = price*quantity;
+
+            sumOfQuantities += quantity;
             sumOfProducts+= product;
         }
-        logger.info("Weighted average of purchased stocks is " + sumOfProducts/boughtStocks.size());
-        return sumOfProducts/boughtStocks.size();
+
+        logger.info("Weighted average of purchased stocks is sum of products (" + sumOfProducts + ") divided by the sum of quantities (" + sumOfQuantities + "). Equalling: " + sumOfProducts/sumOfQuantities);
+        return sumOfProducts/sumOfQuantities;
+
     }
 
 

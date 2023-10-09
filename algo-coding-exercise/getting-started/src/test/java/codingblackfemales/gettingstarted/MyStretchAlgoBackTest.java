@@ -41,10 +41,10 @@ public class MyStretchAlgoBackTest extends AbstractAlgoBackTest {
         send(createTick4());
         createAlgoLogic();
         //96
-//
-//        send(createTick());
-//        createAlgoLogic();
-//        //104
+
+        send(createTick());
+        createAlgoLogic();
+        //104
 //
 //        send(createTick4());
 //        createAlgoLogic();
