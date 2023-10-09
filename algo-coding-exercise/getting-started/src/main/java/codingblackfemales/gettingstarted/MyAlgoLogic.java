@@ -28,11 +28,11 @@ public class MyAlgoLogic implements AlgoLogic {
     public Action evaluate(SimpleAlgoState state) {
        
 
-        logger.info("[MYALGOLOGIC] In Algo Logic....");
+        logger.info("[MYALGO] In Algo Logic....");
 
         final String book = Util.orderBookToString(state);
 
-        logger.info("[ADDCANCELALGO] Algo Sees Book as:\n" + book);
+        logger.info("[MYALGO] Algo Sees Book as:\n" + book);
 
         var totalOrderCount = state.getChildOrders().size();
 
