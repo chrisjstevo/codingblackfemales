@@ -1,7 +1,7 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
-import codingblackfemales.algo.PassiveAlgoLogic;
+//import codingblackfemales.algo.PassiveAlgoLogic;
 import codingblackfemales.container.Actioner;
 import codingblackfemales.container.AlgoContainer;
 import codingblackfemales.container.RunTrigger;
@@ -15,8 +15,13 @@ import codingblackfemales.sequencer.consumer.LoggingConsumer;
 import codingblackfemales.sequencer.net.TestNetwork;
 import codingblackfemales.service.MarketDataService;
 import codingblackfemales.service.OrderService;
+import messages.marketdata.BookUpdateEncoder;
 import messages.marketdata.InstrumentStatus;
+import messages.marketdata.MessageHeaderEncoder;
+import messages.marketdata.Source;
 import messages.marketdata.Venue;
+
+import static org.junit.Assert.assertEquals;
 
 import java.nio.ByteBuffer;
 
@@ -36,6 +41,10 @@ import org.junit.Test;
  *
  */
 public class MyAlgoBackTest extends AbstractAlgoBackTest {
+    private final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+    private final BookUpdateEncoder encoder = new BookUpdateEncoder();
+
+    private AlgoContainer container;
 
     @Override
     public AlgoLogic createAlgoLogic() {
@@ -69,7 +78,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         return sequencer;
     }
 
-    private UnsafeBuffer createSampleMarketDataTick(){
+    private UnsafeBuffer MarketDataTick(){
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
@@ -97,19 +106,49 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         return directBuffer;
     }
 
+    private UnsafeBuffer MarketDataTick2(){
+        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+
+        //write the encoded output to the direct buffer
+        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+
+        //set the fields to desired values
+        encoder.venue(Venue.XLON);
+        encoder.instrumentId(123L);
+        encoder.source(Source.STREAM);
+
+        encoder.bidBookCount(3)
+                .next().price(98L).size(100L)
+                .next().price(95L).size(200L)
+                .next().price(91L).size(300L);
+
+        encoder.askBookCount(4)
+                .next().price(100L).size(101L)
+                .next().price(110L).size(200L)
+                .next().price(125L).size(5200L)
+                .next().price(130L).size(6005L);
+
+        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+
+        return directBuffer;
+    }
+
+
+
     @Test
     public void testExampleBackTest() throws Exception {
         //create a sample market data tick....
-        send(createTick());
+        send(MarketDataTick());
 
         //ADD asserts when you have implemented your algo logic
-        //assertEquals(container.getState().getChildOrders().size(), 3);
+        assertEquals(container.getState().getChildOrders().size(), 0);
 
         //when: market data moves towards us
-        send(createTick2());
+        send(MarketDataTick2());
 
         //then: get the state
-        var state = container.getState();
+        //var state = container.getState();
 
         //Check things like filled quantity, cancelled order count etc....
         //long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
