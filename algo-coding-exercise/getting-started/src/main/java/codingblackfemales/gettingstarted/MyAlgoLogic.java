@@ -23,20 +23,15 @@ public class MyAlgoLogic implements AlgoLogic {
 
         logger.info("[MYALGO] The state of the order book is:\n" + orderBookAsString);
 
-        /********
-         *
-         * Add your logic here....
-         *
-         */
         BidLevel bestBid = state.getBidAt(0);
 
         if (!state.getActiveChildOrders().isEmpty()) {
-            // If there are active orders, cancel the first one (oldest order) - other reasons to cancel an order?
+            // If there are active orders, cancel the oldest order 
             Action cancelAction = new CancelChildOrder(state.getActiveChildOrders().get(0));
             logger.info("[MYALGO] Cancelling an active order.");
             return cancelAction;
         } else {
-            // Create a new child order at the best bid level if there are no active orders
+            // Creating a new child order at the best bid level if there are no active orders
             long quantity = 75; // Fixed quantity
             long price = bestBid.price;
 
@@ -45,7 +40,5 @@ public class MyAlgoLogic implements AlgoLogic {
             return createAction;
         }
 
-
-        //return NoAction.NoAction;
     }
 }

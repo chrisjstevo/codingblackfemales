@@ -21,17 +21,6 @@ import java.nio.ByteBuffer;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
 
-
-/**
- * This test is designed to check your algo behavior in isolation of the order book.
- *
- * You can tick in market data messages by creating new versions of createTick() (ex. createTick2, createTickMore etc..)
- *
- * You should then add behaviour to your algo to respond to that market data by creating or cancelling child orders.
- *
- * When you are comfortable you algo does what you expect, then you can move on to creating the MyAlgoBackTest.
- *
- */
 public class MyAlgoTest extends AbstractAlgoTest {
 
     @Override
@@ -43,10 +32,6 @@ public class MyAlgoTest extends AbstractAlgoTest {
     @Test
     public void testDispatchThroughSequencer() throws Exception {
 
-        //create a sample market data tick....
-        //send(createTick());
-
-        //simple assert to check we had 3 orders created
         assertEquals(container.getState().getChildOrders().size(), 0);
         assertNotNull(createTick());
     }
@@ -59,10 +44,8 @@ public class MyAlgoTest extends AbstractAlgoTest {
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        //write the encoded output to the direct buffer
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-        //set the fields to desired values
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
 
