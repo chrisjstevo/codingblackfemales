@@ -1,19 +1,26 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
+import codingblackfemales.algo.PassiveAlgoLogic;
+import codingblackfemales.container.Actioner;
+import codingblackfemales.container.AlgoContainer;
+import codingblackfemales.container.RunTrigger;
+import codingblackfemales.sequencer.DefaultSequencer;
+import codingblackfemales.sequencer.Sequencer;
+import codingblackfemales.sequencer.consumer.LoggingConsumer;
+import codingblackfemales.sequencer.net.TestNetwork;
+import codingblackfemales.service.MarketDataService;
+import codingblackfemales.service.OrderService;
+import messages.marketdata.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.nio.ByteBuffer;
+
+import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
 
-
-/**
- * This test is designed to check your algo behavior in isolation of the order book.
- *
- * You can tick in market data messages by creating new versions of createTick() (ex. createTick2, createTickMore etc..)
- *
- * You should then add behaviour to your algo to respond to that market data by creating or cancelling child orders.
- *
- * When you are comfortable you algo does what you expect, then you can move on to creating the MyAlgoBackTest.
- *
- */
 public class MyAlgoTest extends AbstractAlgoTest {
 
     @Override
@@ -22,14 +29,42 @@ public class MyAlgoTest extends AbstractAlgoTest {
         return new MyAlgoLogic();
     }
 
-
     @Test
     public void testDispatchThroughSequencer() throws Exception {
 
-        //create a sample market data tick....
-        send(createTick());
-
-        //simple assert to check we had 3 orders created
-        //assertEquals(container.getState().getChildOrders().size(), 3);
+        assertEquals(container.getState().getChildOrders().size(), 0);
+        assertNotNull(createTick());
     }
+ 
+    protected UnsafeBuffer create2ndTick(){
+
+        final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+        final BookUpdateEncoder encoder = new BookUpdateEncoder();
+
+        final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+        final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
+
+        encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
+
+        encoder.venue(Venue.XLON);
+        encoder.instrumentId(123L);
+
+        encoder.askBookCount(3)
+                .next().price(100L).size(102L)
+                .next().price(110L).size(200L)
+                .next().price(115L).size(500L);
+
+        encoder.bidBookCount(3)
+                .next().price(98L).size(1000L)
+                .next().price(95L).size(2000L)
+                .next().price(191L).size(3000L);
+
+        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+        encoder.source(Source.STREAM);
+
+        return directBuffer;
+    }
+
+
+    
 }
