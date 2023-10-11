@@ -30,7 +30,7 @@ public class MyAlgoLogic implements AlgoLogic {
 
         double priceThreshold = 10; // Adjust as needed
    
-        double priceDifference = topAskLevel.price - topBidLevel.price;
+        double priceDifference =  topBidLevel.price - topAskLevel.price ;
 
         final var activeOrders = state.getActiveChildOrders();
 

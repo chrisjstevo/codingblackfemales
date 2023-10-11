@@ -43,7 +43,7 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
 
     public abstract AlgoLogic createAlgoLogic();
 
-    protected UnsafeBuffer createTick(){
+    protected UnsafeBuffer createTick() {
 
         final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
         final BookUpdateEncoder encoder = new BookUpdateEncoder();
@@ -51,23 +51,23 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
         final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        //write the encoded output to the direct buffer
+        // write the encoded output to the direct buffer
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
-        //set the fields to desired values
+        // set the fields to desired values
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
 
-        encoder.askBookCount(1)
-                // .next().price(110L).size(1000L) // Larger ask quantity
-                // .next().price(110L).size(200L)
+        encoder.askBookCount(3)
+                .next().price(110L).size(1000L)
+                .next().price(110L).size(200L)
                 .next().price(115L).size(5000L);
 
-        encoder.bidBookCount(1)
-                // .next().price(100L).size(100L)// Lower bid price Smaller bid quantity
-                // .next().price(95L).size(200L)
-                .next().price(91L).size(300L);
-              
+        encoder.bidBookCount(3)
+                .next().price(100L).size(100L)
+                .next().price(95L).size(200L)
+                .next().price(91L).size(5000L);
+
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
         encoder.source(Source.STREAM);
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="codingblackfemales.gettingstarted.MyAlgoTest" time="0.295" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="codingblackfemales.gettingstarted.MyAlgoTest" time="0.282" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="20"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="GB"/>
     <property name="sun.boot.library.path" value="/opt/homebrew/Cellar/openjdk/20.0.2/libexec/openjdk.jdk/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/getting-started/target/surefire/surefirebooter-20231011054510549_26.jar /Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/getting-started/target/surefire 2023-10-11T05-45-06_698-jvmRun1 surefire-20231011054510549_24tmp surefire_2-20231011054510549_25tmp"/>
+    <property name="sun.java.command" value="/Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/getting-started/target/surefire/surefirebooter-20231011070135346_26.jar /Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/getting-started/target/surefire 2023-10-11T07-01-32_096-jvmRun1 surefire-20231011070135346_24tmp surefire_2-20231011070135346_25tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/getting-started/target/test-classes:/Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/getting-started/target/classes:/Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/algo/target/algo-0.01-SNAPSHOT.jar:/Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/dictionary/target/dictionary-0.01-SNAPSHOT.jar:/Users/bimbo/.m2/repository/org/agrona/agrona/1.16.0/agrona-1.16.0.jar:/Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/sequencer/target/sequencer-0.01-SNAPSHOT.jar:/Users/bimbo/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/Users/bimbo/.m2/repository/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar:/Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/backtest/target/backtest-0.01-SNAPSHOT.jar:/Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/collection/target/collection-0.01-SNAPSHOT.jar:/Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/sequencer/target/sequencer-0.01-SNAPSHOT-tests.jar:/Users/bimbo/.m2/repository/junit/junit/4.11/junit-4.11.jar:/Users/bimbo/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/bimbo/.m2/repository/uk/co/real-logic/sbe-all/1.26.0/sbe-all-1.26.0.jar:/Users/bimbo/.m2/repository/org/mockito/mockito-core/5.4.0/mockito-core-5.4.0.jar:/Users/bimbo/.m2/repository/net/bytebuddy/byte-buddy/1.14.5/byte-buddy-1.14.5.jar:/Users/bimbo/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.5/byte-buddy-agent-1.14.5.jar:/Users/bimbo/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/bimbo/.m2/repository/ch/qos/logback/logback-core/1.3.5/logback-core-1.3.5.jar:/Users/bimbo/.m2/repository/org/slf4j/slf4j-api/2.0.4/slf4j-api-2.0.4.jar:/Users/bimbo/.m2/repository/ch/qos/logback/logback-classic/1.3.5/logback-classic-1.3.5.jar:"/>
@@ -29,7 +29,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="apple.awt.application.name" value="ForkedBooter"/>
-    <property name="surefire.real.class.path" value="/Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/getting-started/target/surefire/surefirebooter-20231011054510549_26.jar"/>
+    <property name="surefire.real.class.path" value="/Users/bimbo/Desktop/cbfacademy/codingblackfemales/algo-coding-exercise/getting-started/target/surefire/surefirebooter-20231011070135346_26.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="20.0.2"/>
@@ -58,208 +58,29 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="64.0"/>
   </properties>
-  <testcase name="testDispatchThroughSequencer" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.046">
-    <system-out><![CDATA[05:45:11.054 [main] INFO  c.sequencer.consumer.LoggingConsumer - [1] 
+  <testcase name="testDispatchThroughSequencer" classname="codingblackfemales.gettingstarted.MyAlgoTest" time="0.027">
+    <system-out><![CDATA[07:01:35.772 [main] INFO  c.sequencer.consumer.LoggingConsumer - [1] 
 |----BID-----|
+  1000 @ 110
+   200 @ 110
   5000 @ 115
 |----ASK-----|
-    300 @ 91
+   100 @ 100
+    200 @ 95
+   5000 @ 91
 
-05:45:11.057 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:115 quantity:5000
-05:45:11.057 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:91 quantity:300
-05:45:11.058 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.061 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
+07:01:35.776 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:110 quantity:1000
+07:01:35.777 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:110 quantity:200
+07:01:35.777 [main] DEBUG c.service.MarketDataService - [ALGO] BID: price:115 quantity:5000
+07:01:35.777 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:100 quantity:100
+07:01:35.777 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:95 quantity:200
+07:01:35.777 [main] DEBUG c.service.MarketDataService - [ALGO] ASK: price:91 quantity:5000
+07:01:35.778 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
+07:01:35.781 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
 |----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.063 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.069 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.070 [main] INFO  c.sequencer.consumer.LoggingConsumer - [2] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=2
-05:45:11.070 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.071 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.071 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.071 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.071 [main] INFO  c.sequencer.consumer.LoggingConsumer - [3] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=3
-05:45:11.071 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.071 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.071 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.072 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.072 [main] INFO  c.sequencer.consumer.LoggingConsumer - [4] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=4
-05:45:11.072 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.072 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.072 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.072 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.072 [main] INFO  c.sequencer.consumer.LoggingConsumer - [5] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=5
-05:45:11.073 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.073 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.073 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.073 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.073 [main] INFO  c.sequencer.consumer.LoggingConsumer - [6] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=6
-05:45:11.073 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.073 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.074 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.074 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.074 [main] INFO  c.sequencer.consumer.LoggingConsumer - [7] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=7
-05:45:11.074 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.074 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.074 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.074 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.075 [main] INFO  c.sequencer.consumer.LoggingConsumer - [8] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=8
-05:45:11.075 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.075 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.075 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.075 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.075 [main] INFO  c.sequencer.consumer.LoggingConsumer - [9] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=9
-05:45:11.075 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.076 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.076 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.076 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.076 [main] INFO  c.sequencer.consumer.LoggingConsumer - [10] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=10
-05:45:11.076 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.076 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.076 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.076 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.077 [main] INFO  c.sequencer.consumer.LoggingConsumer - [11] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=11
-05:45:11.077 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.077 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.077 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.077 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.078 [main] INFO  c.sequencer.consumer.LoggingConsumer - [12] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=12
-05:45:11.078 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.078 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.078 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.078 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.078 [main] INFO  c.sequencer.consumer.LoggingConsumer - [13] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=13
-05:45:11.078 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.078 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.079 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.079 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.079 [main] INFO  c.sequencer.consumer.LoggingConsumer - [14] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=14
-05:45:11.079 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.079 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.079 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.079 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.080 [main] INFO  c.sequencer.consumer.LoggingConsumer - [15] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=15
-05:45:11.080 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.080 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.080 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.080 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.080 [main] INFO  c.sequencer.consumer.LoggingConsumer - [16] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=16
-05:45:11.080 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.080 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.081 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.081 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.081 [main] INFO  c.sequencer.consumer.LoggingConsumer - [17] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=17
-05:45:11.081 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.081 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.081 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.081 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.081 [main] INFO  c.sequencer.consumer.LoggingConsumer - [18] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=18
-05:45:11.081 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.082 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.082 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.082 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.082 [main] INFO  c.sequencer.consumer.LoggingConsumer - [19] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=19
-05:45:11.082 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.082 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.082 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.082 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.082 [main] INFO  c.sequencer.consumer.LoggingConsumer - [20] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=20
-05:45:11.082 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.083 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.083 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.083 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.083 [main] INFO  c.sequencer.consumer.LoggingConsumer - [21] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=21
-05:45:11.083 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.083 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
-|------------||-----------|
-
-05:45:11.083 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Selling opportunity detected. Price difference: -24.0
-05:45:11.083 [main] INFO  c.container.Actioner - [ALGO] Actioner, sending action:CreateChildOrder(side=SELL,quantity=10,price=115)
-05:45:11.083 [main] INFO  c.sequencer.consumer.LoggingConsumer - [22] [CreateOrder](sbeTemplateId=4|sbeSchemaId=2|sbeSchemaVersion=0|sbeBlockLength=33):instrumentId=0|price=115|quantity=10|side=SELL|orderId=22
-05:45:11.083 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] In Algo Logic....
-05:45:11.084 [main] INFO  c.gettingstarted.MyAlgoLogic - [MYALGO] Algo Sees Book as:
-|----BID-----||----ASK----|
-  5000 @ 115    300 @ 91
+  1000 @ 110   100 @ 100
+   200 @ 110    200 @ 95
+  5000 @ 115   5000 @ 91
 |------------||-----------|
 
 ]]></system-out>
