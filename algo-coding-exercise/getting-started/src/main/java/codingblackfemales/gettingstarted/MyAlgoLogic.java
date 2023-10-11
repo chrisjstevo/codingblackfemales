@@ -59,7 +59,7 @@ public class MyAlgoLogic implements AlgoLogic {
         } else if (activeOrders.size() == 1) {
             //var quantity = 10;
             //var price = 80;
-           // return new CreateChildOrder(Side.BUY, quantity, price);
+            // return new CreateChildOrder(Side.BUY, quantity, price);
             //this scenario will the index of the active order
             var childOrder = activeOrders.get(0);
             return new CancelChildOrder(childOrder);
@@ -68,3 +68,5 @@ public class MyAlgoLogic implements AlgoLogic {
         return NoAction.NoAction;
     }
 }
+
+
