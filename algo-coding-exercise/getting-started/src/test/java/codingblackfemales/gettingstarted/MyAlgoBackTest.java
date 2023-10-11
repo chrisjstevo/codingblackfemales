@@ -35,7 +35,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         assertEquals(container.getState().getChildOrders().size(), 21);
 
         //when: market data moves towards us
-        //send(createTick2());
+        send(createTick2());
        
         assertEquals(10, container.getState().getChildOrders().get(0).getQuantity());
         //assertEquals(expectedPrice,container.getState().getChildOrders().get(0).getPrice());

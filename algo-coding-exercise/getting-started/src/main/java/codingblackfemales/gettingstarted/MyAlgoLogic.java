@@ -28,7 +28,7 @@ public class MyAlgoLogic implements AlgoLogic {
         BidLevel topBidLevel = state.getBidAt(0);
         AskLevel topAskLevel = state.getAskAt(0);
 
-        double priceThreshold = 10; // Adjust as needed
+        double priceThreshold = 0.1; // Adjust as needed
    
         double priceDifference =  topBidLevel.price - topAskLevel.price ;
 

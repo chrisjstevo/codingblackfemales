@@ -32,7 +32,10 @@ public class MyAlgoTest extends AbstractAlgoTest {
 
         //create a sample market data tick....
         send(createTick());
-
+ 
+        //ADD asserts when you have implemented your algo logic
+        assertEquals(container.getState().getChildOrders().size(), 21);
+        
         //simple assert to check we had the right amount of active orders created
         assertEquals(10,container.getState().getChildOrders().size(), 21);
     }
