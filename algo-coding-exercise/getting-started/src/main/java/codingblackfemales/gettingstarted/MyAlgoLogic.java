@@ -69,5 +69,4 @@ public class MyAlgoLogic implements AlgoLogic {
     }
 }
 
-    }
-}
+
