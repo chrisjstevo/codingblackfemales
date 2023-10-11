@@ -2,7 +2,6 @@ package codingblackfemales.gettingstarted;
 
 import codingblackfemales.action.Action;
 import codingblackfemales.action.CancelChildOrder;
-// import codingblackfemales.action.CancelChildOrder;
 import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
@@ -20,43 +19,49 @@ public class MyAlgoLogic implements AlgoLogic {
 
     @Override
     public Action evaluate(SimpleAlgoState state) {
-        logger.info("[ADDCANCELALGO] In Algo Logic....");
+        logger.info("[MYALGO] In Algo Logic....");
 
         final String book = Util.orderBookToString(state);
 
-        logger.info("[ADDCANCELALGO] Algo Sees Book as:\n" + book);
+        logger.info("[MYALGO] Algo Sees Book as:\n" + book);
 
         BidLevel topBidLevel = state.getBidAt(0);
         AskLevel topAskLevel = state.getAskAt(0);
 
-        double priceThreshold = 0.1; // Adjust as needed
-
+        double priceThreshold = 10; // Adjust as needed
+   
         double priceDifference = topAskLevel.price - topBidLevel.price;
 
         final var activeOrders = state.getActiveChildOrders();
 
+        var totalOrderCount = state.getChildOrders().size();
+
+        // make sure we have an exit condition...
+        if (totalOrderCount > 20) {
+            return NoAction.NoAction;
+        }
+
         if (priceDifference > priceThreshold) {
             logger.info("[MYALGO] Buying opportunity detected. Price difference: " + priceDifference);
-            long buyQuantity = 10;
-            long buyPrice = topAskLevel.price; // Buy at the ask price
+            long quantity = 10;
+            long price = topAskLevel.price; // Buy at the ask price
 
             if (activeOrders.size() > 0) {
-            final var option = activeOrders.stream().findFirst();
-            if (option.isPresent()) {
-                var childOrder = option.get();
-                logger.info("[ADDCANCELALGO] Cancelling order:" + childOrder);
-                return new CancelChildOrder(childOrder);
+                final var option = activeOrders.stream().findFirst();
+                if (option.isPresent()) {
+                    var childOrder = option.get();
+                    logger.info("[MYALGO] Cancelling order:" + childOrder);
+                    return new CancelChildOrder(childOrder);
+                }
             }
+            return new CreateChildOrder(Side.BUY, quantity, price);
         }
-            return new CreateChildOrder(Side.BUY, buyQuantity, buyPrice);
-        }
-
         if (priceDifference < priceThreshold) {
             logger.info("[MYALGO] Selling opportunity detected. Price difference: " + priceDifference);
-            long sellQuantity = 10;
-            long sellPrice = topBidLevel.price; // Sell at the bid price
+            long quantity = 10;
+            long price = topBidLevel.price; // Sell at the bid price
 
-            return new CreateChildOrder(Side.SELL, sellQuantity, sellPrice);
+            return new CreateChildOrder(Side.SELL, quantity, price);
         }
         // No trading opportunity detected, take no action
         return NoAction.NoAction;

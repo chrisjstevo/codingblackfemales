@@ -18,7 +18,6 @@ import java.nio.ByteBuffer;
 
 public abstract class AbstractAlgoTest extends SequencerTestCase {
 
-
     protected AlgoContainer container;
 
     @Override
@@ -29,8 +28,9 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
         final RunTrigger runTrigger = new RunTrigger();
         final Actioner actioner = new Actioner(sequencer);
 
-        container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger, actioner);
-        //set my algo logic
+        container = new AlgoContainer(new MarketDataService(runTrigger), new OrderService(runTrigger), runTrigger,
+                actioner);
+        // set my algo logic
         container.setLogic(createAlgoLogic());
 
         network.addConsumer(new LoggingConsumer());
@@ -42,7 +42,6 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
     }
 
     public abstract AlgoLogic createAlgoLogic();
-
 
     protected UnsafeBuffer createTick(){
 
@@ -59,22 +58,19 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
 
-        encoder.askBookCount(3)
-                .next().price(100L).size(101L)
-                .next().price(110L).size(200L)
+        encoder.askBookCount(1)
+                // .next().price(110L).size(1000L) // Larger ask quantity
+                // .next().price(110L).size(200L)
                 .next().price(115L).size(5000L);
 
-        encoder.bidBookCount(3)
-                .next().price(98L).size(100L)
-                .next().price(95L).size(200L)
+        encoder.bidBookCount(1)
+                // .next().price(100L).size(100L)// Lower bid price Smaller bid quantity
+                // .next().price(95L).size(200L)
                 .next().price(91L).size(300L);
-
+              
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
         encoder.source(Source.STREAM);
 
         return directBuffer;
     }
-
-
-
 }

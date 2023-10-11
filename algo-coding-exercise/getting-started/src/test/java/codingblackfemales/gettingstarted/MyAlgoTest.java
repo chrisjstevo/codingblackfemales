@@ -2,7 +2,8 @@ package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
 
-//import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+
 
 import org.junit.Test;
 
@@ -32,7 +33,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
         //create a sample market data tick....
         send(createTick());
 
-        //simple assert to check we had 3 orders created
-        //assertEquals(container.getState().getChildOrders().size(), 3);
+        //simple assert to check we had the right amount of active orders created
+        assertEquals(container.getState().getChildOrders().size(), 21);
     }
 }

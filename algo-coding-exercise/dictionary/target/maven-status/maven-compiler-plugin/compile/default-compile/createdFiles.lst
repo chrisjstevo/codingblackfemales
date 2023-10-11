@@ -1,4 +1,3 @@
-messages/order/package-info.class
 messages/order/CancelAckedOrderEncoder.class
 messages/marketdata/BidBookUpdateDecoder.class
 messages/order/AckedOrderDecoder.class
@@ -14,7 +13,6 @@ messages/order/MessageHeaderDecoder.class
 messages/marketdata/MessageHeaderDecoder.class
 messages/marketdata/AskBookUpdateDecoder.class
 messages/marketdata/BidBookUpdateEncoder$BidBookEncoder.class
-messages/marketdata/package-info.class
 messages/order/PendingOrderEncoder.class
 messages/order/AckedOrderEncoder.class
 messages/marketdata/BidBookUpdateEncoder.class
