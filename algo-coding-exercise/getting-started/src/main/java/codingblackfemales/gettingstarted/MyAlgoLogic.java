@@ -29,8 +29,8 @@ public class MyAlgoLogic implements AlgoLogic {
         AskLevel topAskLevel = state.getAskAt(0);
 
         double priceThreshold = 0.1; // Adjust as needed
-   
-        double priceDifference =  topBidLevel.price - topAskLevel.price ;
+
+        double priceDifference = topBidLevel.price - topAskLevel.price;
 
         final var activeOrders = state.getActiveChildOrders();
 
@@ -43,7 +43,7 @@ public class MyAlgoLogic implements AlgoLogic {
 
         if (priceDifference > priceThreshold) {
             logger.info("[MYALGO] Buying opportunity detected. Price difference: " + priceDifference);
-            long quantity = 10;
+            long quantity = topAskLevel.quantity;
             long price = topAskLevel.price; // Buy at the ask price
 
             if (activeOrders.size() > 0) {
@@ -58,7 +58,7 @@ public class MyAlgoLogic implements AlgoLogic {
         }
         if (priceDifference < priceThreshold) {
             logger.info("[MYALGO] Selling opportunity detected. Price difference: " + priceDifference);
-            long quantity = 10;
+            long quantity = topBidLevel.quantity;
             long price = topBidLevel.price; // Sell at the bid price
 
             return new CreateChildOrder(Side.SELL, quantity, price);
