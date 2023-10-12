@@ -82,7 +82,7 @@ public class MyAlgoLogic implements AlgoLogic {
 
             final var activeOrders = state.getActiveChildOrders();
 
-            if (activeOrders.size() == 2) {
+            if (activeOrderCount == 2) {
                 final var option = activeOrders.stream().findFirst();
 
                 var childOrder = option.get();
