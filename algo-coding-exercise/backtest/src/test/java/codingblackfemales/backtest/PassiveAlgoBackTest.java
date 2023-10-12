@@ -118,12 +118,13 @@ public class PassiveAlgoBackTest extends SequencerTestCase {
     @Test
     public void testExampleBackTest() throws Exception {
         //create a sample market data tick....
-        send(createSampleMarketDataTick());
+        send(createSampleMarketDataTick()); //first data tick in PassiveAlgoTest. This includes the order book. As ordxers are created they are added to the Bid side (passive). This signifies the number of stocks that investors want to buy at a price lower than what the market is selling.
+        //The bid-ask spread reflects the supply and demand for a particular asset, wit
         //simple assert to check we had 3 orders created
         assertEquals(container.getState().getChildOrders().size(), 3);
 
         //when: market data moves towards us
-        send(createSampleMarketDataTick2());
+        send(createSampleMarketDataTick2()); // The market prices recognise that they have demand and prices fall towards this. Our order gets fulfilled.
 
         //then: get the state
         var state = container.getState();

@@ -27,7 +27,7 @@ public class AddCancelAlgoLogic implements AlgoLogic {
         var totalOrderCount = state.getChildOrders().size();
 
         //make sure we have an exit condition...
-        if (totalOrderCount > 20) {
+        if (totalOrderCount > 20) { // total number of active and inactive child orders
             return NoAction.NoAction;
         }
 
@@ -35,9 +35,9 @@ public class AddCancelAlgoLogic implements AlgoLogic {
 
         if (activeOrders.size() > 0) {
 
-            final var option = activeOrders.stream().findFirst();
+            final var option = activeOrders.stream().findFirst(); // finding the first active order
 
-            if (option.isPresent()) {
+            if (option.isPresent()) { // if we have one, get it and cancel it. Logic for cancelling orders
                 var childOrder = option.get();
                 logger.info("[ADDCANCELALGO] Cancelling order:" + childOrder);
                 return new CancelChildOrder(childOrder);
@@ -45,7 +45,7 @@ public class AddCancelAlgoLogic implements AlgoLogic {
             else{
                 return NoAction.NoAction;
             }
-        } else {
+        } else { // Logic for creating active child orders on passive side of book. market order
             BidLevel level = state.getBidAt(0);
             final long price = level.price;
             final long quantity = level.quantity;

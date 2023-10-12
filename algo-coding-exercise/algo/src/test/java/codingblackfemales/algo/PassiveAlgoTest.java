@@ -26,7 +26,7 @@ public class PassiveAlgoTest extends SequencerTestCase {
     private AlgoContainer container;
 
     @Override
-    public Sequencer getSequencer() {
+    public Sequencer getSequencer() { // implemented method
         final TestNetwork network = new TestNetwork();
         final Sequencer sequencer = new DefaultSequencer(network);
 
