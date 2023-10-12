@@ -34,7 +34,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
         // create a sample market data tick....
         send(createTick());
 
-        // simple assert to check we had 3 orders created
-        // assertEquals(3, container.getState().getChildOrders().size());
+        // simple assert to check we had 4 orders created
+        assertEquals(4, container.getState().getChildOrders().size());
     }
 }
