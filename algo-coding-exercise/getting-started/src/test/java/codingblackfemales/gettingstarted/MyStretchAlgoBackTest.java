@@ -17,38 +17,27 @@ public class MyStretchAlgoBackTest extends AbstractAlgoBackTest {
     @Test
     public void testExampleBackTest() throws Exception {
         //create a sample market data tick....
-        send(createTick());
-        createAlgoLogic();
+        send(createTick3()); // 1
 
-        send(createTick2());
-        createAlgoLogic();
+        send(createTick4()); // 2
 
-        send(createTick3());
-        createAlgoLogic();
+        send(createTick3()); // 3
 
-        send(createTick4());
-        createAlgoLogic();
+        send(createTick4()); // 4
 
-        send(createTick3());
-        createAlgoLogic();
+        send(createTick3()); // 5
 
-        send(createTick4());
-        createAlgoLogic();
+        send(createTick()); // 6
 
-        send(createTick());
-        createAlgoLogic();
+        send(createTick4()); // 7
 
-        send(createTick4());
-        createAlgoLogic();
-        //96
+        send(createTick4()); // 8
 
-        send(createTick());
-        createAlgoLogic();
-        //104
-//
-//        send(createTick4());
-//        createAlgoLogic();
-//        //96
+        send(createTick()); // 9
+
+        send(createTick4()); // 10
+
+
 
 
     }
