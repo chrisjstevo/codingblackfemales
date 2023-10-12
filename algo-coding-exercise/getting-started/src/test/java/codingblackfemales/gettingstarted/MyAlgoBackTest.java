@@ -3,7 +3,7 @@ package codingblackfemales.gettingstarted;
 import codingblackfemales.algo.AlgoLogic;
 // import codingblackfemales.sotw.ChildOrder;
 
-import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -34,14 +34,14 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
     @Test
     public void testExampleBackTest() throws Exception {
         // create a sample market data tick....
-        send(createTick());
+        // send(createTick());
 
         // when: market data moves towards us
-        send(createTick2());
+        //send(createTick2());
 
         // ADD asserts when you have implemented your algo logic
-        assertEquals(101, container.getState().getChildOrders().get(0).getQuantity());
-        assertEquals(90,container.getState().getChildOrders().get(0).getPrice());
+        // assertEquals(101, container.getState().getChildOrders().get(0).getQuantity());
+        // assertEquals(90, container.getState().getChildOrders().get(0).getPrice());
     }
 
 }

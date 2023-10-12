@@ -32,9 +32,10 @@ public class MyAlgoTest extends AbstractAlgoTest {
     public void testDispatchThroughSequencer() throws Exception {
 
         // create a sample market data tick....
-        send(createTick());
+        send(createTick3());
 
-        // simple assert to check we had the right amount of order size expected
-        assertEquals(21, container.getState().getChildOrders().size());
+        // assert the quantity expected and price it sold for the first child order
+        assertEquals(100, container.getState().getChildOrders().get(0).getQuantity());
+        assertEquals(100, container.getState().getChildOrders().get(0).getPrice());
     }
 }

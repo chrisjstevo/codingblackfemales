@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: codingblackfemales.collection.intrusive.IntrusiveLinkedListTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.028 s - in codingblackfemales.collection.intrusive.IntrusiveLinkedListTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.026 s - in codingblackfemales.collection.intrusive.IntrusiveLinkedListTest
