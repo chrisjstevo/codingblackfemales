@@ -1,6 +1,7 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.action.Action;
+import codingblackfemales.action.CancelChildOrder;
 import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.action.NoAction;
 import codingblackfemales.algo.AlgoLogic;
@@ -43,11 +44,10 @@ public class MyAlgoLogic implements AlgoLogic {
         }
 
         // CONSTANTS
-        final int TOTAL_ORDER_LIMIT = 15;
         final int DESIRED_ACTIVE_ORDERS = 4;
         // determine the max volume an order can hold (25%)
         final double MAX_PERCENT_LIMIT = 0.25;
-        long volumeLimit = (long) (MAX_PERCENT_LIMIT * totalBidQuantity);
+        long orderVolumeLimit = (long) (MAX_PERCENT_LIMIT * totalBidQuantity);
 
         // total number of orders and active orders
         // var totalOrderCount = state.getChildOrders().size();
@@ -60,20 +60,37 @@ public class MyAlgoLogic implements AlgoLogic {
         if (activeOrderCount < DESIRED_ACTIVE_ORDERS) {
             // order will only go through if the desired quantity is less than market volume
             // limit
-            if (orderBidQuantity < volumeLimit) {
+            if (orderBidQuantity <= orderVolumeLimit) {
                 logger.info("[MYALGO] Have:" + state.getActiveChildOrders().size()
                         + " children, want 4, joining passive side of book with: " + orderBidQuantity + " @ "
                         + orderBidPrice);
+                orderBidQuantity += 400;
                 return new CreateChildOrder(Side.BUY, orderBidQuantity, orderBidPrice);
-            } else {
-                logger.info(
-                        "[MYALGO] Order Rejected - Quantity Exceeds Market Limit of " + (MAX_PERCENT_LIMIT * 100)
-                                + "%");
-                logger.info("[MYALGO] Have:" + state.getActiveChildOrders().size()
-                        + " children, want 4");
-                return NoAction.NoAction;
+
+                // if the order quantity is more than market order book volume limit, then no
+                // action taken
+            } else if (orderBidQuantity > orderVolumeLimit) {
+                if (orderBidQuantity < orderVolumeLimit + 100) {
+                    logger.info(
+                            "[MYALGO] Order Rejected - Quantity Exceeds Market Limit of " + (MAX_PERCENT_LIMIT * 100)
+                                    + "%");
+                    logger.info("[MYALGO] Have:" + state.getActiveChildOrders().size()
+                            + " children, want 4");
+                    return NoAction.NoAction;
+                }
+            }
+
+            final var activeOrders = state.getActiveChildOrders();
+
+            if (activeOrders.size() == 2) {
+                final var option = activeOrders.stream().findFirst();
+
+                var childOrder = option.get();
+                logger.info("[MYALGO] Past Order Cancelled.");
+                return new CancelChildOrder(childOrder);
             }
         }
+
         // }
 
         return NoAction.NoAction;
