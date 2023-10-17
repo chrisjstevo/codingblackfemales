@@ -11,6 +11,7 @@ import messages.order.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// This class is for creating child orders and 
 public class AddCancelAlgoLogic implements AlgoLogic {
 
     private static final Logger logger = LoggerFactory.getLogger(AddCancelAlgoLogic.class);
