@@ -131,5 +131,7 @@ public class PassiveAlgoBackTest extends SequencerTestCase {
 
         //and: check that our algo state was updated to reflect our fills when the market data
         assertEquals(225, filledQuantity);
+        
+        assertEquals(container.getState().getActiveChildOrders().size(), 3);
     }
 }

@@ -4,6 +4,8 @@ import messages.marketdata.*;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Assert;
 import org.junit.Test;
+import uk.co.real_logic.sbe.ir.generated.MessageHeaderDecoder;
+import uk.co.real_logic.sbe.ir.generated.MessageHeaderEncoder;
 
 import java.nio.ByteBuffer;
 

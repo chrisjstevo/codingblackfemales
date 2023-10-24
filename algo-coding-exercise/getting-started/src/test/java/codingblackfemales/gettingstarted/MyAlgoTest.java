@@ -1,8 +1,4 @@
-package codingblackfemales.gettingstarted;
-
 import codingblackfemales.algo.AlgoLogic;
-import org.junit.Test;
-
 
 /**
  * This test is designed to check your algo behavior in isolation of the order book.
@@ -14,6 +10,8 @@ import org.junit.Test;
  * When you are comfortable you algo does what you expect, then you can move on to creating the MyAlgoBackTest.
  *
  */
+
+
 public class MyAlgoTest extends AbstractAlgoTest {
 
     @Override
@@ -27,7 +25,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
     public void testDispatchThroughSequencer() throws Exception {
 
         //create a sample market data tick....
-        send(createTick());
+        send(createTickMore());
 
         //simple assert to check we had 3 orders created
         //assertEquals(container.getState().getChildOrders().size(), 3);

@@ -80,5 +80,8 @@ public class PassiveAlgoTest extends SequencerTestCase {
 
         //simple assert to check we had 3 orders created
         assertEquals(container.getState().getChildOrders().size(), 3);
+        assertEquals(container.getState().getActiveChildOrders().size(), 0);
+        
+        
     }
 }

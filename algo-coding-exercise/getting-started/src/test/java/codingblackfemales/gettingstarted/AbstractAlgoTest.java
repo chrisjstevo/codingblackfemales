@@ -44,7 +44,7 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
     public abstract AlgoLogic createAlgoLogic();
 
 
-    protected UnsafeBuffer createTick(){
+    protected UnsafeBuffer createTickMore(){
 
         final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
         final BookUpdateEncoder encoder = new BookUpdateEncoder();
@@ -59,12 +59,12 @@ public abstract class AbstractAlgoTest extends SequencerTestCase {
         encoder.venue(Venue.XLON);
         encoder.instrumentId(123L);
 
-        encoder.askBookCount(3)
+        encoder.bidBookCount(3)
                 .next().price(100L).size(101L)
                 .next().price(110L).size(200L)
                 .next().price(115L).size(5000L);
 
-        encoder.bidBookCount(3)
+        encoder.askBookCount(3)
                 .next().price(98L).size(100L)
                 .next().price(95L).size(200L)
                 .next().price(91L).size(300L);
