@@ -56,42 +56,20 @@ public class MyAlgoLogic implements AlgoLogic {
         // no more than 15 orders - exit condition
         // if (totalOrderCount < TOTAL_ORDER_LIMIT) {
 
-        // want 4 orders
-        if (activeOrderCount < DESIRED_ACTIVE_ORDERS) {
-            // order will only go through if the desired quantity is less than market volume
-            // limit
-            if (orderBidQuantity <= orderVolumeLimit) {
-                logger.info("[MYALGO] Have:" + state.getActiveChildOrders().size()
-                        + " children, want 4, joining passive side of book with: " + orderBidQuantity + " @ "
-                        + orderBidPrice);
-                orderBidQuantity += 400;
-                return new CreateChildOrder(Side.BUY, orderBidQuantity, orderBidPrice);
+        if (activeOrderCount < 4) {
+            logger.info("[MYALGO] Have:" + state.getActiveChildOrders().size()
+                    + " children, want 4, joining passive side of book with: " + orderBidQuantity + " @ "
+                    + orderBidPrice);
 
-                // if the order quantity is more than market order book volume limit, then no
-                // action taken
-            } else if (orderBidQuantity > orderVolumeLimit) {
-                if (orderBidQuantity < orderVolumeLimit + 100) {
-                    logger.info(
-                            "[MYALGO] Order Rejected - Quantity Exceeds Market Limit of " + (MAX_PERCENT_LIMIT * 100)
-                                    + "%");
-                    logger.info("[MYALGO] Have:" + state.getActiveChildOrders().size()
-                            + " children, want 4");
-                    return NoAction.NoAction;
-                }
-            }
-
+            return new CreateChildOrder(Side.BUY, orderBidQuantity, orderBidPrice);
+        } else if (activeOrderCount > 8) {
             final var activeOrders = state.getActiveChildOrders();
+            final var option = activeOrders.stream().findFirst();
 
-            if (activeOrderCount == 2) {
-                final var option = activeOrders.stream().findFirst();
-
-                var childOrder = option.get();
-                logger.info("[MYALGO] Past Order Cancelled.");
-                return new CancelChildOrder(childOrder);
-            }
+            var childOrder = option.get();
+            logger.info("[MYALGO] Past Order Cancelled.");
+            return new CancelChildOrder(childOrder);
         }
-
-        // }
 
         return NoAction.NoAction;
     }
