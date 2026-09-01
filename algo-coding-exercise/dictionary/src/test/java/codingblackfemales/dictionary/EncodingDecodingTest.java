@@ -27,7 +27,7 @@ public class EncodingDecodingTest {
         System.out.println(encoder.sbeTemplateId());
 
         //set the fields to desired values
-        encoder.venue(Venue.XLON);
+        encoder.venue(Venue.LME);
         encoder.instrumentId(123L);
 
         encoder.askBookCount(3)

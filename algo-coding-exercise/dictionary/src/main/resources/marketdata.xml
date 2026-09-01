@@ -13,9 +13,9 @@
         <type name="int32Enum" primitiveType="int32" />
 
         <enum name="Venue" encodingType="int32Enum">
-            <validValue name="XLON">1</validValue>
-            <validValue name="XPAR">2</validValue>
-            <validValue name="XAMS">3</validValue>
+            <validValue name="LME">1</validValue>
+            <validValue name="CME">2</validValue>
+            <validValue name="SHFE">3</validValue>
         </enum>
     </types>
 

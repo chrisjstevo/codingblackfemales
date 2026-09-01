@@ -64,7 +64,7 @@ public class AddCancelAlgoBackTest extends SequencerTestCase {
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
         //set the fields to desired values
-        encoder.venue(Venue.XLON);
+        encoder.venue(Venue.LME);
         encoder.instrumentId(123L);
         encoder.source(Source.STREAM);
 
@@ -92,7 +92,7 @@ public class AddCancelAlgoBackTest extends SequencerTestCase {
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
 
         //set the fields to desired values
-        encoder.venue(Venue.XLON);
+        encoder.venue(Venue.LME);
         encoder.instrumentId(123L);
         encoder.source(Source.STREAM);
 

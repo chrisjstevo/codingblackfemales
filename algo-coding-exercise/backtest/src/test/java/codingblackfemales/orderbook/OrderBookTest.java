@@ -27,7 +27,7 @@ public class OrderBookTest {
         //write the encoded output to the direct buffer
         bookUpdateEncoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
         //set the fields to desired values
-        bookUpdateEncoder.venue(Venue.XLON);
+        bookUpdateEncoder.venue(Venue.LME);
         bookUpdateEncoder.instrumentId(123L);
         bookUpdateEncoder.source(Source.STREAM);
 
@@ -53,7 +53,7 @@ public class OrderBookTest {
         //write the encoded output to the direct buffer
         bookUpdateEncoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
         //set the fields to desired values
-        bookUpdateEncoder.venue(Venue.XLON);
+        bookUpdateEncoder.venue(Venue.LME);
         bookUpdateEncoder.instrumentId(123L);
         bookUpdateEncoder.source(Source.STREAM);
 

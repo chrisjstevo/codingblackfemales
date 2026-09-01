@@ -29,7 +29,7 @@ public class ReadOnlyMarketDataChannelPublishVisitor implements OrderBookVisitor
 
         encoder.wrapAndApplyHeader(directBuffer, 0, headerEncoder);
         //set the fields to desired valus
-        encoder.venue(Venue.XLON);
+        encoder.venue(Venue.LME);
         encoder.instrumentId(123L);
         encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
         encoder.source(Source.ORDERBOOK);

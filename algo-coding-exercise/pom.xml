@@ -4,7 +4,7 @@
     <groupId>codingblackfemales</groupId>
     <artifactId>algo-coding-exercise</artifactId>
     <version>0.01-SNAPSHOT</version>
-    <name>CBF Algos</name>
+    <name>cbf-algo</name>
     <description>Coding Black Females - Algos</description>
     <packaging>pom</packaging>
 
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.4.0</version>
+            <version>5.23.0</version>
             <scope>test</scope>
         </dependency>
 

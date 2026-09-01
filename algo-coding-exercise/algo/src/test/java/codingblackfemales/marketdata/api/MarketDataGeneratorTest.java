@@ -12,7 +12,7 @@ public class MarketDataGeneratorTest {
     @Before
     public void setup() {
         final long instrumentId = 1234;
-        final Venue venue = Venue.XLON;
+        final Venue venue = Venue.LME;
         final long priceLevel = 1000;
         final long priceMaxDelta = 100;
         marketDataGenerator = new SimpleFileMarketDataGenerator("src/test/resources/marketdata.json", new RandomMarketDataGenerator(instrumentId, venue, priceLevel, priceMaxDelta, 15));
