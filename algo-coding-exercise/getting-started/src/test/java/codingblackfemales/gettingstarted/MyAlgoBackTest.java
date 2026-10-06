@@ -1,6 +1,10 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
+import codingblackfemales.sotw.ChildOrder;
+
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 /**
@@ -23,23 +27,23 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
     }
 
     @Test
-    public void testExampleBackTest() throws Exception {
-        //create a sample market data tick....
+    public void testOrderIsFilledWhenMarketMoves() throws Exception {
+      
+        // Send the initial market-data tick
+        // The algo creates a BUY order at the best bid
         send(createTick());
 
-        //ADD asserts when you have implemented your algo logic
-        //assertEquals(container.getState().getChildOrders().size(), 3);
-
-        //when: market data moves towards us
+        // Send a second market-data tick where the market moves towards the BUY order
+        // The backtest should match the order and generate a fill
         send(createTick2());
 
-        //then: get the state
+       
+        // Get the current algo state after the market has moved
         var state = container.getState();
 
-        //Check things like filled quantity, cancelled order count etc....
-        //long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
-        //and: check that our algo state was updated to reflect our fills when the market data
-        //assertEquals(225, filledQuantity);
+        // Check that the BUY order created by the algo was filled for the expected quantity
+        long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
+        assertEquals(100, filledQuantity);
     }
 
 }
