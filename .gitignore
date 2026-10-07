@@ -1,1 +1,5 @@
-/session1/target/
+# Maven
+**/target/
+
+# macOS
+.DS_Store
