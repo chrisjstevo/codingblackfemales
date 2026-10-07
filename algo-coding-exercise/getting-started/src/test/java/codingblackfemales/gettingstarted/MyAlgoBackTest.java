@@ -1,20 +1,14 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
+import messages.marketdata.*;
+import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
 
-/**
- * This test plugs together all of the infrastructure, including the order book (which you can trade against)
- * and the market data feed.
- *
- * If your algo adds orders to the book, they will reflect in your market data coming back from the order book.
- *
- * If you cross the srpead (i.e. you BUY an order with a price which is == or > askPrice()) you will match, and receive
- * a fill back into your order from the order book (visible from the algo in the childOrders of the state object.
- *
- * If you cancel the order your child order will show the order status as cancelled in the childOrders of the state object.
- *
- */
+import java.nio.ByteBuffer;
+
+import static org.junit.Assert.assertEquals;
+
 public class MyAlgoBackTest extends AbstractAlgoBackTest {
 
     @Override
@@ -23,23 +17,59 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
     }
 
     @Test
-    public void testExampleBackTest() throws Exception {
-        //create a sample market data tick....
-        send(createTick());
+    public void restsAtBestBidWithoutDuplicatingOnBookFeedback() throws Exception {
+        send(tick(98, 100, 100, 101));
+        send(tick(98, 100, 100, 101));
 
-        //ADD asserts when you have implemented your algo logic
-        //assertEquals(container.getState().getChildOrders().size(), 3);
-
-        //when: market data moves towards us
-        send(createTick2());
-
-        //then: get the state
-        var state = container.getState();
-
-        //Check things like filled quantity, cancelled order count etc....
-        //long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
-        //and: check that our algo state was updated to reflect our fills when the market data
-        //assertEquals(225, filledQuantity);
+        assertEquals(1, container.getState().getChildOrders().size());
+        assertEquals(98, container.getState().getChildOrders().get(0).getPrice());
+        assertEquals(0, container.getState().getChildOrders().get(0).getFilledQuantity());
+        assertEquals(98, container.getState().getBidAt(0).price);
+        assertEquals(100, container.getState().getAskAt(0).price);
     }
 
+    @Test
+    public void fillsTargetWhenSellersReachOurPriceAndThenStops() throws Exception {
+        send(tick(98, 100, 100, 101));
+        send(tick(95, 100, 98, 101));
+        send(tick(95, 100, 98, 101));
+
+        assertEquals(75, container.getState().getChildOrders().get(0).getFilledQuantity());
+        assertEquals(1, container.getState().getChildOrders().size());
+    }
+
+    @Test
+    public void cancelsInSimulatorWhenAskBookDisappearsAndCannotFillCancelledOrder() throws Exception {
+        send(tick(98, 100, 100, 101));
+        var order = container.getState().getChildOrders().get(0);
+
+        send(tick(98, 100, 0, 0));
+
+        assertEquals(codingblackfemales.sotw.OrderState.CANCELLED, order.getState());
+        assertEquals(0, container.getState().getActiveChildOrders().size());
+        assertEquals(1, container.getState().getChildOrders().size());
+
+        send(tick(95, 100, 98, 101));
+        assertEquals(0, order.getFilledQuantity());
+        assertEquals(2, container.getState().getChildOrders().size());
+    }
+
+    private UnsafeBuffer tick(long bidPrice, long bidQuantity, long askPrice, long askQuantity) {
+        UnsafeBuffer buffer = new UnsafeBuffer(ByteBuffer.allocateDirect(1024));
+        BookUpdateEncoder encoder = new BookUpdateEncoder();
+        encoder.wrapAndApplyHeader(buffer, 0, new MessageHeaderEncoder());
+        encoder.venue(Venue.LME).instrumentId(123L)
+                .instrumentStatus(InstrumentStatus.CONTINUOUS).source(Source.STREAM);
+        if (bidPrice > 0) {
+            encoder.bidBookCount(1).next().price(bidPrice).size(bidQuantity);
+        } else {
+            encoder.bidBookCount(0);
+        }
+        if (askPrice > 0) {
+            encoder.askBookCount(1).next().price(askPrice).size(askQuantity);
+        } else {
+            encoder.askBookCount(0);
+        }
+        return buffer;
+    }
 }

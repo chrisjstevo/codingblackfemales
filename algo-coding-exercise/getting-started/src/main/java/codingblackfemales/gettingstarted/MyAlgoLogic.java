@@ -1,30 +1,56 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.action.Action;
-import codingblackfemales.action.NoAction;
+import codingblackfemales.action.CancelChildOrder;
+import codingblackfemales.action.CreateChildOrder;
 import codingblackfemales.algo.AlgoLogic;
+import codingblackfemales.sotw.ChildOrder;
+import codingblackfemales.sotw.OrderState;
 import codingblackfemales.sotw.SimpleAlgoState;
-import codingblackfemales.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import messages.order.Side;
+
+import static codingblackfemales.action.NoAction.NoAction;
 
 public class MyAlgoLogic implements AlgoLogic {
 
-    private static final Logger logger = LoggerFactory.getLogger(MyAlgoLogic.class);
+    // The quantity we want to buy
+    private static final long TARGET_QUANTITY = 75;
 
     @Override
     public Action evaluate(SimpleAlgoState state) {
+        long filledQuantity = 0;
+        ChildOrder activeOrder = null;
 
-        var orderBookAsString = Util.orderBookToString(state);
+        // Count fills even from cancelled orders, and find the outstanding order
+        for (ChildOrder order : state.getChildOrders()) {
+            filledQuantity += order.getFilledQuantity();
+            if (order.getState() != OrderState.CANCELLED
+                    && order.getFilledQuantity() < order.getQuantity()) {
+                activeOrder = order;
+            }
+        }
 
-        logger.info("[MYALGO] The state of the order book is:\n" + orderBookAsString);
+        // Wait for valid prices and quantities on both sides of the book
+        boolean validBook = state.getBidLevels() > 0 && state.getAskLevels() > 0
+                && state.getBidAt(0) != null && state.getAskAt(0) != null
+                && state.getBidAt(0).price > 0 && state.getAskAt(0).price > 0
+                && state.getBidAt(0).quantity > 0 && state.getAskAt(0).quantity > 0
+                && state.getBidAt(0).price < state.getAskAt(0).price;
 
-        /********
-         *
-         * Add your logic here....
-         *
-         */
+        if (activeOrder != null) {
+            // Cancel an outdated order. On the next evaluation, replace it
+            if (!validBook || activeOrder.getPrice() != state.getBidAt(0).price) {
+                return new CancelChildOrder(activeOrder);
+            }
+            return NoAction;
+        }
 
-        return NoAction.NoAction;
+        if (validBook && filledQuantity < TARGET_QUANTITY) {
+            long price = state.getBidAt(0).price;
+            long quantity = TARGET_QUANTITY - filledQuantity;
+            return new CreateChildOrder(Side.BUY, quantity, price);
+        }
+
+        return NoAction;
     }
 }
