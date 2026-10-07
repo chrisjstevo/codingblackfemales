@@ -1,6 +1,9 @@
 package codingblackfemales.gettingstarted;
-
 import codingblackfemales.algo.AlgoLogic;
+import codingblackfemales.sotw.OrderState;
+
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 
@@ -22,14 +25,39 @@ public class MyAlgoTest extends AbstractAlgoTest {
         return new MyAlgoLogic();
     }
 
-
-    @Test
-    public void testDispatchThroughSequencer() throws Exception {
-
-        //create a sample market data tick....
+    // scenario 1: cheap bid triggers BUY orders
+    @Test 
+    public void createsBuyOrdersWhenBidPriceIsBelowTargetBuyPrice() throws Exception {
         send(createTick());
+        assertEquals(3, container.getState().getChildOrders().size());
+        
+    }
 
-        //simple assert to check we had 3 orders created
-        //assertEquals(container.getState().getChildOrders().size(), 3);
+    // scenario 2: expensive ask triggers SELL orders
+    @Test 
+    public void createsSellOrdersWhenAskIsAboveTargetSellPrice() throws Exception {
+        send(createTick2());
+        assertEquals(3, container.getState().getActiveChildOrders().size());
+    }
+
+    // scenario 3: no buy/sell conditions met triggers no action
+    @Test 
+    public void takesNoActionWhenMarketDoesNotMeetAnyConditions() throws Exception {
+        send(createTick3());
+        assertEquals(0, container.getState().getActiveChildOrders().size());
+    }
+
+    // scenario 4: existing BUY orders are cancelled when the market is no longer cheap
+    @Test
+    public void cancelsBuyOrdersWhenBidPriceIsNoLongerBelowTargetBuyPrice() throws Exception {
+        send(createTick());
+        send(createTick3());
+
+        long cancelledOrders = container.getState().getChildOrders().stream()
+                .filter(childOrder -> childOrder.getState() == OrderState.CANCELLED)
+                .count();
+
+        assertEquals(3, cancelledOrders);
+        assertEquals(0, container.getState().getActiveChildOrders().size());
     }
 }

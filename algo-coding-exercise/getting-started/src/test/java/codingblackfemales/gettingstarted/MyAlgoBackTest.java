@@ -1,7 +1,11 @@
 package codingblackfemales.gettingstarted;
 
 import codingblackfemales.algo.AlgoLogic;
+import codingblackfemales.sotw.ChildOrder;
+import codingblackfemales.sotw.OrderState;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * This test plugs together all of the infrastructure, including the order book (which you can trade against)
@@ -22,24 +26,51 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         return new MyAlgoLogic();
     }
 
+    // scenario 1: cheap market data creates BUY child orders in the simulated order book
     @Test
-    public void testExampleBackTest() throws Exception {
-        //create a sample market data tick....
+    public void createBuyChildOrdersInSimulatedOrderBook() throws Exception {
         send(createTick());
-
-        //ADD asserts when you have implemented your algo logic
-        //assertEquals(container.getState().getChildOrders().size(), 3);
-
-        //when: market data moves towards us
-        send(createTick2());
-
-        //then: get the state
-        var state = container.getState();
-
-        //Check things like filled quantity, cancelled order count etc....
-        //long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
-        //and: check that our algo state was updated to reflect our fills when the market data
-        //assertEquals(225, filledQuantity);
+        assertEquals(3, container.getState().getChildOrders().size());
     }
 
+    // scenario 2: later market data moves towards the algo and fills active child orders
+    @Test 
+    public void fillActiveChildOrders() throws Exception {
+        send(createTick());
+        send(createTick2());
+
+        var state = container.getState();
+        long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
+        
+        assertEquals(225, filledQuantity);
+    }
+
+    // scenario 3: filled quantity is reflected back into the algo state
+    @Test 
+    public void fillQuantityReflectedInAlgoState() throws Exception {
+        send(createTick());
+        send(createTick2());
+
+        var state = container.getState();
+
+        long filledQuantity = state.getChildOrders().stream().map(ChildOrder::getFilledQuantity).reduce(Long::sum).get();
+
+        assertEquals(225, filledQuantity);
+    }   
+    
+    // scenario 4: cancellation logic cancels open child orders when the market is no longer favourable
+    @Test 
+    public void cancellationLogicUpdatesChildOrderStatus() throws Exception{
+        send(createTick());
+        send(createTick3());
+        send(createTick3());
+        send(createTick3());
+
+        var state = container.getState();
+
+        long cancelledOrders = state.getChildOrders().stream()
+                .filter(childOrder -> childOrder.getState() == OrderState.CANCELLED)
+                .count();
+        assertEquals(3, cancelledOrders);
+    }
 }

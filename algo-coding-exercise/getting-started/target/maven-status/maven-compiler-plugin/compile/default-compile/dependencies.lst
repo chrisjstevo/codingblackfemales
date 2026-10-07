@@ -1,0 +1,12 @@
+classpath:/Users/joyce/home/repo/LME/trading/algo-coding-exercise/algo/target/classes	44:519abea05c33e36a58a92618b8036306f76e7cbd5945b40b6004933087f431ad
+classpath:/Users/joyce/home/repo/LME/trading/algo-coding-exercise/dictionary/target/classes	42:8a631541b6a3dbb7364bb9f69b6e758801423358ea8be761968c9da4f8455a53
+classpath:/Users/joyce/.m2/repository/org/agrona/agrona/1.16.0/agrona-1.16.0.jar	464570:1656343467000
+classpath:/Users/joyce/home/repo/LME/trading/algo-coding-exercise/sequencer/target/classes	13:5885287fb7b64f72c9b7eef1cfe12feda79f8bcceee16bc011cc4c919e2424e4
+classpath:/Users/joyce/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar	283367:1673019840000
+classpath:/Users/joyce/.m2/repository/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar	587402:1614372051000
+classpath:/Users/joyce/home/repo/LME/trading/algo-coding-exercise/backtest/target/classes	22:92a970390833694e6f13b0c74659f5989c332132df9e0894ac23632b4f69ea35
+classpath:/Users/joyce/home/repo/LME/trading/algo-coding-exercise/collection/target/classes	8:2dcfb06e512f8f044715dc4fb585b84b2d7b5080b173ce41f6d0dcb00cf27403
+classpath:/Users/joyce/.m2/repository/uk/co/real-logic/sbe-all/1.26.0/sbe-all-1.26.0.jar	816883:1657545504000
+classpath:/Users/joyce/.m2/repository/ch/qos/logback/logback-core/1.3.5/logback-core-1.3.5.jar	564625:1668805387000
+classpath:/Users/joyce/.m2/repository/org/slf4j/slf4j-api/2.0.4/slf4j-api-2.0.4.jar	61753:1668716798000
+classpath:/Users/joyce/.m2/repository/ch/qos/logback/logback-classic/1.3.5/logback-classic-1.3.5.jar	260493:1668805428000

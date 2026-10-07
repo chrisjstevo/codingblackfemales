@@ -9,11 +9,11 @@ public interface SimpleAlgoState {
 
     public String getSymbol();
 
-    public int getBidLevels();
-    public int getAskLevels();
+    public int getBidLevels(); // how many available bid levels
+    public int getAskLevels(); // how many available ask levels
 
-    public BidLevel getBidAt(int index);
-    public AskLevel getAskAt(int index);
+    public BidLevel getBidAt(int index); // buyers waiting to buy
+    public AskLevel getAskAt(int index); // sellers waiting to sell
 
     public List<ChildOrder> getChildOrders();
 
