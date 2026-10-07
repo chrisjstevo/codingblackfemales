@@ -22,8 +22,9 @@ Opening the project:
 1. Git fork this project
 2. Open the project as a maven project in your IDE (normally by opening the top level pom.xml file)
 3. Click to expand the "getting-started" module
-4. Navigate to the [MyAlgoTest.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MyAlgoLogic.java) and [MyAlgoLogic.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MyAlgoLogic.java)
+4. Navigate to the [MyAlgoTest.java](https://github.com/chinaza-Sommie/codingblackfemales-chinaza/blob/main/algo-coding-exercise/getting-started/src/test/java/codingblackfemales/gettingstarted/MyAlgoTest.java) and [MyAlgoLogic.java](https://github.com/chrisjstevo/codingblackfemales/blob/main/algo-coding-exercise/getting-started/src/main/java/codingblackfemales/gettingstarted/MyAlgoLogic.java)
 5. You're ready to go!
+
 
 ** Please note, you will need to run the "mvn compile" task, either at command line or from the IDE integration to make sure the binary encoders and decoders are created. 
 
