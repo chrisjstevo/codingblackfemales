@@ -44,6 +44,12 @@ public class ChildOrder {
         return fills.stream().map( cf -> cf.getQuantity()).collect(Collectors.summingLong(Long::longValue));
     }
 
+    //this method is added to expose the fill values
+    public long getFilledValue() {
+        return fills.stream()
+                .mapToLong(fill -> fill.getQuantity() * fill.getPrice())
+                .sum();
+    }
     public int getState() {
         return state;
     }
