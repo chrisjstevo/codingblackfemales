@@ -38,6 +38,21 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         assertEquals(1, container.getState().getChildOrders().size());
     }
 
+    @Test
+    public void cancelsInSimulatorWhenAskBookDisappearsAndCannotFillCancelledOrder() throws Exception {
+        send(tick(98, 100, 100, 101));
+        var order = container.getState().getChildOrders().get(0);
+
+        send(tick(98, 100, 0, 0));
+
+        assertEquals(codingblackfemales.sotw.OrderState.CANCELLED, order.getState());
+        assertEquals(0, container.getState().getActiveChildOrders().size());
+        assertEquals(1, container.getState().getChildOrders().size());
+
+        send(tick(95, 100, 98, 101));
+        assertEquals(0, order.getFilledQuantity());
+    }
+
     private UnsafeBuffer tick(long bidPrice, long bidQuantity, long askPrice, long askQuantity) {
         UnsafeBuffer buffer = new UnsafeBuffer(ByteBuffer.allocateDirect(1024));
         BookUpdateEncoder encoder = new BookUpdateEncoder();
