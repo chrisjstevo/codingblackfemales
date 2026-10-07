@@ -1,0 +1,18 @@
+Index: algo-coding-exercise/algo/src/main/java/codingblackfemales/algo/AddCancelAlgoLogic.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package codingblackfemales.algo;\r\n\r\nimport codingblackfemales.action.Action;\r\nimport codingblackfemales.action.CancelChildOrder;\r\nimport codingblackfemales.action.CreateChildOrder;\r\nimport codingblackfemales.action.NoAction;\r\nimport codingblackfemales.sotw.SimpleAlgoState;\r\nimport codingblackfemales.sotw.marketdata.BidLevel;\r\nimport codingblackfemales.util.Util;\r\nimport messages.order.Side;\r\nimport org.slf4j.Logger;\r\nimport org.slf4j.LoggerFactory;\r\n\r\npublic class AddCancelAlgoLogic implements AlgoLogic {\r\n\r\n    private static final Logger logger = LoggerFactory.getLogger(AddCancelAlgoLogic.class);\r\n\r\n    @Override\r\n    public Action evaluate(SimpleAlgoState state) {\r\n\r\n        logger.info(\"[ADDCANCELALGO] In Algo Logic....\");\r\n\r\n        final String book = Util.orderBookToString(state);\r\n\r\n        logger.info(\"[ADDCANCELALGO] Algo Sees Book as:\\n\" + book);\r\n\r\n        var totalOrderCount = state.getChildOrders().size();\r\n\r\n        //make sure we have an exit condition...\r\n        if (totalOrderCount > 20) {\r\n            return NoAction.NoAction;\r\n        }\r\n\r\n        final var activeOrders = state.getActiveChildOrders();\r\n\r\n        if (activeOrders.size() > 0) {\r\n\r\n            final var option = activeOrders.stream().findFirst();\r\n\r\n            if (option.isPresent()) {\r\n                var childOrder = option.get();\r\n                logger.info(\"[ADDCANCELALGO] Cancelling order:\" + childOrder);\r\n                return new CancelChildOrder(childOrder);\r\n            }\r\n            else{\r\n                return NoAction.NoAction;\r\n            }\r\n        } else {\r\n            BidLevel level = state.getBidAt(0);\r\n            final long price = level.price;\r\n            final long quantity = level.quantity;\r\n            logger.info(\"[ADDCANCELALGO] Adding order for\" + quantity + \"@\" + price);\r\n            return new CreateChildOrder(Side.BUY, quantity, price);\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/algo-coding-exercise/algo/src/main/java/codingblackfemales/algo/AddCancelAlgoLogic.java b/algo-coding-exercise/algo/src/main/java/codingblackfemales/algo/AddCancelAlgoLogic.java
+--- a/algo-coding-exercise/algo/src/main/java/codingblackfemales/algo/AddCancelAlgoLogic.java	(revision f3f8111a7a3442e51a8be300c1e33f1ca64989b7)
++++ b/algo-coding-exercise/algo/src/main/java/codingblackfemales/algo/AddCancelAlgoLogic.java	(date 1791038347655)
+@@ -11,6 +11,7 @@
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ 
++
+ public class AddCancelAlgoLogic implements AlgoLogic {
+ 
+     private static final Logger logger = LoggerFactory.getLogger(AddCancelAlgoLogic.class);

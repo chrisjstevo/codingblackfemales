@@ -33,6 +33,7 @@ public class AddCancelAlgoLogic implements AlgoLogic {
 
         final var activeOrders = state.getActiveChildOrders();
 
+
         if (activeOrders.size() > 0) {
 
             final var option = activeOrders.stream().findFirst();

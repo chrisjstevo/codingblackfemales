@@ -1,0 +1,114 @@
+<changelist name="Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]" date="1791038823801" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 03/10/2026 15:47 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/AskBookUpdateDecoder$AskBookDecoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/AskBookUpdateDecoder$AskBookDecoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/AskBookUpdateDecoder$AskBookDecoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BookUpdateEncoder$BidBookEncoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BookUpdateEncoder$BidBookEncoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/BookUpdateEncoder$BidBookEncoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BidBookUpdateEncoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BidBookUpdateEncoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/BidBookUpdateEncoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BookUpdateDecoder$BidBookDecoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BookUpdateDecoder$BidBookDecoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/BookUpdateDecoder$BidBookDecoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/AskBookUpdateEncoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/AskBookUpdateEncoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/AskBookUpdateEncoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/AskBookUpdateDecoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/AskBookUpdateDecoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/AskBookUpdateDecoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/Source.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/Source.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/Source.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BidBookUpdateDecoder$BidBookDecoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BidBookUpdateDecoder$BidBookDecoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/BidBookUpdateDecoder$BidBookDecoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/AskBookUpdateEncoder$AskBookEncoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/AskBookUpdateEncoder$AskBookEncoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/AskBookUpdateEncoder$AskBookEncoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/GroupSizeEncodingEncoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/GroupSizeEncodingEncoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/GroupSizeEncodingEncoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BookUpdateDecoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BookUpdateDecoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/BookUpdateDecoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BidBookUpdateEncoder$BidBookEncoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BidBookUpdateEncoder$BidBookEncoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/BidBookUpdateEncoder$BidBookEncoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/GroupSizeEncodingDecoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/GroupSizeEncodingDecoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/GroupSizeEncodingDecoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BookUpdateEncoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BookUpdateEncoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/BookUpdateEncoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/MessageHeaderEncoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/MessageHeaderEncoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/MessageHeaderEncoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BookUpdateEncoder$AskBookEncoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BookUpdateEncoder$AskBookEncoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/BookUpdateEncoder$AskBookEncoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/InstrumentStatus.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/InstrumentStatus.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/InstrumentStatus.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/MessageHeaderDecoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/MessageHeaderDecoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/MessageHeaderDecoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BookUpdateDecoder$AskBookDecoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BookUpdateDecoder$AskBookDecoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/BookUpdateDecoder$AskBookDecoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BidBookUpdateDecoder.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/BidBookUpdateDecoder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/BidBookUpdateDecoder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/Venue.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/Venue.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/Venue.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/MetaAttribute.class" />
+    <option name="AFTER_PATH" value="algo-coding-exercise/dictionary/target/classes/messages/marketdata/MetaAttribute.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_03_10_2026_15_47_[Changes]/MetaAttribute.class" />
+  </binary>
+</changelist>

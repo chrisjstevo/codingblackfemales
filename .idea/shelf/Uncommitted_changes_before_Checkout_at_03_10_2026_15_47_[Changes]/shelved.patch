@@ -1,0 +1,773 @@
+Index: algo-coding-exercise/dictionary/target/classes/marketdata.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/algo-coding-exercise/dictionary/target/classes/marketdata.xml b/algo-coding-exercise/dictionary/target/classes/marketdata.xml
+deleted file mode 100644
+--- a/algo-coding-exercise/dictionary/target/classes/marketdata.xml	(revision 7f7f0e4c2b112fc44517287767d5e7bd402a9513)
++++ /dev/null	(revision 7f7f0e4c2b112fc44517287767d5e7bd402a9513)
+@@ -1,92 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<sbe:messageSchema xmlns:sbe="http://fixprotocol.io/2016/sbe"
+-                   xmlns:xi="http://www.w3.org/2001/XInclude"
+-                   package="messages.marketdata"
+-                   id="1"
+-                   version="0"
+-                   semanticVersion="5.2"
+-                   description="Market Data Schema Package"
+-                   byteOrder="littleEndian">
+-    <xi:include href="common-types.xml"/>
+-
+-    <types>
+-        <type name="int32Enum" primitiveType="int32" />
+-
+-        <enum name="Venue" encodingType="int32Enum">
+-            <validValue name="LME">1</validValue>
+-            <validValue name="CME">2</validValue>
+-            <validValue name="SHFE">3</validValue>
+-        </enum>
+-    </types>
+-
+-    <types>
+-        <enum name="Source" encodingType="int32Enum">
+-            <validValue name="ORDERBOOK">1</validValue>
+-            <validValue name="STREAM">2</validValue>
+-        </enum>
+-    </types>
+-
+-    <types>
+-        <enum name="InstrumentStatus" encodingType="char">
+-            <validValue name="CONTINUOUS">C</validValue>
+-            <validValue name="AUCTION">A</validValue>
+-            <validValue name="CLOSED">X</validValue>
+-        </enum>
+-    </types>
+-
+-    <types>
+-        <enum name="InstrumentSubStatus" encodingType="char">
+-            <validValue name="LUNCHAUC">L</validValue>
+-            <validValue name="EVENINGAUC">E</validValue>
+-            <validValue name="CLOSED">X</validValue>
+-            <validValue name="CONTAUCT">C</validValue>
+-        </enum>
+-    </types>
+-
+-    <sbe:message name="BookUpdate" id="1" description="Full Book Update">
+-
+-        <field name="instrumentId" id="1" type="uint64"/>
+-        <field name="venue" id="2" type="Venue"/>
+-        <field name="instrumentStatus" id="9" type="InstrumentStatus"/>
+-        <field name="source" id="21" type="Source"/>
+-
+-        <group name="bidBook" id="3" dimensionType="groupSizeEncoding">
+-            <field name="price" id="4" type="uint64"/>
+-            <field name="size" id="5" type="uint64"/>
+-        </group>
+-
+-        <group name="askBook" id="6" dimensionType="groupSizeEncoding">
+-            <field name="price" id="7" type="uint64"/>
+-            <field name="size" id="8" type="uint64"/>
+-        </group>
+-
+-    </sbe:message>
+-
+-    <sbe:message name="BidBookUpdate" id="9" description="Bid Side Book Update">
+-
+-        <field name="instrumentId" id="10" type="uint64"/>
+-        <field name="venue" id="11" type="Venue"/>
+-
+-        <group name="bidBook" id="12" dimensionType="groupSizeEncoding">
+-            <field name="price" id="13" type="uint64"/>
+-            <field name="size" id="14" type="uint64"/>
+-        </group>
+-
+-    </sbe:message>
+-
+-    <sbe:message name="AskBookUpdate" id="15" description="Ask Side Book Update">
+-
+-        <field name="instrumentId" id="16" type="uint64"/>
+-        <field name="venue" id="17" type="Venue"/>
+-
+-        <group name="askBook" id="18" dimensionType="groupSizeEncoding">
+-            <field name="price" id="19" type="uint64"/>
+-            <field name="size" id="20" type="uint64"/>
+-        </group>
+-
+-    </sbe:message>
+-
+-
+-
+-
+-</sbe:messageSchema>
+\ No newline at end of file
+Index: algo-coding-exercise/dictionary/target/classes/order.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/algo-coding-exercise/dictionary/target/classes/order.xml b/algo-coding-exercise/dictionary/target/classes/order.xml
+deleted file mode 100644
+--- a/algo-coding-exercise/dictionary/target/classes/order.xml	(revision 7f7f0e4c2b112fc44517287767d5e7bd402a9513)
++++ /dev/null	(revision 7f7f0e4c2b112fc44517287767d5e7bd402a9513)
+@@ -1,61 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<sbe:messageSchema xmlns:sbe="http://fixprotocol.io/2016/sbe"
+-                   xmlns:xi="http://www.w3.org/2001/XInclude"
+-                   package="messages.order"
+-                   id="2"
+-                   version="0"
+-                   semanticVersion="5.2"
+-                   description="Order Schema Package"
+-                   byteOrder="littleEndian">
+-    <xi:include href="common-types.xml"/>
+-
+-    <types>
+-        <enum name="Side" encodingType="char">
+-            <validValue name="BUY">B</validValue>
+-            <validValue name="SELL">S</validValue>
+-        </enum>
+-    </types>
+-
+-    <sbe:message name="CreateOrder" id="4" description="Child Order Object">
+-        <field name="instrumentId" id="1" type="uint64"/>
+-        <field name="price" id="2" type="uint64"/>
+-        <field name="quantity" id="3" type="uint64"/>
+-        <field name="side" id="4" type="Side"/>
+-        <field name="orderId" id="5" type="uint64"/>
+-    </sbe:message>
+-
+-    <sbe:message name="PendingOrder" id="11" description="Pending Child Order Object">
+-        <field name="instrumentId" id="1" type="uint64"/>
+-        <field name="price" id="2" type="uint64"/>
+-        <field name="quantity" id="3" type="uint64"/>
+-        <field name="side" id="4" type="Side"/>
+-        <field name="orderId" id="5" type="uint64"/>
+-    </sbe:message>
+-
+-
+-    <sbe:message name="CancelOrder" id="5" description="Cancel Order Object">
+-        <field name="orderId" id="1" type="uint64"/>
+-    </sbe:message>
+-
+-    <sbe:message name="AckedOrder" id="7" description="Acked Order Message">
+-        <field name="orderId" id="1" type="uint64"/>
+-    </sbe:message>
+-
+-    <sbe:message name="CancelAckedOrder" id="8" description="Cancel Acked Order Message">
+-        <field name="orderId" id="1" type="uint64"/>
+-    </sbe:message>
+-
+-    <sbe:message name="PartialFillOrder" id="9" description="Partial Fill Order Message">
+-        <field name="orderId" id="1" type="uint64"/>
+-        <field name="quantity" id="2" type="uint64"/>
+-        <field name="price" id="3" type="uint64"/>
+-    </sbe:message>
+-
+-    <sbe:message name="FillOrder" id="10" description="Fill Order Order Message">
+-        <field name="orderId" id="1" type="uint64"/>
+-        <field name="quantity" id="2" type="uint64"/>
+-        <field name="price" id="3" type="uint64"/>
+-    </sbe:message>
+-
+-
+-</sbe:messageSchema>
+\ No newline at end of file
+Index: algo-coding-exercise/dictionary/target/classes/common-types.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/algo-coding-exercise/dictionary/target/classes/common-types.xml b/algo-coding-exercise/dictionary/target/classes/common-types.xml
+deleted file mode 100644
+--- a/algo-coding-exercise/dictionary/target/classes/common-types.xml	(revision 7f7f0e4c2b112fc44517287767d5e7bd402a9513)
++++ /dev/null	(revision 7f7f0e4c2b112fc44517287767d5e7bd402a9513)
+@@ -1,35 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<types>
+-    <!--composite name="commandHeader" description="Message identifiers and length of message root.">
+-        <type name="blockLength" primitiveType="uint16"/>
+-        <type name="templateId" primitiveType="uint16"/>
+-        <type name="schemaId" primitiveType="uint16"/>
+-        <type name="version" primitiveType="uint16"/>
+-    </composite-->
+-
+-    <composite name="messageHeader" description="Message identifiers and length of message root.">
+-        <type name="blockLength" primitiveType="uint16"/>
+-        <type name="templateId" primitiveType="uint16"/>
+-        <type name="schemaId" primitiveType="uint16"/>
+-        <type name="version" primitiveType="uint16"/>
+-        <type name="sequencerNumber" primitiveType="uint64"/>
+-    </composite>
+-
+-
+-    <composite name="groupSizeEncoding" description="Repeating group dimensions.">
+-        <type name="blockLength" primitiveType="uint16"/>
+-        <type name="numInGroup" primitiveType="uint16"/>
+-    </composite>
+-    <composite name="varStringEncoding" description="Variable length UTF-8 String.">
+-        <type name="length" primitiveType="uint32" maxValue="1073741824"/>
+-        <type name="varData" primitiveType="uint8" length="0" characterEncoding="UTF-8"/>
+-    </composite>
+-    <composite name="varAsciiEncoding" description="Variable length ASCII String.">
+-        <type name="length" primitiveType="uint32" maxValue="1073741824"/>
+-        <type name="varData" primitiveType="uint8" length="0" characterEncoding="ASCII"/>
+-    </composite>
+-    <composite name="varDataEncoding" description="Variable length binary blob.">
+-        <type name="length" primitiveType="uint32" maxValue="1073741824"/>
+-        <type name="varData" primitiveType="uint8" length="0"/>
+-    </composite>
+-</types>
+\ No newline at end of file
+Index: algo-coding-exercise/collection/collection.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/algo-coding-exercise/collection/collection.iml b/algo-coding-exercise/collection/collection.iml
+new file mode 100644
+--- /dev/null	(date 1791038220944)
++++ b/algo-coding-exercise/collection/collection.iml	(date 1791038220944)
+@@ -0,0 +1,26 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module external.linked.project.id="$MODULE_DIR$/pom.xml" external.system.module.type="SINGLE_MODULE" external.system.module.version="223-2" org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_16">
++    <output url="file://$MODULE_DIR$/target/classes" />
++    <output-test url="file://$MODULE_DIR$/target/test-classes" />
++    <content url="file://$MODULE_DIR$">
++      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
++      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
++      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
++      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
++      <excludeFolder url="file://$MODULE_DIR$/target" />
++    </content>
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
++    <orderEntry type="library" name="Maven: uk.co.real-logic:sbe-all:1.26.0" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:5.23.0" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy:1.17.7" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.17.7" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:3.3" level="project" />
++    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.3.5" level="project" />
++    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.4" level="project" />
++    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.3.5" level="project" />
++  </component>
++</module>
+\ No newline at end of file
+Index: .idea/libraries/Maven__com_google_code_gson_gson_2_10_1.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__com_google_code_gson_gson_2_10_1.xml b/.idea/libraries/Maven__com_google_code_gson_gson_2_10_1.xml
+new file mode 100644
+--- /dev/null	(date 1791038220976)
++++ b/.idea/libraries/Maven__com_google_code_gson_gson_2_10_1.xml	(date 1791038220976)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: com.google.code.gson:gson:2.10.1" type="java-imported" external-system-id="Maven">
++    <properties groupId="com.google.code.gson" artifactId="gson" version="2.10.1" baseVersion="2.10.1" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.10.1/gson-2.10.1-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.10.1/gson-2.10.1-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__junit_junit_4_11.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__junit_junit_4_11.xml b/.idea/libraries/Maven__junit_junit_4_11.xml
+new file mode 100644
+--- /dev/null	(date 1791038220978)
++++ b/.idea/libraries/Maven__junit_junit_4_11.xml	(date 1791038220978)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: junit:junit:4.11" type="java-imported" external-system-id="Maven">
++    <properties groupId="junit" artifactId="junit" version="4.11" baseVersion="4.11" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__ch_qos_logback_logback_classic_1_3_5.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__ch_qos_logback_logback_classic_1_3_5.xml b/.idea/libraries/Maven__ch_qos_logback_logback_classic_1_3_5.xml
+new file mode 100644
+--- /dev/null	(date 1791038220973)
++++ b/.idea/libraries/Maven__ch_qos_logback_logback_classic_1_3_5.xml	(date 1791038220973)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: ch.qos.logback:logback-classic:1.3.5" type="java-imported" external-system-id="Maven">
++    <properties groupId="ch.qos.logback" artifactId="logback-classic" version="1.3.5" baseVersion="1.3.5" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/ch/qos/logback/logback-classic/1.3.5/logback-classic-1.3.5.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/ch/qos/logback/logback-classic/1.3.5/logback-classic-1.3.5-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/ch/qos/logback/logback-classic/1.3.5/logback-classic-1.3.5-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__ch_qos_logback_logback_core_1_3_5.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__ch_qos_logback_logback_core_1_3_5.xml b/.idea/libraries/Maven__ch_qos_logback_logback_core_1_3_5.xml
+new file mode 100644
+--- /dev/null	(date 1791038220974)
++++ b/.idea/libraries/Maven__ch_qos_logback_logback_core_1_3_5.xml	(date 1791038220974)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: ch.qos.logback:logback-core:1.3.5" type="java-imported" external-system-id="Maven">
++    <properties groupId="ch.qos.logback" artifactId="logback-core" version="1.3.5" baseVersion="1.3.5" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/ch/qos/logback/logback-core/1.3.5/logback-core-1.3.5.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/ch/qos/logback/logback-core/1.3.5/logback-core-1.3.5-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/ch/qos/logback/logback-core/1.3.5/logback-core-1.3.5-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__org_agrona_agrona_1_16_0.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__org_agrona_agrona_1_16_0.xml b/.idea/libraries/Maven__org_agrona_agrona_1_16_0.xml
+new file mode 100644
+--- /dev/null	(date 1791038220984)
++++ b/.idea/libraries/Maven__org_agrona_agrona_1_16_0.xml	(date 1791038220984)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: org.agrona:agrona:1.16.0" type="java-imported" external-system-id="Maven">
++    <properties groupId="org.agrona" artifactId="agrona" version="1.16.0" baseVersion="1.16.0" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/agrona/agrona/1.16.0/agrona-1.16.0.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/agrona/agrona/1.16.0/agrona-1.16.0-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/agrona/agrona/1.16.0/agrona-1.16.0-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__org_apache_commons_commons_lang3_3_12_0.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_12_0.xml b/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_12_0.xml
+new file mode 100644
+--- /dev/null	(date 1791038220986)
++++ b/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_12_0.xml	(date 1791038220986)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: org.apache.commons:commons-lang3:3.12.0" type="java-imported" external-system-id="Maven">
++    <properties groupId="org.apache.commons" artifactId="commons-lang3" version="3.12.0" baseVersion="3.12.0" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__net_bytebuddy_byte_buddy_1_17_7.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__net_bytebuddy_byte_buddy_1_17_7.xml b/.idea/libraries/Maven__net_bytebuddy_byte_buddy_1_17_7.xml
+new file mode 100644
+--- /dev/null	(date 1791038220980)
++++ b/.idea/libraries/Maven__net_bytebuddy_byte_buddy_1_17_7.xml	(date 1791038220980)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: net.bytebuddy:byte-buddy:1.17.7" type="java-imported" external-system-id="Maven">
++    <properties groupId="net.bytebuddy" artifactId="byte-buddy" version="1.17.7" baseVersion="1.17.7" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/net/bytebuddy/byte-buddy/1.17.7/byte-buddy-1.17.7.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/net/bytebuddy/byte-buddy/1.17.7/byte-buddy-1.17.7-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/net/bytebuddy/byte-buddy/1.17.7/byte-buddy-1.17.7-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__net_bytebuddy_byte_buddy_agent_1_17_7.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__net_bytebuddy_byte_buddy_agent_1_17_7.xml b/.idea/libraries/Maven__net_bytebuddy_byte_buddy_agent_1_17_7.xml
+new file mode 100644
+--- /dev/null	(date 1791038220982)
++++ b/.idea/libraries/Maven__net_bytebuddy_byte_buddy_agent_1_17_7.xml	(date 1791038220982)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: net.bytebuddy:byte-buddy-agent:1.17.7" type="java-imported" external-system-id="Maven">
++    <properties groupId="net.bytebuddy" artifactId="byte-buddy-agent" version="1.17.7" baseVersion="1.17.7" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/net/bytebuddy/byte-buddy-agent/1.17.7/byte-buddy-agent-1.17.7.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/net/bytebuddy/byte-buddy-agent/1.17.7/byte-buddy-agent-1.17.7-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/net/bytebuddy/byte-buddy-agent/1.17.7/byte-buddy-agent-1.17.7-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__org_objenesis_objenesis_3_3.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__org_objenesis_objenesis_3_3.xml b/.idea/libraries/Maven__org_objenesis_objenesis_3_3.xml
+new file mode 100644
+--- /dev/null	(date 1791038220992)
++++ b/.idea/libraries/Maven__org_objenesis_objenesis_3_3.xml	(date 1791038220992)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: org.objenesis:objenesis:3.3" type="java-imported" external-system-id="Maven">
++    <properties groupId="org.objenesis" artifactId="objenesis" version="3.3" baseVersion="3.3" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/objenesis/objenesis/3.3/objenesis-3.3.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/objenesis/objenesis/3.3/objenesis-3.3-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/objenesis/objenesis/3.3/objenesis-3.3-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__org_slf4j_slf4j_api_2_0_4.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__org_slf4j_slf4j_api_2_0_4.xml b/.idea/libraries/Maven__org_slf4j_slf4j_api_2_0_4.xml
+new file mode 100644
+--- /dev/null	(date 1791038220994)
++++ b/.idea/libraries/Maven__org_slf4j_slf4j_api_2_0_4.xml	(date 1791038220994)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: org.slf4j:slf4j-api:2.0.4" type="java-imported" external-system-id="Maven">
++    <properties groupId="org.slf4j" artifactId="slf4j-api" version="2.0.4" baseVersion="2.0.4" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/2.0.4/slf4j-api-2.0.4.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/2.0.4/slf4j-api-2.0.4-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/2.0.4/slf4j-api-2.0.4-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml b/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml
+new file mode 100644
+--- /dev/null	(date 1791038220988)
++++ b/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml	(date 1791038220988)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: org.hamcrest:hamcrest-core:1.3" type="java-imported" external-system-id="Maven">
++    <properties groupId="org.hamcrest" artifactId="hamcrest-core" version="1.3" baseVersion="1.3" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__org_mockito_mockito_core_5_23_0.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__org_mockito_mockito_core_5_23_0.xml b/.idea/libraries/Maven__org_mockito_mockito_core_5_23_0.xml
+new file mode 100644
+--- /dev/null	(date 1791038220990)
++++ b/.idea/libraries/Maven__org_mockito_mockito_core_5_23_0.xml	(date 1791038220990)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: org.mockito:mockito-core:5.23.0" type="java-imported" external-system-id="Maven">
++    <properties groupId="org.mockito" artifactId="mockito-core" version="5.23.0" baseVersion="5.23.0" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__uk_co_real_logic_sbe_all_1_26_0.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__uk_co_real_logic_sbe_all_1_26_0.xml b/.idea/libraries/Maven__uk_co_real_logic_sbe_all_1_26_0.xml
+new file mode 100644
+--- /dev/null	(date 1791038220997)
++++ b/.idea/libraries/Maven__uk_co_real_logic_sbe_all_1_26_0.xml	(date 1791038220997)
+@@ -0,0 +1,14 @@
++<component name="libraryTable">
++  <library name="Maven: uk.co.real-logic:sbe-all:1.26.0" type="java-imported" external-system-id="Maven">
++    <properties groupId="uk.co.real-logic" artifactId="sbe-all" version="1.26.0" baseVersion="1.26.0" />
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/uk/co/real-logic/sbe-all/1.26.0/sbe-all-1.26.0.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/uk/co/real-logic/sbe-all/1.26.0/sbe-all-1.26.0-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/uk/co/real-logic/sbe-all/1.26.0/sbe-all-1.26.0-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: algo-coding-exercise/dictionary/dictionary.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/algo-coding-exercise/dictionary/dictionary.iml b/algo-coding-exercise/dictionary/dictionary.iml
+new file mode 100644
+--- /dev/null	(date 1791038220918)
++++ b/algo-coding-exercise/dictionary/dictionary.iml	(date 1791038220918)
+@@ -0,0 +1,28 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module external.linked.project.id="$MODULE_DIR$/pom.xml" external.system.module.type="SINGLE_MODULE" external.system.module.version="223-2" org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_16">
++    <output url="file://$MODULE_DIR$/target/classes" />
++    <output-test url="file://$MODULE_DIR$/target/test-classes" />
++    <content url="file://$MODULE_DIR$">
++      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
++      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
++      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
++      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
++      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/java" isTestSource="false" />
++      <excludeFolder url="file://$MODULE_DIR$/target" />
++    </content>
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
++    <orderEntry type="library" name="Maven: org.agrona:agrona:1.16.0" level="project" />
++    <orderEntry type="library" name="Maven: uk.co.real-logic:sbe-all:1.26.0" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:5.23.0" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy:1.17.7" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.17.7" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:3.3" level="project" />
++    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.3.5" level="project" />
++    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.4" level="project" />
++    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.3.5" level="project" />
++  </component>
++</module>
+\ No newline at end of file
+Index: algo-coding-exercise/oms/oms.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/algo-coding-exercise/oms/oms.iml b/algo-coding-exercise/oms/oms.iml
+new file mode 100644
+--- /dev/null	(date 1791038220923)
++++ b/algo-coding-exercise/oms/oms.iml	(date 1791038220923)
+@@ -0,0 +1,26 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module external.linked.project.id="$MODULE_DIR$/pom.xml" external.system.module.type="SINGLE_MODULE" external.system.module.version="223-2" org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_16">
++    <output url="file://$MODULE_DIR$/target/classes" />
++    <output-test url="file://$MODULE_DIR$/target/test-classes" />
++    <content url="file://$MODULE_DIR$">
++      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
++      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
++      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
++      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
++      <excludeFolder url="file://$MODULE_DIR$/target" />
++    </content>
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
++    <orderEntry type="library" name="Maven: uk.co.real-logic:sbe-all:1.26.0" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:5.23.0" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy:1.17.7" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.17.7" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:3.3" level="project" />
++    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.3.5" level="project" />
++    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.4" level="project" />
++    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.3.5" level="project" />
++  </component>
++</module>
+\ No newline at end of file
+Index: algo-coding-exercise/sequencer/sequencer.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/algo-coding-exercise/sequencer/sequencer.iml b/algo-coding-exercise/sequencer/sequencer.iml
+new file mode 100644
+--- /dev/null	(date 1791038220935)
++++ b/algo-coding-exercise/sequencer/sequencer.iml	(date 1791038220935)
+@@ -0,0 +1,28 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module external.linked.project.id="$MODULE_DIR$/pom.xml" external.system.module.type="SINGLE_MODULE" external.system.module.version="223-2" org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_16">
++    <output url="file://$MODULE_DIR$/target/classes" />
++    <output-test url="file://$MODULE_DIR$/target/test-classes" />
++    <content url="file://$MODULE_DIR$">
++      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
++      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
++      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
++      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
++      <excludeFolder url="file://$MODULE_DIR$/target" />
++    </content>
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
++    <orderEntry type="module" module-name="dictionary" />
++    <orderEntry type="library" name="Maven: org.agrona:agrona:1.16.0" level="project" />
++    <orderEntry type="library" name="Maven: uk.co.real-logic:sbe-all:1.26.0" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:5.23.0" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy:1.17.7" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.17.7" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:3.3" level="project" />
++    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.3.5" level="project" />
++    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.4" level="project" />
++    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.3.5" level="project" />
++  </component>
++</module>
+\ No newline at end of file
+Index: algo-coding-exercise/getting-started/getting-started.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/algo-coding-exercise/getting-started/getting-started.iml b/algo-coding-exercise/getting-started/getting-started.iml
+new file mode 100644
+--- /dev/null	(date 1791038220940)
++++ b/algo-coding-exercise/getting-started/getting-started.iml	(date 1791038220940)
+@@ -0,0 +1,35 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module external.linked.project.id="$MODULE_DIR$/pom.xml" external.system.module.type="SINGLE_MODULE" external.system.module.version="223-2" org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_16">
++    <output url="file://$MODULE_DIR$/target/classes" />
++    <output-test url="file://$MODULE_DIR$/target/test-classes" />
++    <content url="file://$MODULE_DIR$">
++      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
++      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
++      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
++      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
++      <excludeFolder url="file://$MODULE_DIR$/target" />
++    </content>
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++    <orderEntry type="module" module-name="algo" />
++    <orderEntry type="module" module-name="dictionary" />
++    <orderEntry type="library" name="Maven: org.agrona:agrona:1.16.0" level="project" />
++    <orderEntry type="module" module-name="sequencer" />
++    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.10.1" level="project" />
++    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.12.0" level="project" />
++    <orderEntry type="module" module-name="backtest" />
++    <orderEntry type="module" module-name="collection" />
++    <orderEntry type="module" module-name="sequencer" scope="TEST" production-on-test="" />
++    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
++    <orderEntry type="library" name="Maven: uk.co.real-logic:sbe-all:1.26.0" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:5.23.0" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy:1.17.7" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.17.7" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:3.3" level="project" />
++    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.3.5" level="project" />
++    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.4" level="project" />
++    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.3.5" level="project" />
++  </component>
++</module>
+\ No newline at end of file
+Index: algo-coding-exercise/algo-coding-exercise.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/algo-coding-exercise/algo-coding-exercise.iml b/algo-coding-exercise/algo-coding-exercise.iml
+new file mode 100644
+--- /dev/null	(date 1791038220927)
++++ b/algo-coding-exercise/algo-coding-exercise.iml	(date 1791038220927)
+@@ -0,0 +1,18 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module external.linked.project.id="$MODULE_DIR$/pom.xml" external.system.module.type="AGGREGATOR" external.system.module.version="223-2" org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_16">
++    <content url="file://$MODULE_DIR$">
++      <excludeFolder url="file://$MODULE_DIR$/target" />
++    </content>
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++    <orderEntry type="library" name="Maven: uk.co.real-logic:sbe-all:1.26.0" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:5.23.0" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy:1.17.7" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.17.7" level="project" />
++    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:3.3" level="project" />
++    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.3.5" level="project" />
++    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.4" level="project" />
++    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.3.5" level="project" />
++  </component>
++</module>
+\ No newline at end of file
