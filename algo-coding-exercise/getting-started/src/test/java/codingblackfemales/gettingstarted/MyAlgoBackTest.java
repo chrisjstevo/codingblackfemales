@@ -51,6 +51,7 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
 
         send(tick(95, 100, 98, 101));
         assertEquals(0, order.getFilledQuantity());
+        assertEquals(2, container.getState().getChildOrders().size());
     }
 
     private UnsafeBuffer tick(long bidPrice, long bidQuantity, long askPrice, long askQuantity) {
