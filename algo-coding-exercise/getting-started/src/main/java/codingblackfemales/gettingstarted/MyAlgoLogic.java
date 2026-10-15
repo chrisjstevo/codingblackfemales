@@ -16,6 +16,14 @@ import org.slf4j.LoggerFactory;
 //   Creates a buy order while the best bid is at or below the limit.
 //   Cancels the order if the best bid rises above the limit.
 
+
+
+// Stretch goal — buy and sell (not implemented):
+// Track shares and average purchase price from actual fills
+// If I own no shares and have no pending buy, place a BUY limit order at the best ask
+//  If I own shares and the best bid reaches my target profit, place a SELL limit order for no more than I own
+//  Update my position from actual fill quantities, including partial fills, and avoid duplicate pending orders
+
 public class MyAlgoLogic implements AlgoLogic {
 
     // Logger allows us to see what algo is doing while it runs
@@ -58,6 +66,8 @@ public class MyAlgoLogic implements AlgoLogic {
 
         // Check if already have an active child order
         // e.g. BUY 10 @ 98
+        // for each loop
+        // for each child order check the state
         for (ChildOrder order : state.getActiveChildOrders()) {
 
             // If an order has already been filled, skip it and continue to next order

@@ -3,10 +3,18 @@ package codingblackfemales.gettingstarted;
 import codingblackfemales.algo.AlgoLogic;
 import codingblackfemales.sotw.ChildOrder;
 import codingblackfemales.sotw.OrderState;
+import messages.marketdata.BookUpdateEncoder;
+import messages.marketdata.InstrumentStatus;
+import messages.marketdata.MessageHeaderEncoder;
+import messages.marketdata.Source;
+import messages.marketdata.Venue;
 import messages.order.Side;
 
 import static org.junit.Assert.assertEquals;
 
+import java.nio.ByteBuffer;
+
+import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
 
 /**
@@ -23,18 +31,27 @@ import org.junit.Test;
  * to creating your MyAlgoBackTest.
  *
  */
+
+// tick = update or event in the market
 public class MyAlgoTest extends AbstractAlgoTest {
 
     @Override
     public AlgoLogic createAlgoLogic() {
-        // This adds our algorithm logic to the container classes.
+        // This adds algo logic to the container classes
         return new MyAlgoLogic();
     }
 
+    // @Test annotation tells JUnit to run it as a test
+    // Java unit tests are written as a method
+    // testDispatchThroughSequencer - method name
+
+    // TEST 1
     @Test
     public void testDispatchThroughSequencer() throws Exception {
 
         // Send the first market-data tick into the trading infrastructure.
+        // createTick() puts details such as the best bid price and quantity into buffer
+        // container and decodes the message from the buffer
         send(createTick());
 
         // createTick() has a best bid of 98.
@@ -67,6 +84,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
                 container.getState().getChildOrders().get(0).getState());
     }
 
+    // TEST 2
     @Test
     public void testDoesNotCreateDuplicateOrders() throws Exception {
 
@@ -88,6 +106,7 @@ public class MyAlgoTest extends AbstractAlgoTest {
                 container.getState().getChildOrders().size());
     }
 
+    // TEST 3
     @Test
     public void testDoesNotCreateOrderAboveLimit() throws Exception {
 
@@ -99,5 +118,70 @@ public class MyAlgoTest extends AbstractAlgoTest {
         assertEquals(
                 0,
                 container.getState().getChildOrders().size());
+    }
+
+    // CODE ADDED AFTER JACOCO COVERAGE
+
+    // sends a market-data tick that describes a book with one ask level and no bids
+    // assertion checks that no child order was created
+
+    @Test
+    public void testDoesNothingWhenThereAreNoBids() throws Exception {
+
+        // creates encoders to build a market-data update message
+        MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+        BookUpdateEncoder encoder = new BookUpdateEncoder();
+
+        // creates a buffer to hold the encoded message
+        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+        UnsafeBuffer buffer = new UnsafeBuffer(byteBuffer);
+
+        encoder.wrapAndApplyHeader(buffer, 0, headerEncoder);
+        encoder.venue(Venue.LME);
+        encoder.instrumentId(123L);
+
+        // Sets the tick to have no bid levels and one ask level
+        // 101 units offered at price 100.
+        encoder.bidBookCount(0);
+        encoder.askBookCount(1)
+                .next().price(100L).size(101L);
+
+        encoder.instrumentStatus(InstrumentStatus.CONTINUOUS);
+        encoder.source(Source.STREAM);
+
+        // sends the market-data message through the test system
+        // algo receives it and sees there are no bids, and returns NoAction.
+        send(buffer);
+
+        // checks that no child order was created.
+        assertEquals(0, container.getState().getChildOrders().size());
+    }
+
+    @Test
+    public void testCreatesNewOrderAfterExistingOrderIsFilled() throws Exception {
+
+        // send intiial market data tick
+        send(createTick());
+
+        // get the first ChildOrder state and store it in firstOrder
+        ChildOrder firstOrder = container.getState().getChildOrders().get(0);
+
+        // Set the order state to FILLED
+        firstOrder.setState(OrderState.FILLED);
+
+        // send another tick
+        send(createTick3());
+
+        // skips any filled orders and creates new order if best bid is still within
+        // limit
+        assertEquals(2, container.getState().getChildOrders().size());
+
+        // get the second ChildOrder state and store it in newOrder
+        ChildOrder newOrder = container.getState().getChildOrders().get(1);
+
+        // assert new order is on BUY side for 10 @ 98
+        assertEquals(Side.BUY, newOrder.getSide());
+        assertEquals(10, newOrder.getQuantity());
+        assertEquals(98, newOrder.getPrice());
     }
 }

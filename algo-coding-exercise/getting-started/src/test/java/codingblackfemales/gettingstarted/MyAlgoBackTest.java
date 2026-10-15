@@ -52,7 +52,6 @@ public class MyAlgoBackTest extends AbstractAlgoBackTest {
         // Check that the order price is 98.
         assertEquals(98, order.getPrice());
 
-        // when: market data moves towards us
         send(createTick2());
 
         // then: get the state
